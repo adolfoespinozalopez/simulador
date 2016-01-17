@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core">
+    <style type="text/css">
+        #divHeader .ui-menu .ui-menu-parent .ui-menu-child {
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
+            border-radius: 10px;
+        }
+        #divHeader2 #divHeader_Top{
+            margin-bottom: 10px;
+        }
+    </style>
+    <div id="divHeader2">
+        <div id="divHeader_Top">
+            <div id="divHeader_Header">
+                <div class="header">
+                    <div class="logo">
+                        <img border="0"  src="${facesContext.externalContext.requestContextPath}/img/logo.jpg" />
+                    </div>
+                    <div class="txtUsername">
+                        <ui:fragment rendered="#{loginController.logueado}">
+                            <h:form id="frmSesion">
+                                <span style="font-weight: bold;">Bienvenido : </span> 
+                                <i class="fa fa-fw fa-user"></i>
+                                <span style="color: #2E74D1;font-size: 11px;">#{loginController.usuarioNombre}</span>
+                                | 
+                                <i class="fa fa-fw fa-cog"></i>
+                                <span style="color: #2E74D1;font-size: 11px;">#{loginController.perfilNombre}</span>
+                                <span style="margin-right: 5px;"></span>
+                                <f:verbatim>[</f:verbatim>                                    
+                                <a href="${facesContext.externalContext.requestContextPath}/CerrarSesionServlet" style="font-weight: bold;">Cerrar sesión</a>
+                                <f:verbatim>]</f:verbatim>
+                            </h:form>
+                        </ui:fragment>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui:composition>

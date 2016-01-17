@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets" 
+      xmlns:h="http://java.sun.com/jsf/html" >
+    
+    <h:head>
+        <title>Simulador | BBVA Continental</title>
+    </h:head>
+    <h:body>        
+        <ui:composition template="/WEB-INF/facelets/templates/mainLayout.xhtml">            
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>           
+            </ui:define>
+            <ui:define name="content" >
+                <div class="compania">
+                </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

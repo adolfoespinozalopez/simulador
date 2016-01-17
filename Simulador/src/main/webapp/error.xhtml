@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>
+            <h:outputText value="Sismedic.com :: Grupo Vital :: Login" />
+        </title>
+    </h:head>
+    <h:body>
+        <ui:composition template="/WEB-INF/facelets/templates/mainLayout.xhtml">            
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>           
+            </ui:define>
+            <ui:define name="content" >
+                 <div class="paginaError">
+                     <table id="tblTitulo">
+                             <tr>
+                                 <td>
+                                     <h1> Lo Sentimos!!</h1>
+                                 </td>
+                             </tr>
+                             <tr>
+                                 <td>
+                                     <h2>
+                                     La p&aacute;gina que solicita está en construcción.
+                                     </h2>
+                                 </td>
+                             </tr>
+                         </table>
+                 </div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

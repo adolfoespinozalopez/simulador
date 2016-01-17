@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition>
+        <p:idleMonitor onactive="sessionTimeOutDialog.show();" timeout="#{session.maxInactiveInterval * 1000}" />
+        <p:dialog header="Sesión Caducada" 
+                  widgetVar="sessionTimeOutDialog" 
+                  modal="true" 
+                  closable="false" 
+                  width="450" 
+                  resizable="false"
+                  visible="false">
+            <h:form id="frmSesionCaducada">
+                <table style="border-spacing: 4px;">
+                    <tbody>
+                        <tr>
+                            <td align="center">
+                                <img src="#{facesContext.externalContext.requestContextPath}/img/fondo.png" width="400" height="139"></img>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="justify">
+                                <h:outputText value="La sesión ha caducado, por favor, pulse sobre el siguiente botón para volver a acceder a la aplicación." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="center">
+                                <p:commandButton id="confirmBackToLogin" value="Regresar" onclick="window.location = '#{facesContext.externalContext.requestContextPath}/index.jsp?faces-redirect=true';"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </h:form>
+        </p:dialog>
+    </ui:composition>
+</html>

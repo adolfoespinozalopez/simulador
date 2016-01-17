@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:body>
+        <ui:composition
+            template="/WEB-INF/facelets/templates/mainLayout.xhtml">
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>
+            </ui:define>
+            <ui:define name="content" >
+                <h1 class="title-sh">Perfiles</h1>
+                <h:form id="frmGestionarPerfiles" onkeypress="if (event.keyCode == 13) return false;">
+                    <p:panel id="panPerfiles">
+                        <h:outputText value="Nombre :" style="padding-right: 5px;"/>
+                        <p:inputText id="nombrePerfilBus" style="width: 45%;" maxlength="100" value="#{perfilController.perfilNombreBus}"/>
+                        <p:toolbar style="padding: 4px;margin: 4px 0px;">
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton id="btnBuscar" process="@this, nombrePerfilBus" value="Buscar" icon="ui-icon-search" 
+                                                 update=":frmGestionarPerfiles:panPerfiles, :growl" actionListener="#{perfilController.buscar}"/>
+                                <p:commandButton process="@this" value="Agregar" icon="ui-icon-document" actionListener="#{perfilController.crear}" 
+                                                 update=":frmDetallePerfil" oncomplete="PF('mantePerfiles').show()">
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dataTable id="grdPerfiles" value="#{perfilController.listaPerfiles}" var="item"  
+                                     selection="#{perfilController.selectedPerfil}" reflow="false"
+                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     rowIndexVar="index" rowKey="#{item.id}"
+                                     emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                            <p:column headerText="N°" style="width: 5%;text-align: center;">
+                                <h:outputText value="#{index+1}"/>
+                            </p:column>
+                            <p:column headerText="Nombre" style="text-align: left;">
+                                <h:outputText value="#{item.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Inicio" style="text-align: center;">
+                                <h:outputText value="#{item.fecInicio}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fin" style="text-align: center;">
+                                <h:outputText value="#{item.fecFin}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Tipo Perfil" style="text-align: center;">
+                                <h:outputText value="#{(item.tipo=='1')?'Administrador':'Inversionista'}"/>
+                            </p:column>
+                            <p:column headerText="Activo" style="text-align: center;">
+                                <p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Opciones" style="text-align: center;">
+                                <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
+                                                 oncomplete="PF('mantePerfiles').show()" update=":dlgPerfil"
+                                                 style="width: 20px; height: 20px;" >
+                                    <p:resetInput target="dlgPerfil" />
+                                </p:commandButton>
+                                <p:commandButton process="@this, grdPerfiles" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}">
+                                    <f:setPropertyActionListener value="#{item}" target="#{perfilController.selectedPerfil}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog modal="true" header="Eliminar Perfil" widgetVar="dlgConfirmacion" 
+                          resizable="false" width="380" height="100" id="dlgMensaje">
+                    <h:form id="frmConfirmacion">
+                        <p:panel>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" style="margin-bottom: 10px;"></span>
+                                            <h:outputLabel style="font-size: 10pt;" value="¿Está seguro de eliminar el registro seleccionado?"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <p:commandButton process="@this" value="Sí" action="#{perfilController.eliminar()}" 
+                                                             oncomplete="PF('dlgConfirmacion').hide()"/>  
+                                            <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>      
+                        </p:panel>
+                    </h:form>
+                    <p:ajax event="close" update="frmGestionarPerfiles:grdPerfiles"/> 
+                </p:dialog>
+
+                <p:dialog id="dlgPerfil" modal="true" header="Mantenimiento Perfiles" widgetVar="mantePerfiles" resizable="false"
+                          width="530" height="485">
+                    <ui:include src="frmDetallePerfil.xhtml" />
+                    <p:ajax event="close" listener="#{perfilController.cancelar()}" 
+                            update=":frmGestionarPerfiles:panPerfiles, :frmDetallePerfil" />
+                </p:dialog>  
+
+                <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

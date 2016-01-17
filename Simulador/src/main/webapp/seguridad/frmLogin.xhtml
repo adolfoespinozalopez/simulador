@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:p="http://primefaces.org/ui"      
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Simulador | BBVA Continental - Login</title>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+        <meta name="author" content="BBVA"/>
+        <meta name="description" content="Los seguros del BBVA Continental te ofrecen la mejor variedad en seguros de vida, salud y patrimonio de Lima y todo el Perú."/>
+        <meta name="keywords" content="bbva continental, seguros, seguro de vida, soat, seguro oncologico"/>
+        <meta name="title" content="BBVA Continental da la mejor variedad en Seguros de vida y patrimonio."/>
+        <link rel="shortcut icon" href="${facesContext.externalContext.requestContextPath}/img/favicon.ico"/>
+        <!-- font icon -->
+        <link href="${facesContext.externalContext.requestContextPath}/css/elegant-icons-style.css" rel="stylesheet" />
+        <link href="${facesContext.externalContext.requestContextPath}/css/font-awesome.css" rel="stylesheet" />
+        <!-- Custom styles -->
+        <link href="${facesContext.externalContext.requestContextPath}/css/style.css" rel="stylesheet"/>
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 -->
+        <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <![endif]-->
+    </h:head>
+    <h:body styleClass="login-img-body">
+        <div class="container">
+            <h:form id="frmLoginCuadro" styleClass="login-form">
+                <div class="login-wrap">
+                    <p class="login-img">
+                        <img src="img/logologin2.png"/>
+                        <i class="icon_lock_alt"></i>
+                    </p>
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="icon_profile"></i></span>
+                      <p:inputText id="usuario" styleClass="form-control" placeholder="Usuario" value="#{loginController.usuario}" required="true" autocomplete="off" requiredMessage="Ingrese el usuario"  /> 
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                        <p:password id="contrasena" styleClass="form-control" placeholder="Contraseña" value="#{loginController.contrasena}" required="true" redisplay="true" requiredMessage="Ingrese el password" />
+                    </div>
+                    <p:commandButton process="@this, usuario, contrasena" id="loginButton" value="Ingresar"
+                                     action="#{loginController.login()}" styleClass="btn" update="usuario, contrasena, mensaje"/>
+                </div>
+                <div>
+                    <p:messages id="mensaje" showDetail="true" showSummary="false"/>  
+                </div>
+            </h:form>
+        </div>
+    </h:body>
+</html>
