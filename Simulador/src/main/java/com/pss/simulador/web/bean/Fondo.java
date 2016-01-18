@@ -28,6 +28,13 @@ public class Fondo implements Serializable{
         this.nombre = nombre;
     }
 
+    public Fondo(Integer id, String nombre, String tipoMoneda, String codigo) {
+        this.id = id;
+        this.nombre = nombre;
+        this.tipoMoneda = tipoMoneda;
+        this.codigo = codigo;
+    }
+    
     public Integer getId() {
         return id;
     }
