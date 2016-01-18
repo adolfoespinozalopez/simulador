@@ -32,11 +32,10 @@ public class TipoCambioController {
 	@PostConstruct
 	public void init() {
 		listaTipoCambio = new ArrayList<TipoCambio>();
-		TipoCambio tipoCambio = new TipoCambio();
+		TipoCambio tipoCambio = new TipoCambio(1);
 		tipoCambio.setNuValor(3.43);
 		tipoCambio.setFhFecIngreso(new Date());
 		tipoCambio.setStEstado("1");
-		tipoCambio.setCdIdtipocambio(1);
 		listaTipoCambio.add(tipoCambio);
 	}
 	
