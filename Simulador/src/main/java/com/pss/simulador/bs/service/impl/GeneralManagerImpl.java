@@ -4,6 +4,9 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
+
 import com.pss.simulador.bs.dao.GeneralDao;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.service.GeneralManager;
@@ -15,6 +18,7 @@ import com.pss.simulador.bs.service.GeneralManager;
 * @since 1.0
 */
 @Service("generalManager")
+@Transactional
 public class GeneralManagerImpl implements GeneralManager {
 
 	private static final Logger LOG = Logger.getLogger(GeneralManagerImpl.class);

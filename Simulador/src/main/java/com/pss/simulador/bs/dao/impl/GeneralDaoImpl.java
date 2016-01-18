@@ -22,7 +22,7 @@ public class GeneralDaoImpl extends HibernateDAO<General> implements GeneralDao 
 	
 	public List<General> findByDomainAndState(String domain, String stEstado) {
 		Criteria criterioCiiu = super.getCriteria(General.class);
-		criterioCiiu.add(Restrictions.like("nbDominio", domain));
+		criterioCiiu.add(Restrictions.eq("nbDominio", domain));
 		criterioCiiu.add(Restrictions.eq("stEstado", stEstado));
 		List<General> lista = criterioCiiu.list();
 		LOG.info("lista = "+lista.size());
