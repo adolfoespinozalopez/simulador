@@ -5,10 +5,10 @@
 
 <hibernate-configuration>
 	<session-factory>
-		<property name="dialect">org.hibernate.dialect.OracleDialect</property>
+		<property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
 		<property name="current_session_context_class">thread</property>
-		<property name="show_sql">false</property>
-		<property name="format_sql">false</property>
+		<property name="show_sql">true</property>
+		<property name="format_sql">true</property>
 		<property name="hibernate.default_schema">BBVATESOR</property>
 
 		<!-- <property name="dialect">org.hibernate.dialect.OracleDialect</property> -->

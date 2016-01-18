@@ -1,14 +1,17 @@
 package com.pss.simulador.core.dao;
 
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
 import com.pss.simulador.core.dao.impl.IHibernateDAO;
-
+/**
+*
+* @author Pierre Obregon
+* @version 1.0, 16/01/2016
+* @since 1.0
+*/
 public class HibernateDAO<T> extends HibernateDaoSupport implements IHibernateDAO<T> {
 	@Autowired
 	public void setSessionFactoryHibernate(SessionFactory sessionFactory) {

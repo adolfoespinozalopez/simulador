@@ -25,7 +25,7 @@ import com.pss.simulador.util.Constante;
 @RequestScoped
 public class LoginController implements Serializable {
 	
-	//private static final Logger LOG = Logger.getLogger(LoginController.class);
+	private static final Logger LOG = Logger.getLogger(LoginController.class);
 	private static final long serialVersionUID = 1L;
 	private String usuario = "";
     private String contrasena = "";
@@ -40,16 +40,15 @@ public class LoginController implements Serializable {
     private List<General> listaMoneda = new ArrayList<General>();
     @Resource(name = "generalManager")
     GeneralManager generalManager;
-    private static final Logger LOG = Logger.getLogger(LoginController.class);
     
     
     public String login() {
-        
+        System.out.println("generalManager ="+generalManager);
     	try {
-            LOG.info("generalManager ="+generalManager);
+            System.out.println("generalManager ="+generalManager);
             listaMoneda =  generalManager.findByDomainAndState(Constante.DOMINIO_MONEDA, Constante.ESTADO_ACTIVO);
             for (General general : listaMoneda) {
-                LOG.info("general ="+general.getCdIdgeneral());
+                System.out.println("general ="+general.getCdIdgeneral());
             }
         } catch (Exception e) {
             LOG.error("ERROR EN load Moneda: " + e.getStackTrace());

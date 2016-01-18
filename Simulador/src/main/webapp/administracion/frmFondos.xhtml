@@ -16,79 +16,52 @@
                 <h:form id="frmGestionarFondos" onkeypress="if (event.keyCode == 13) return false;">
                     <p:panel id="panFondos">
                         <h:outputText value="Nombre :" style="padding-right: 5px;"/>
-                        <p:inputText id="nombreFondo" style="width: 45%;" maxlength="100" value="#{perfilController.perfilNombreBus}"/>
+                        <p:inputText id="nombreFondo" style="width: 45%;" maxlength="100" value="#{fondoController.fondoNombreBus}"/>
                         <p:toolbar style="padding: 4px;margin: 4px 0px;">
                             <p:toolbarGroup align="left">  
                                 <p:commandButton id="btnBuscar" process="@this, nombreFondo" value="Buscar" icon="ui-icon-search" 
-                                                 update=":frmGestionarFondos:panFondos, :growl" actionListener="#{perfilController.buscar}"/>
+                                                 update=":frmGestionarFondos:panFondos, :growl" actionListener="#{fondoController.buscar}"/>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dataTable id="grdFondos" value="#{perfilController.listaPerfiles}" var="item"  
-                                     selection="#{perfilController.selectedPerfil}" reflow="false"
+                        <p:dataTable id="grdFondos" value="#{fondoController.listaFondos}" var="item"  
+                                     selection="#{fondoController.selectedFondo}" reflow="false"
                                      selectionMode="single" scrollable="true" scrollHeight="390" 
                                      rowIndexVar="index" rowKey="#{item.id}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-                            <p:column headerText="N°" style="width: 5%;text-align: center;">
-                                <h:outputText value="#{index+1}"/>
+                            <p:column headerText="Codigo" style="width: 10%;text-align: center;">
+                                <h:outputText value="#{item.codigo}"/>
                             </p:column>
                             <p:column headerText="Nombre" style="text-align: left;">
                                 <h:outputText value="#{item.nombre}"/>
                             </p:column>
-                            <p:column headerText="Inicio" style="text-align: center;">
-                                <h:outputText value="#{item.fecInicio}">
-                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm" locale="es_PE" type="date" timeZone="EST"/>
-                                </h:outputText>
+                            <p:column headerText="Moneda" style="text-align: center;">
+                                <h:outputText value="#{item.tipoMoneda}"/>
                             </p:column>
-                            <p:column headerText="Fin" style="text-align: center;">
-                                <h:outputText value="#{item.fecFin}">
-                                    <f:convertDateTime pattern="dd/MM/yyy HH:mm" locale="es_PE" type="date" timeZone="EST"/>
-                                </h:outputText>
+                            <p:column headerText="Num. Cuenta" style="text-align: center;">
+                                <h:outputText value="#{item.saldo.nuNumCuenta}"/>
                             </p:column>
-                            <p:column headerText="Tipo Perfil" style="text-align: center;">
-                                <h:outputText value="#{(item.tipo=='1')?'Administrador':'Inversionista'}"/>
+                            <p:column headerText="Inicial" style="text-align: center;">
+                                <h:outputText value="#{item.saldo.toSaldoInicial}"/>
                             </p:column>
-                            <p:column headerText="Activo" style="text-align: center;">
-                                <p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}" disabled="true"/>
+                            <p:column headerText="Liquidez" style="text-align: center;">
+                                <h:outputText value="#{item.saldo.imPorcLiquidez}"/>
+                            </p:column>
+                            <p:column headerText="Disponible" style="text-align: center;">
+                                <h:outputText value="#{item.saldo.imLiquidezInmedi}"/>
                             </p:column>
                             <p:column headerText="Opciones" style="text-align: center;">
-                                <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
+                                <p:commandButton icon="ui-icon-pencil" actionListener="#{fondoController.verDetalles(item)}" 
                                                  style="width: 20px; height: 20px;">
                                 </p:commandButton>
-                                <p:commandButton process="@this, grdFondos" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}">
-                                    <f:setPropertyActionListener value="#{item}" target="#{perfilController.selectedPerfil}" />
+                                <p:commandButton icon="ui-icon-wrench"  actionListener="#{fondoController.verLimites(item)}" 
+                                				 style="width: 20px; height: 20px;">
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </p:panel>
                 </h:form>
-                <p:dialog modal="true" header="Eliminar Perfil" widgetVar="dlgConfirmacion" 
-                          resizable="false" width="380" height="100" id="dlgMensaje">
-                    <h:form id="frmConfirmacion">
-                        <p:panel>
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" style="margin-bottom: 10px;"></span>
-                                            <h:outputLabel style="font-size: 10pt;" value="¿Está seguro de eliminar el registro seleccionado?"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td>
-                                            <p:commandButton process="@this" value="Sí" action="#{perfilController.eliminar()}" oncomplete="PF('dlgConfirmacion').hide()"/>  
-                                            <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>      
-                        </p:panel>
-                    </h:form>
-                    <p:ajax event="close" update="frmGestionarFondos:grdFondos"/> 
-                </p:dialog>
 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
             </ui:define>

@@ -1,10 +1,14 @@
 package com.pss.simulador.core.dao.impl;
 
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
-
+/**
+*
+* @author Pierre Obregon
+* @version 1.0, 16/01/2016
+* @since 1.0
+*/
 public interface IHibernateDAO<T> {
 
 	/**
