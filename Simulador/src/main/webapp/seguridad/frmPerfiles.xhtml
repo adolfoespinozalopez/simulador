@@ -58,11 +58,11 @@
                             <p:column headerText="Opciones" style="text-align: center;">
                                 <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
                                                  oncomplete="PF('mantePerfiles').show()" update=":dlgPerfil"
-                                                 style="width: 20px; height: 20px;" >
+                                                 style="width: 20px; height: 20px;" title="Ver detalles">
                                     <p:resetInput target="dlgPerfil" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdPerfiles" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}">
+                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}" title="Eliminar">
                                     <f:setPropertyActionListener value="#{item}" target="#{perfilController.selectedPerfil}" />
                                 </p:commandButton>
                             </p:column>

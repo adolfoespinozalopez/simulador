@@ -22,44 +22,38 @@
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dataTable id="grdTipoCambio" value="#{perfilController.listaPerfiles}" var="item"  
-                                     selection="#{perfilController.selectedPerfil}" reflow="false"
+                        <p:dataTable id="grdTipoCambio" value="#{tipoCambioController.listaTipoCambio}" var="item"  
+                                     selection="#{tipoCambioController.selectedTipoCambio}" reflow="false"
                                      selectionMode="single" scrollable="true" scrollHeight="390" 
-                                     rowIndexVar="index" rowKey="#{item.id}"
+                                     rowIndexVar="index" rowKey="#{item.cdIdtipocambio}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
-                            <p:column headerText="Nombre" style="text-align: left;">
-                                <h:outputText value="#{item.nombre}"/>
-                            </p:column>
-                            <p:column headerText="Inicio" style="text-align: center;">
-                                <h:outputText value="#{item.fecInicio}">
+                            <p:column headerText="Fecha" style="text-align: center;">
+                                <h:outputText value="#{item.fhFecIngreso}">
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Fin" style="text-align: center;">
-                                <h:outputText value="#{item.fecFin}">
-                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                            <p:column headerText="Valor" style="text-align: center;">
+                            	<h:outputText value="#{item.nuValor}" style="text-align: center;">
+                                	<f:convertNumber groupingUsed="true" pattern="#,###" maxFractionDigits="3"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column headerText="Tipo Perfil" style="text-align: center;">
-                                <h:outputText value="#{(item.tipo=='1')?'Administrador':'Inversionista'}"/>
                             </p:column>
                             <p:column headerText="Activo" style="text-align: center;">
-                                <p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}" disabled="true"/>
+                                <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>
                             </p:column>
                             <p:column headerText="Opciones" style="text-align: center;">
-                                <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
-                                                 oncomplete="PF('mantePerfiles').show()" update=":dlgPerfil"
+                                <p:commandButton icon="ui-icon-pencil" actionListener="#{tipoCambioController.verDetalles(item)}" 
+                                                 oncomplete="PF('manteTipoCambio').show()" update=":dlgTipoCambio"
                                                  style="width: 20px; height: 20px;" >
-                                    <p:resetInput target="dlgPerfil" />
+                                    <p:resetInput target="dlgTipoCambio" />
                                 </p:commandButton>
-                                <p:commandButton process="@this, grdPerfiles" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}">
-                                    <f:setPropertyActionListener value="#{item}" target="#{perfilController.selectedPerfil}" />
+                                <p:commandButton process="@this, grdTipoCambio" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}">
+                                    <f:setPropertyActionListener value="#{item}" target="#{tipoCambioController.selectedTipoCambio}" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -93,10 +87,10 @@
                 </p:dialog>
 
                 <p:dialog id="dlgTipoCambio" modal="true" header="Mantenimiento Tipo de Cambio" 
-                		  widgetVar="manteTipoCambio" resizable="false" width="530" height="485">
+                		  widgetVar="manteTipoCambio" resizable="false" width="300" height="200">
                     <ui:include src="frmDetalleTipoCambio.xhtml" />
-                    <p:ajax event="close" listener="#{perfilController.cancelar()}" 
-                            update=":frmGestionarPerfiles:panPerfiles, :frmDetallePerfil" />
+                    <p:ajax event="close" listener="#{tipoCambioController.cancelar()}" 
+                            update=":frmGestionarTipoCambio:panTipoCambio, :frmDetalleTipoCambio" />
                 </p:dialog>  
 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

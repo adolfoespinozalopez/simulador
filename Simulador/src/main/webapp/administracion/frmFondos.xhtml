@@ -30,7 +30,7 @@
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-                            <p:column headerText="Codigo" style="width: 10%;text-align: center;">
+                            <p:column headerText="Codigo" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{item.codigo}"/>
                             </p:column>
                             <p:column headerText="Nombre" style="text-align: left;">
@@ -43,26 +43,40 @@
                                 <h:outputText value="#{item.saldo.nuNumCuenta}"/>
                             </p:column>
                             <p:column headerText="Inicial" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.toSaldoInicial}"/>
+                                <h:outputText value="#{item.saldo.toSaldoInicial}">
+                                	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Liquidez" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.imPorcLiquidez}"/>
+                                <h:outputText value="#{item.saldo.imPorcLiquidez}">
+                                	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Disponible" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.imLiquidezInmedi}"/>
+                                <h:outputText value="#{item.saldo.imLiquidezInmedi}">
+                                	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
+                                </h:outputText>
                             </p:column>
                             <p:column headerText="Opciones" style="text-align: center;">
-                                <p:commandButton icon="ui-icon-pencil" actionListener="#{fondoController.verDetalles(item)}" 
-                                                 style="width: 20px; height: 20px;">
+                                <p:commandButton icon="ui-icon-pencil" actionListener="#{fondoController.verDetalles(item)}"
+                                				 oncomplete="PF('manteFondos').show()" update=":dlgFondo" 
+                                                 style="width: 20px; height: 20px;" title="Ver detalles">
                                 </p:commandButton>
                                 <p:commandButton icon="ui-icon-wrench"  actionListener="#{fondoController.verLimites(item)}" 
-                                				 style="width: 20px; height: 20px;">
+                                				 style="width: 20px; height: 20px;" title="Ver límites">
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </p:panel>
                 </h:form>
 
+				<p:dialog id="dlgFondo" modal="true" header="Mantenimiento Fondos" widgetVar="manteFondos" resizable="false"
+                          width="580" height="340">
+                    <ui:include src="frmDetalleFondo.xhtml" />
+                    <p:ajax event="close" listener="#{fondoController.cancelar()}" 
+                            update=":frmGestionarFondos:panFondos, :frmDetalleFondo" />
+                </p:dialog>  
+                
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
             </ui:define>
         </ui:composition>

@@ -485,3 +485,9 @@ h1.title-sh {
     background: none;
     color: #cd0a0a;
 }
+.negrita {
+	font-weight: bold;
+}
+.nonegrita {
+	font-size:12px !important;
+}
