@@ -1,6 +1,7 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -30,11 +31,18 @@ public class TipoCambioController {
 	
 	@PostConstruct
 	public void init() {
-		
+		listaTipoCambio = new ArrayList<TipoCambio>();
+		TipoCambio tipoCambio = new TipoCambio();
+		tipoCambio.setNuValor(3.43);
+		tipoCambio.setFhFecIngreso(new Date());
+		tipoCambio.setStEstado("1");
+		tipoCambio.setCdIdtipocambio(1);
+		listaTipoCambio.add(tipoCambio);
 	}
 	
 	public void crear() {
 		selectedTipoCambio = new TipoCambio();
+		selectedTipoCambio.setFhFecIngreso(new Date());
 	}
 
 	public void verDetalles(TipoCambio tipoCambio) {
