@@ -17,8 +17,8 @@ import com.pss.simulador.bs.service.GeneralManager;
 * @version 1.0, 13/01/2016
 * @since 1.0
 */
-@Service("generalManager")
 @Transactional
+@Service("generalManager")
 public class GeneralManagerImpl implements GeneralManager {
 
 	private static final Logger LOG = Logger.getLogger(GeneralManagerImpl.class);

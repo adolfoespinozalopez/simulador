@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.General;
@@ -21,8 +19,7 @@ import com.pss.simulador.util.Constante;
 * @since 1.0
 */
 @Component
-@ManagedBean(name = "loginController")
-@RequestScoped
+@Scope(value="request")
 public class LoginController implements Serializable {
 	
 	private static final Logger LOG = Logger.getLogger(LoginController.class);
@@ -38,7 +35,7 @@ public class LoginController implements Serializable {
     private String SRepitaContrasena = "";
     
     private List<General> listaMoneda = new ArrayList<General>();
-    @Resource(name = "generalManager")
+    @Autowired
     GeneralManager generalManager;
     
     

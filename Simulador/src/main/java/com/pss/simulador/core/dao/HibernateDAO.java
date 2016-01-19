@@ -19,7 +19,7 @@ public class HibernateDAO<T> extends HibernateDaoSupport implements IHibernateDA
 	}
 
 	public void saveOrUpdateAll(List<T> list) {
-		super.getHibernateTemplate().saveOrUpdateAll(list);
+		super.getHibernateTemplate().saveOrUpdate(list);
 		super.getHibernateTemplate().flush();
 	}
 	
