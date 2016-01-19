@@ -25,4 +25,12 @@ public class Constante {
      * Dominio
      */
     public static final String DOMINIO_MONEDA = "MONEDA";
+    public static final String TIPO_APERTURA = "TIPOAPERTURA";
+    public static final String MONEDA_OPERACION = "MONEDAOPERACION";
+    public static final String TIPO_OPERACION_FWD = "TIPOOPERACIONFWD";
+    public static final String TIPO_OPERACION_CUENTA = "TIPOOPERACIONCUENTA";
+    /**
+     * Combos
+     */
+    public static final String  NO_OPTION_SELECTED = "-1";
 }

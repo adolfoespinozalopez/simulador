@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.General;
-import com.pss.simulador.bs.service.GeneralManager;
-import com.pss.simulador.util.Constante;
 /**
 *
 * @author Adolfo Espinoza
@@ -19,7 +18,8 @@ import com.pss.simulador.util.Constante;
 * @since 1.0
 */
 @Component
-@Scope(value="request")
+@ManagedBean(name = "loginController")
+@SessionScoped
 public class LoginController implements Serializable {
 	
 	private static final Logger LOG = Logger.getLogger(LoginController.class);
@@ -35,23 +35,8 @@ public class LoginController implements Serializable {
     private String SRepitaContrasena = "";
     
     private List<General> listaMoneda = new ArrayList<General>();
-    @Autowired
-    GeneralManager generalManager;
     
-    
-    public String login() {
-        System.out.println("generalManager ="+generalManager);
-    	try {
-            System.out.println("generalManager ="+generalManager);
-            listaMoneda =  generalManager.findByDomainAndState(Constante.DOMINIO_MONEDA, Constante.ESTADO_ACTIVO);
-            for (General general : listaMoneda) {
-                System.out.println("general ="+general.getCdIdgeneral());
-            }
-        } catch (Exception e) {
-            LOG.error("ERROR EN load Moneda: " + e.getStackTrace());
-            e.printStackTrace();
-        }
-        
+    public String login() {        
         BEsInversion = false;
         BEsAdmin = false;
         if(usuario != null){

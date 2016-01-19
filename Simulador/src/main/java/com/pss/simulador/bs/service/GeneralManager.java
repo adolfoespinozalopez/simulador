@@ -13,4 +13,7 @@ public interface GeneralManager {
 
 	public List<General> findByDomainAndState(String domain, String stEstado);
 	
+	public List<General> findByDomain(String domain);
+	
+	public List<String> findAllDomainsActive();
 }

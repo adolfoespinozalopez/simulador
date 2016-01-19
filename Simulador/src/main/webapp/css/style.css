@@ -491,3 +491,6 @@ h1.title-sh {
 .nonegrita {
 	font-size:12px !important;
 }
+.ui-spinner-input{
+	width: 70px;
+}

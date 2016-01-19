@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:body>
+        <ui:composition
+            template="/WEB-INF/facelets/templates/mainLayout.xhtml">
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>
+            </ui:define>
+            <ui:define name="content" >
+            	<p:blockUI block=":frmGestionarEmisores:panEmisores" trigger=":frmGestionarEmisores:btnBuscar" widgetVar="blkPanel">
+                    Espere mientras se cargan los datos<br /> 
+                    <p:graphicImage value="/img/loading.gif" style="width: 65px; height: 50px;"/>
+                </p:blockUI>
+                <h1 class="title-sh">Emisores</h1>
+                <h:form id="frmGestionarEmisores" onkeypress="if (event.keyCode == 13) return false;">
+                    <p:panel id="panEmisores">
+                    	<h:outputText value="Nombre :" style="padding-right: 5px;"/>
+                        <p:inputText id="nombreEmisorBus" style="width: 45%;" maxlength="100" value="#{emisorController.emisorNombreBus}"/>
+                        <h:outputText value="Tipo :" style="padding-left: 15px;"/>
+                        <p:selectOneMenu id="lstTipoEmisorBus" style="width: 190px;" 
+                                         value="#{emisorController.selectedTipoEmisor}" >
+                        	<f:selectItem itemValue="-1" itemLabel="TODOS"></f:selectItem>
+                        	<f:selectItems value="#{emisorController.lstGeneralDominio}" var="tipoEmisor" 
+	                                       itemValue="#{tipoEmisor}" itemLabel="#{tipoEmisor}"/>
+                        </p:selectOneMenu>
+                        <p:toolbar style="padding: 4px;margin: 4px 0px;">
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton id="btnBuscar" process="@this, nombreEmisorBus, lstTipoEmisorBus" value="Buscar" icon="ui-icon-search" 
+                                                 update=":frmGestionarEmisores:grdEmisores, :growl" actionListener="#{emisorController.buscar}"/>
+                                <p:commandButton process="@this" value="Agregar" icon="ui-icon-document" actionListener="#{emisorController.crear}" 
+                                                 update=":frmDetalleEmisor" oncomplete="PF('manteEmisores').show()">
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dataTable id="grdEmisores" value="#{emisorController.listaEmisor}" var="item"  
+                                     selection="#{emisorController.selectedEmisor}" reflow="false"
+                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     rowIndexVar="index" rowKey="#{item.cdIdemisor}"
+                                     emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
+                                     paginator="true" rows="10"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                            <p:column headerText="N°" style="width: 5%;text-align: center;">
+                                <h:outputText value="#{index+1}"/>
+                            </p:column>
+                            <p:column headerText="Nombre" style="text-align: left;">
+                                <h:outputText value="#{item.nbNomEmisor}"/>
+                            </p:column>
+                            <p:column headerText="Rating" style="width: 5%;text-align: center;">
+                                <h:outputText value="#{item.tpRating}"/>
+                            </p:column>
+                            <p:column headerText="Pasivo" style="text-align: left;">
+                                <h:outputText value="#{item.imPasivo}"/>
+                            </p:column>
+                            <p:column headerText="Tipo" style="text-align: center;">
+                                <h:outputText value="#{item.tpTipemisor}"/>
+                            </p:column>
+                            <p:column headerText="Activo" style="text-align: center;">
+                                <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>
+                            </p:column>
+                            <p:column headerText="Opciones" style="text-align: center;">
+                                <p:commandButton process="@this, grdEmisores" icon="ui-icon-pencil" actionListener="#{emisorController.verDetalles(item)}" 
+                                                 oncomplete="PF('manteEmisores').show()" update=":dlgEmisor"
+                                                 style="width: 20px; height: 20px;" title="Ver detalles">
+                                    <p:resetInput target="dlgEmisor" />
+                                </p:commandButton>
+                                <p:commandButton process="@this, grdEmisores" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Eliminar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{emisorController.selectedGeneral}" />
+                                </p:commandButton>
+                                <p:commandButton process="@this, grdEmisores" icon="ui-icon-wrench"  actionListener="#{emisorController.verLimites(item)}"
+                                				 oncomplete="PF('manteEmisorLimite').show()" update=":dlgEmisorLimite" 
+                                				 style="width: 20px; height: 20px;" title="Ver límites">
+                               		<p:resetInput target="dlgEmisorLimite" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog modal="true" header="Eliminar General" widgetVar="dlgConfirmacion" 
+                          resizable="false" width="380" height="100" id="dlgMensaje">
+                    <h:form id="frmConfirmacion">
+                        <p:panel>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" style="margin-bottom: 10px;"></span>
+                                            <h:outputLabel style="font-size: 10pt;" value="¿Está seguro de eliminar el registro seleccionado?"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <p:commandButton process="@this" value="Sí" action="#{emisorController.eliminar()}" 
+                                                             oncomplete="PF('dlgConfirmacion').hide()"/>
+                                            <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>      
+                        </p:panel>
+                    </h:form>
+                    <p:ajax event="close" update="frmGestionarEmisores:grdEmisores"/> 
+                </p:dialog>
+
+                <p:dialog id="dlgEmisor" modal="true" header="Mantenimiento Emisor" widgetVar="manteEmisores" resizable="false"
+                          width="420" height="270">
+                    <ui:include src="frmDetalleEmisor.xhtml" />
+                    <p:ajax event="close" listener="#{emisorController.cancelar()}" 
+                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisor" />
+                </p:dialog>
+
+				<p:dialog id="dlgEmisorLimite" modal="true" header="Mantenimiento Límites Por Emisor" widgetVar="manteEmisorLimite" resizable="false"
+                          width="580" height="280">
+                    <ui:include src="frmDetalleEmisorLimite.xhtml" />
+                    <p:ajax event="close" listener="#{emisorController.cancelar()}" 
+                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisorLimite" />
+                </p:dialog>
+                
+                <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

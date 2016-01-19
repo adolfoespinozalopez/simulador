@@ -30,4 +30,12 @@ public class GeneralManagerImpl implements GeneralManager {
 		return generalDao.findByDomainAndState(domain, stEstado);
 	}
 
+	public List<General> findByDomain(String domain) {
+		return generalDao.findByDomain(domain);
+	}
+
+	public List<String> findAllDomainsActive() {
+		return generalDao.findAllDomainsActive();
+	}
+
 }

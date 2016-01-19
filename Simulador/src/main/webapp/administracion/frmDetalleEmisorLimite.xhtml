@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:form id="frmDetalleEmisorLimite">
+        <p:panel id="panelEmisorLimiteDetalle" header="Detalle Límite Por Emisor" 
+                 rendered="#{(emisorController.selectedEmisor != null)?true:false}">
+            <table style="width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="width: 60px;"><h:outputLabel value="Emisor:" /></td>
+                        <td>
+                            <p:inputText id="nombreEmisorLimite" style="width: 445px;" readonly="true"
+                                         value="#{emisorController.selectedEmisor.nbNomEmisor}" />
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td colspan="2"><BR/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p:fieldset legend="Límites" id="fldLimite">
+                <table style="width: 100%;">
+	                <tbody>
+	                    <tr>
+	                        <td><p:outputLabel value="Inicial:" for="valPorInicio" /></td>
+	                        <td>
+                                <p:spinner id="valPorInicio" required="true" prefix="%"
+                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcIni}" 
+                                		   min="0" max="100" stepFactor="0.25" />
+	                        </td>
+	                        <td><p:message for="valPorInicio" display="icon" /></td>
+	                        <td><p:outputLabel value="Final:" for="valPorFin" /></td>
+	                        <td>
+	                        	<p:spinner id="valPorFin" required="true" prefix="%"
+                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcFin}" 
+                                		   min="0" max="100" stepFactor="0.25"/>
+	                        </td>
+	                        <td><p:message for="valPorFin" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
+	                        <td>
+		                       	<p:inputText id="valInicio" value="#{emisorController.selectedlimiteEmisor.nuMontoIni}" 
+		                        			 required="true" maxlength="30" style="width: 130px;">
+		                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+	                			</p:inputText>
+	                        </td>
+	                        <td><p:message for="valInicio" display="icon" /></td>
+	                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
+	                        <td>
+	                        	<p:inputText id="valFin" value="#{emisorController.selectedlimiteEmisor.nuMontoFin}" 
+		                        			 required="true" maxlength="30" style="width: 130px;">
+		                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+	                			</p:inputText>
+	                        </td>
+	                        <td><p:message for="valFin" display="icon" /></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+            </p:fieldset>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelEmisorLimiteDetalle" validateClient="true" 
+                                 style="margin-right:10px" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteEmisorLimite').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

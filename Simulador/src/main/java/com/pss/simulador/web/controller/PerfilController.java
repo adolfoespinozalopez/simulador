@@ -23,7 +23,7 @@ import com.pss.simulador.web.bean.Perfil;
 * @since 1.0
 */
 @Component
-@ManagedBean(name = "loginController")
+@ManagedBean(name = "perfilController")
 @RequestScoped
 public class PerfilController {
 
