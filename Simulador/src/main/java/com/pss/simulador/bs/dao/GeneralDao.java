@@ -1,7 +1,5 @@
 package com.pss.simulador.bs.dao;
 
-import java.util.List;
-import com.pss.simulador.bs.domain.General;
 
 /**
 *
@@ -10,8 +8,8 @@ import com.pss.simulador.bs.domain.General;
 * @since 1.0
 */
 public interface GeneralDao {
-
-	public List<General> findByDomainAndState(String domain, String stEstado);
-	public List<General> findByDomain(String domain);
-	public List<String> findAllDomainsActive();
+//
+//	public List<General> findByDomainAndState(String domain, String stEstado);
+//	public List<General> findByDomain(String domain);
+//	public List<String> findAllDomainsActive();
 }
