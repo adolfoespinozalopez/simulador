@@ -1,6 +1,7 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -47,6 +48,26 @@ public class PortafolioController {
 	
 	@Autowired
     private InfoportManager infoportManager;
+	
+	/*
+	 * Modal
+	 */
+	private String tasaPreCancelacion;
+	private String montoPreCancelacion;
+	
+	private String selectedFondoAper = Constante.NO_OPTION_SELECTED;
+	private String selectedContraAper = Constante.NO_OPTION_SELECTED;
+	private String selectedMonedaAper = Constante.NO_OPTION_SELECTED;
+	private String selectedTipoAper = Constante.NO_OPTION_SELECTED;
+	private String importeAper;
+	private String tasaAper;
+	private String plazoAper;
+	private Date fechaVctoAper;
+	
+	private String importeRenova;
+	private String tasaRenova;
+	private String plazoRenova;
+	private Date fechaVctoRenova;
 	
 	@PostConstruct
 	public void init() {
@@ -118,6 +139,118 @@ public class PortafolioController {
 		this.mensajeValida = mensajeValida;
 	}
 	
+	public String getTasaPreCancelacion() {
+		return tasaPreCancelacion;
+	}
+
+	public void setTasaPreCancelacion(String tasaPreCancelacion) {
+		this.tasaPreCancelacion = tasaPreCancelacion;
+	}
+
+	public String getMontoPreCancelacion() {
+		return montoPreCancelacion;
+	}
+
+	public void setMontoPreCancelacion(String montoPreCancelacion) {
+		this.montoPreCancelacion = montoPreCancelacion;
+	}
+
+	public String getSelectedFondoAper() {
+		return selectedFondoAper;
+	}
+
+	public void setSelectedFondoAper(String selectedFondoAper) {
+		this.selectedFondoAper = selectedFondoAper;
+	}
+
+	public String getSelectedContraAper() {
+		return selectedContraAper;
+	}
+
+	public void setSelectedContraAper(String selectedContraAper) {
+		this.selectedContraAper = selectedContraAper;
+	}
+
+	public String getSelectedMonedaAper() {
+		return selectedMonedaAper;
+	}
+
+	public void setSelectedMonedaAper(String selectedMonedaAper) {
+		this.selectedMonedaAper = selectedMonedaAper;
+	}
+
+	public String getSelectedTipoAper() {
+		return selectedTipoAper;
+	}
+
+	public void setSelectedTipoAper(String selectedTipoAper) {
+		this.selectedTipoAper = selectedTipoAper;
+	}
+
+	public String getImporteAper() {
+		return importeAper;
+	}
+
+	public void setImporteAper(String importeAper) {
+		this.importeAper = importeAper;
+	}
+
+	public String getTasaAper() {
+		return tasaAper;
+	}
+
+	public void setTasaAper(String tasaAper) {
+		this.tasaAper = tasaAper;
+	}
+
+	public String getPlazoAper() {
+		return plazoAper;
+	}
+
+	public void setPlazoAper(String plazoAper) {
+		this.plazoAper = plazoAper;
+	}
+
+	public Date getFechaVctoAper() {
+		return fechaVctoAper;
+	}
+
+	public void setFechaVctoAper(Date fechaVctoAper) {
+		this.fechaVctoAper = fechaVctoAper;
+	}
+	
+	public String getImporteRenova() {
+		return importeRenova;
+	}
+
+	public void setImporteRenova(String importeRenova) {
+		this.importeRenova = importeRenova;
+	}
+
+	public String getTasaRenova() {
+		return tasaRenova;
+	}
+
+	public void setTasaRenova(String tasaRenova) {
+		this.tasaRenova = tasaRenova;
+	}
+
+	public String getPlazoRenova() {
+		return plazoRenova;
+	}
+
+	public void setPlazoRenova(String plazoRenova) {
+		this.plazoRenova = plazoRenova;
+	}
+
+	public Date getFechaVctoRenova() {
+		return fechaVctoRenova;
+	}
+
+	public void setFechaVctoRenova(Date fechaVctoRenova) {
+		this.fechaVctoRenova = fechaVctoRenova;
+	}
+
 	public void cancelar() {
 		selectedInfo = null;
 	}
@@ -126,9 +259,39 @@ public class PortafolioController {
 		RequestContext context = RequestContext.getCurrentInstance();
 		if (selectedInfo == null) {
             mensajeValida = "Debe seleccionar un registro.";
-            context.execute("msjVal.show()");
+            context.execute("PF('msjVal').show()");
         }else{
-        	
+        	context.execute("PF('manteCancelarDeposito').show()");
+        }
+	}
+	
+	public void validarPreCancelarDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('mantePreCancelarDeposito').show()");
+        }
+	}
+	
+	public void validarAperturaDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('mantePreAperturaDeposito').show()");
+        }
+	}
+	
+	public void validarRenovarDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('manteRenuevaDeposito').show()");
         }
 	}
 }

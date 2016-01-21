@@ -52,10 +52,13 @@
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
 	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
-	                        						update=":dlgMensajeVal"></p:menuitem>
-	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" ></p:menuitem>
-	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" ></p:menuitem>
-	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" ></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"></p:menuitem>
+	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" actionListener="#{portafolioController.validarPreCancelarDeposito}"
+	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"></p:menuitem>
+	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" actionListener="#{portafolioController.validarAperturaDeposito}"
+	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito"></p:menuitem>
+	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" actionListener="#{portafolioController.validarRenovarDeposito}"
+	                        						update=":dlgMensajeVal, :dlgRenuevaDeposito, :frmRenuevaDeposito:panelRenuevaDeposito"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
@@ -254,7 +257,7 @@
                         <tfoot>                           
                             <tr>
                             	<td style="text-align: center">
-                                    <p:commandButton value="Cerrar" icon="ui-icon-close" onclick="msjVal.hide()" 
+                                    <p:commandButton value="Cerrar" icon="ui-icon-close" onclick="PF('msjVal').hide()" 
                                                      update=":frmPortafolio:grdFondo"/>
                                 </td>
                             </tr>
@@ -263,7 +266,33 @@
                    </p:panel>
                 </p:dialog>
                 
+                <p:dialog id="dlgCancelarDeposito" modal="true" header="Cancelación de Depósitos a Plazo" 
+                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="320">
+                    <ui:include src="frmCancelarDeposito.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmPortafolio:grdFondo, :frmCancelarDeposito" />
+                </p:dialog>
                 
+                <p:dialog id="dlgPreCancelarDeposito" modal="true" header="Pre - Cancelación de Depósitos a Plazo" 
+                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="340">
+                    <ui:include src="frmPreCancelarDeposito.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmPortafolio:grdFondo, :frmPreCancelarDeposito" />
+                </p:dialog>
+                
+                <p:dialog id="dlgAperturaDeposito" modal="true" header="Apertura de Depósito a Plazo" 
+                		  widgetVar="mantePreAperturaDeposito" resizable="false" width="490" height="270">
+                    <ui:include src="frmAperturaDeposito.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmPortafolio:grdFondo, :frmAperturaDeposito" />
+                </p:dialog>
+                
+                <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
+                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="270">
+                	<ui:include src="frmRenuevaDeposito.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmPortafolio:grdFondo, :frmRenuevaDeposito" />
+                </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
             </ui:define>

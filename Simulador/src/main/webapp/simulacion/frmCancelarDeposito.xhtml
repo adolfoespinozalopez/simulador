@@ -1,0 +1,103 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id="frmCancelarDeposito">
+    	<p:focus context="panelCancelarDeposito"/>
+        <p:panel id="panelCancelarDeposito" header="Detalle Cancelación" 
+                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+            <table style="width: 100%;">
+                <tbody>
+                	<tr>
+                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
+                        <td colspan="3">
+                            <p:inputText id="txtnomFondo" style="width: 285px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.nbNomFondo}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Contraparte:"/></td>
+                        <td colspan="3">
+                            <p:inputText id="txtnomConraparte" style="width: 285px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.nbNomEmisor}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Moneda:"/></td>
+                        <td>
+	                        <p:inputText id="txtmoneda" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                        <td style="width: 60px;"><h:outputLabel value="Tipo:"/></td>
+                        <td>
+	                        <p:inputText id="txtTipo" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Tasa:"/></td>
+                        <td>
+	                        <p:inputText id="txtTasa" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                        <td><h:outputLabel value="Plazo:"/></td>
+                        <td>
+	                        <p:inputText id="txtPlazo" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Fecha Inicio:"/></td>
+                        <td>
+                        	<p:calendar maxlength="10" id="fecInicio" size="13" effect="fadeIn" 
+                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEmision}"
+                                        styleClass="disabled">
+                            </p:calendar>
+                        </td>
+                        <td><h:outputLabel value="Fecha Vcto:"/></td>
+                        <td>
+	                        <p:calendar maxlength="10" id="fecVcto" size="13" effect="fadeIn" 
+                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+                                        value="#{portafolioController.selectedInfo.fhFecVencimiento}"
+                                        styleClass="disabled">
+                            </p:calendar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Capital (K):"/></td>
+                        <td colspan="3">
+                            <p:inputText id="txtCapital" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.imValorSinInter}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Intereses (I):"/></td>
+                        <td colspan="3">
+                            <p:inputText id="txtInteres" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.imInteresCorrid}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="(K) + (I):"/></td>
+                        <td colspan="3">
+                            <p:inputText id="txtSuma" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.imValorMonRef}" />
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td colspan="4"><BR/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Confirmar" icon="ui-icon-disk" update="panelCancelarDeposito" 
+                                 style="margin-right:10px" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteCancelarDeposito').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

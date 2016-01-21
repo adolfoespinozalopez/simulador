@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id="frmRenuevaDeposito">
+    	<p:focus context="panelRenuevaDeposito"/>
+        <p:panel id="panelRenuevaDeposito" header="Detalle Renovación" 
+                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+            <table style="width: 100%;">
+                <tbody>
+                	<tr>
+                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
+                        <td colspan="5">
+                            <p:inputText id="txtFondoRen" style="width: 315px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.nbNomFondo}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Contraparte:"/></td>
+                        <td colspan="5">
+                            <p:inputText id="txtContraparteRen" style="width: 315px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.nbNomEmisor}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Moneda:"/></td>
+                        <td colspan="2">
+	                        <p:inputText id="txtmonedaRen" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
+                        <td colspan="2">
+	                        <p:inputText id="txtTipoRen" style="width: 100px;" readonly="true" 
+                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p:outputLabel value="Importe:" for="txtImpRen"/></td>
+                        <td colspan="4">
+	                        <p:inputText id="txtImpRen" style="width: 315px;" maxlength="30" required="true"
+                                         value="#{portafolioController.importeRenova}" />
+                        </td>
+                        <td><p:message for="txtImpRen" display="icon" /></td>
+                    </tr>
+                    <tr>
+                    	<td><p:outputLabel value="Tasa:" for="txtTasaRen"/></td>
+                        <td>
+	                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="30" required="true"
+                                         value="#{portafolioController.tasaRenova}" />
+                        </td>
+                        <td style="width: 40px;"><p:message for="txtTasaRen" display="icon" /></td>
+                        <td><p:outputLabel value="Plazo:" for="txtPlazoRen"/></td>
+                        <td>
+	                        <p:inputText id="txtPlazoRen" style="width: 100px;" maxlength="30" required="true" 
+                                         value="#{portafolioController.plazoRenova}" />
+                        </td>
+                        <td style="width: 40px;"><p:message for="txtPlazoRen" display="icon" /></td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Fecha Vcto:"/></td>
+                        <td colspan="5">
+                            <p:calendar maxlength="10" id="fecVctoRen" size="13" effect="fadeIn" 
+                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+                                        value="#{portafolioController.fechaVctoRenova}"
+                                        styleClass="disabled">
+                            </p:calendar>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td colspan="6"><BR/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Confirmar" icon="ui-icon-disk" update="panelRenuevaDeposito" validateClient="true" 
+                                 style="margin-right:10px" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteRenuevaDeposito').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id="frmAperturaDeposito">
+    	<p:focus context="panelAperturaDeposito"/>
+        <p:panel id="panelAperturaDeposito" header="Detalle Apertura" 
+                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+            <table style="width: 100%;">
+                <tbody>
+                	<tr>
+                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
+                        <td colspan="5">
+                            <p:selectOneMenu id="lstFondoAper" required="true" style="width: 325px;" 
+                                         	value="#{portafolioController.selectedFondoAper}" >
+	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+	                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+	                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+	                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+	                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+	                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+	                        </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Contraparte:"/></td>
+                        <td colspan="5">
+                            <p:selectOneMenu id="lstContraAper" required="true" style="width: 325px;" 
+                                         	value="#{portafolioController.selectedContraAper}" >
+	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
+	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
+	                            <f:selectItem itemLabel="BANCO GNB" itemValue="BANCO GNB" />
+	                            <f:selectItem itemLabel="BANCO RIPLEY" itemValue="BANCO RIPLEY" />
+	                            <f:selectItem itemLabel="BIF" itemValue="BIF" />
+	                            <f:selectItem itemLabel="BANCO SANTANDER" itemValue="BANCO SANTANDER" />
+	                        </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Moneda:"/></td>
+                        <td colspan="2">
+	                        <p:selectOneMenu id="lstMonedaAper" required="true" style="width: 110px;" 
+                                         	value="#{portafolioController.selectedMonedaAper}" >
+	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+	                            <f:selectItem itemLabel="PEN" itemValue="PEN" />
+	                            <f:selectItem itemLabel="USD" itemValue="USD" />
+	                        </p:selectOneMenu>
+                        </td>
+                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
+                        <td colspan="2">
+	                        <p:selectOneMenu id="lstTipoAper" required="true" style="width: 112px;" 
+                                         	value="#{portafolioController.selectedMonedaAper}" >
+	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+	                            <f:selectItem itemLabel="NORMAL" itemValue="NORMAL" />
+	                            <f:selectItem itemLabel="COBERTURADO" itemValue="COBERTURADO" />
+	                        </p:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p:outputLabel value="Importe:" for="txtImpAper"/></td>
+                        <td colspan="4">
+	                        <p:inputText id="txtImpAper" style="width: 315px;" maxlength="30" required="true"
+                                         value="#{portafolioController.importeAper}" />
+                        </td>
+                        <td><p:message for="txtImpAper" display="icon" /></td>
+                    </tr>
+                    <tr>
+                    	<td><p:outputLabel value="Tasa:" for="txtTasaAper"/></td>
+                        <td>
+	                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="30" required="true"
+                                         value="#{portafolioController.tasaAper}" />
+                        </td>
+                        <td style="width: 40px;"><p:message for="txtTasaAper" display="icon" /></td>
+                        <td><p:outputLabel value="Plazo:" for="txtPlazoAper"/></td>
+                        <td>
+	                        <p:inputText id="txtPlazoAper" style="width: 105px;" maxlength="30" required="true" 
+                                         value="#{portafolioController.plazoAper}" />
+                        </td>
+                        <td style="width: 40px;"><p:message for="txtPlazoAper" display="icon" /></td>
+                    </tr>
+                    <tr>
+                        <td><h:outputLabel value="Fecha Vcto:"/></td>
+                        <td colspan="5">
+                            <p:calendar maxlength="10" id="fecVcto" size="13" effect="fadeIn" 
+                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+                                        value="#{portafolioController.fechaVctoAper}"
+                                        styleClass="disabled">
+                            </p:calendar>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<td colspan="6"><BR/></td>
+                    </tr>
+                </tbody>
+            </table>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Confirmar" icon="ui-icon-disk" update="panelAperturaDeposito" validateClient="true" 
+                                 style="margin-right:10px" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteAperturaDeposito').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>
