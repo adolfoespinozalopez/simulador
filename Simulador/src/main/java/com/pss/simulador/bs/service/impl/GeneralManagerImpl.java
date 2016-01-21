@@ -22,8 +22,6 @@ public class GeneralManagerImpl implements GeneralManager {
 
 	private static final Logger LOG = Logger.getLogger(GeneralManagerImpl.class);
 	
-	
-	
 	@Autowired
 	private GeneralRepository generalRepository;
 	
@@ -38,6 +36,10 @@ public class GeneralManagerImpl implements GeneralManager {
 
 	public List<String> findAllDomainsActive() {
 		return generalRepository.findAllDomainsActive();
+	}
+
+	public List<String> findAllDomains() {
+		return generalRepository.findAllDomains();
 	}
 
 }

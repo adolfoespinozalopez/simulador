@@ -8,58 +8,6 @@
         body{
             background: none !important;
         }
-        .nav {
-            background:#0079c1;
-            background: -moz-linear-gradient(top,#0079c1 0,#00529b 100%);
-            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#0079c1), to(#00529b));
-            background: -webkit-linear-gradient(top,#0079c1 0,#00529b 100%);
-            background: -o-linear-gradient(top,#0079c1 0,#00529b 100%);
-            background: linear-gradient(to bottom,#0079c1 0,#00529b 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#0079c1, endColorstr=#00529b, GradientType=0);
-        }
-        .nav .ui-menuitem-active{
-            /*background: none #426fd9;
-            color: #fff !important;*/
-        }
-        .nav .ui-menu-child{
-            background: #005098;
-            padding: 10px 20px !important;
-            border: 1px solid #005098 !important;
-            top: 32px !important;
-        }
-        .nav .ui-menu-child .ui-menuitem-text{
-            color: #ffffff;
-        }
-        .nav .ui-state-hover{
-            background: #005098; 
-        }
-        .nav a.ui-state-hover {
-            border: none !important;
-        }
-        .nav .ui-menu-child a.ui-state-hover .ui-menuitem-text {
-            border-bottom: 1px solid #fff;
-        }
-        .nav .ui-state-hover .ui-menuitem-text{
-            color: #fff;
-        }
-        .nav .ui-menuitem-link{
-            border: none !important;
-            padding: 10px 15px !important;
-            color: #fff;
-        }
-        .nav .ui-menuitem-link .ui-icon{
-            font-size: 18px!important;
-        }
-        .ui-menuitem-link .ui-menuitem-text{
-            font-size: 13px!important;
-            margin-left: 6px;
-        }
-        .nav .ui-menu-child .ui-menuitem-text{
-            border-bottom: 1px solid #005098;
-        }
-        .nav .ui-shadow{
-            box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.8);
-        }
     </style>
     <div id="divHeader">
         <div id="divHeader_Top">
@@ -76,8 +24,9 @@
                         <p:menuitem value="Emisores" url="/administracion/frmEmisores.jsf" icon="fa fa-bank"/>
                     </p:submenu>
                     <p:submenu label="Simulación" icon="fa fa-paper-plane-o">
-                        <p:menuitem value="Simulación" url="/simulacion/frmSimulacion.jsf" icon="fa fa-bullseye"/>
-                        <p:menuitem value="Ordenes" url="#" icon="fa fa-bullseye"/>
+                    	<p:menuitem value="Portafolio" url="/simulacion/frmPortafolio.jsf" icon="fa fa-briefcase"/>
+                        <p:menuitem value="Exposición" url="/simulacion/frmSimulacion.jsf" icon="fa fa-globe"/>
+                        <p:menuitem value="Ordenes" url="#" icon="fa fa-inbox"/>
                     </p:submenu>
                 </p:menubar>
             </h:form>

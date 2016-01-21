@@ -1,6 +1,7 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -9,6 +10,8 @@ import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+
+import com.pss.simulador.web.bean.FlujoCaja;
 import com.pss.simulador.web.bean.Fondo;
 import com.pss.simulador.web.bean.Simulacion;
 
@@ -25,6 +28,9 @@ public class SimulacionController {
 
 	private static final Logger LOG = Logger.getLogger(SimulacionController.class);
 	private List<Simulacion> lista = new ArrayList<Simulacion>();
+	
+	private List<FlujoCaja> listaCaja = new ArrayList<FlujoCaja>();
+	
 	private Fondo selectedFondo;
 
 	public SimulacionController() {
@@ -57,6 +63,47 @@ public class SimulacionController {
 		lista.add(new Simulacion("Derivados", -3049.0, 0.0, -3049.0, 0.0, 0.0, 0.0, 0.02, 2.81));
 		lista.add(new Simulacion("Suscripción + Vtas.", 108298.0, 0.0, 108298.0, 0.0, 0.0, 0.0, 0.02, 2.81));
 		lista.add(new Simulacion("Rescate + Comp.", 1088152.0, -0.3, 1088152.0, 0.3, 0.0, 0.0, 0.0, 0.0));
+		
+		Calendar cal = Calendar.getInstance();
+		listaCaja = new ArrayList<FlujoCaja>();
+		listaCaja.add(new FlujoCaja(cal.getTime(), 6912633.00, 0.00, 6912633.00, 570.00, 0.00, 570.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 10032799.00, 0.00, 16945432.00, 0.00, 0.00, 570.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 10063903.00, 0.00, 27009336.00, 0.00, 0.00, 570.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 10031740.00, 0.00, 65394155.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 16291673.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 5080448.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
+		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
+		cal.add(Calendar.DATE, 1);
 	}
 
 	public List<Simulacion> getLista() {
@@ -74,4 +121,13 @@ public class SimulacionController {
 	public void setSelectedFondo(Fondo selectedFondo) {
 		this.selectedFondo = selectedFondo;
 	}
+
+	public List<FlujoCaja> getListaCaja() {
+		return listaCaja;
+	}
+
+	public void setListaCaja(List<FlujoCaja> listaCaja) {
+		this.listaCaja = listaCaja;
+	}
+	
 }

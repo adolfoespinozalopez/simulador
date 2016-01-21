@@ -16,4 +16,6 @@ public interface GeneralManager {
 	public List<General> findByDomain(String domain);
 	
 	public List<String> findAllDomainsActive();
+	
+	public List<String> findAllDomains();
 }

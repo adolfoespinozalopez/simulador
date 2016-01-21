@@ -14,7 +14,7 @@ import javax.persistence.TemporalType;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI004_TIPOCAMBIO")
+@Table(name = "TSI004_TIPOCAMBIO", schema="BBVATESOR")
 public class TipoCambio implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -28,7 +28,7 @@
                         </p:selectOneMenu>
                         <p:separator />
                         
-                        <p:layout style="min-width:400px;min-height:550px;" fullPage="false">
+                        <p:layout style="min-width:400px;max-height:550px;height:550px;" fullPage="false">
                             <p:layoutUnit position="center" resizable="true" size="600" minSize="700"  
                                           header="Exposición del Fondo">
                                 <p:dataTable id="grdFondo" value="#{simulacionController.lista}" var="item" 
@@ -71,12 +71,65 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:layoutUnit>
-                            <p:layoutUnit position="east" resizable="true" collapsible="true" effect="drop" header="Flujo de Caja" maxSize="500">
-                                Center
+                            <p:layoutUnit position="east" resizable="true" collapsible="true" effect="drop" 
+                            				header="Flujo de Caja" maxSize="500" size="400">
+                            	<p:dataTable id="grdCaja" value="#{simulacionController.listaCaja}" var="item" 
+                                             resizableColumns="true" style="width:100%;" 
+                                     		 emptyMessage="No se encontraron registros">
+                                     <p:columnGroup type="header">
+							            <p:row>
+							                <p:column colspan="1" headerText="11" />
+							                <p:column colspan="3" headerText="PEN" />
+							                <p:column colspan="3" headerText="USD" />
+							            </p:row>
+							            <p:row>
+							            	<p:column headerText="Fecha" />
+							            	<p:column headerText="Entrada" />
+							                <p:column headerText="Salida" />
+							                <p:column headerText="Saldo" />
+							                <p:column headerText="Entrada" />
+							                <p:column headerText="Salida" />
+							                <p:column headerText="Saldo" />
+							            </p:row>
+							        </p:columnGroup>
+							        <p:column headerText="Feha" style="text-align: center;">
+		                                <h:outputText value="#{item.fecha}">
+		                                    <f:convertDateTime pattern="EEE d MMM" locale="es_PE" type="date" timeZone="EST"/>
+		                                </h:outputText>
+		                            </p:column>
+                            		<p:column headerText="Entrada" style="text-align: center;">
+										<h:outputText value="#{item.entradaSoles}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Salida" style="text-align: center;">
+										<h:outputText value="#{item.salidaSoles}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Saldo" style="text-align: center;">
+										<h:outputText value="#{item.saldoSoles}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Entrada" style="text-align: center;">
+										<h:outputText value="#{item.entradaDolar}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Salida" style="text-align: center;">
+										<h:outputText value="#{item.salidaDolar}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+									<p:column headerText="Saldo" style="text-align: center;">
+										<h:outputText value="#{item.saldoDolar}">
+											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										</h:outputText>
+									</p:column>
+                                 </p:dataTable>
                             </p:layoutUnit>
                         </p:layout>
-                        
-                        
                     </p:panel>
                 </h:form>
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
@@ -84,3 +137,4 @@
         </ui:composition>
     </h:body>
 </html>
+

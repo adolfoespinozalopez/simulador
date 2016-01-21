@@ -17,6 +17,7 @@
                     <p:graphicImage value="/img/loading.gif" style="width: 65px; height: 50px;"/>
                 </p:blockUI>
                 <h1 class="title-sh">Emisores</h1>
+                <p:separator />
                 <h:form id="frmGestionarEmisores" onkeypress="if (event.keyCode == 13) return false;">
                     <p:panel id="panEmisores">
                     	<h:outputText value="Nombre :" style="padding-right: 5px;"/>
@@ -68,20 +69,20 @@
                                                  style="width: 20px; height: 20px;" title="Ver detalles">
                                     <p:resetInput target="dlgEmisor" />
                                 </p:commandButton>
-                                <p:commandButton process="@this, grdEmisores" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Eliminar">
-                                    <f:setPropertyActionListener value="#{item}" target="#{emisorController.selectedGeneral}" />
-                                </p:commandButton>
                                 <p:commandButton process="@this, grdEmisores" icon="ui-icon-wrench"  actionListener="#{emisorController.verLimites(item)}"
                                 				 oncomplete="PF('manteEmisorLimite').show()" update=":dlgEmisorLimite" 
                                 				 style="width: 20px; height: 20px;" title="Ver límites">
                                		<p:resetInput target="dlgEmisorLimite" />
                                 </p:commandButton>
+                                <p:commandButton process="@this, grdEmisores" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Eliminar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{emisorController.selectedEmisor}" />
+                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </p:panel>
                 </h:form>
-                <p:dialog modal="true" header="Eliminar General" widgetVar="dlgConfirmacion" 
+                <p:dialog modal="true" header="Eliminar Emisor" widgetVar="dlgConfirmacion" 
                           resizable="false" width="380" height="100" id="dlgMensaje">
                     <h:form id="frmConfirmacion">
                         <p:panel>

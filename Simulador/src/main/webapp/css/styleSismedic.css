@@ -40,7 +40,9 @@ ul#navigation li.special{float:right}.banner_wrapper{clear:both;display:block;he
 #divAcceso{float:left;width:284px;margin-top:60px}
 
 .g06{background:url("../../images/g06-sprite.png") repeat-y scroll -478px 0 transparent;margin:0;font-family:arial,helvetica,sans-serif!important;font-size:11px!important}
-.content{padding:0;min-height:580px;height:615px;width:1165px;min-width:1165px;text-align:left;margin:0 auto;background:#fff;padding-top:10px}
+
+.content{padding:0;min-height:580px;height:600px;width:1165px;min-width:1165px;text-align:left;margin:0 auto;background:#fff;padding-top:10px}
+
 .compania{background-image:url("../img/BBVAtorre1.jpg");background-position:60px -400px;background-repeat:no-repeat;float:left;height:615px;width:1165px;margin:0;padding:0;}
 .paginaError{background-image:url("../../images/bg_underconstruction.png");background-position:left top;background-repeat:no-repeat;float:left;height:334px;width:1165px;margin-left:-40px}
 .compania p{color:#7D7D7D;float:left;height:300px;margin-left:520px;margin-top:10px;text-align:justify;width:600px;font-size:12px}

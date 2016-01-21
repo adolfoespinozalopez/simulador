@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI009_PERFILFONDO")
+@Table(name = "TSI009_PERFILFONDO", schema="BBVATESOR")
 public class PerfilFondo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

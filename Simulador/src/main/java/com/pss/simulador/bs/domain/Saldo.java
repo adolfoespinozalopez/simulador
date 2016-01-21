@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI001_SALDO")
+@Table(name = "TSI001_SALDO", schema="BBVATESOR")
 public class Saldo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

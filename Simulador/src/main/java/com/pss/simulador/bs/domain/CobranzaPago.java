@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI003_COBRANZAPAGO")
+@Table(name = "TSI003_COBRANZAPAGO", schema="BBVATESOR")
 public class CobranzaPago implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author Adolfo
+ * @author Adolfo Espinoza
  * @version 1.0, 08/01/2016
  * @since 1.0
  */

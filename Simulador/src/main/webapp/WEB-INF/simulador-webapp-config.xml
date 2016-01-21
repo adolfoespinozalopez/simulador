@@ -34,7 +34,7 @@
 	
 	<!-- definir entityManagerFactory -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
-		<property name="persistenceUnitName" value="SpringData"></property>
+		<property name="persistenceUnitName" value="simuladorData"></property>
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 	</bean>
 	

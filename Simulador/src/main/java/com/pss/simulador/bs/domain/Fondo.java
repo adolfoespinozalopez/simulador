@@ -15,7 +15,7 @@ import javax.persistence.Table;
 * @since 1.0
 */
 @Entity
-@Table(name = "TSI008_FONDO")
+@Table(name = "TSI008_FONDO", schema="BBVATESOR")
 public class Fondo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

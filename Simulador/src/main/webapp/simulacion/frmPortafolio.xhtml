@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:pe="http://primefaces.org/ui/extensions">
+    <h:body>
+        <ui:composition
+            template="/WEB-INF/facelets/templates/mainLayout.xhtml">
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>
+            </ui:define>
+            <ui:define name="content" >
+            	<h1 class="title-sh">Portafolio</h1>
+            	<p:separator />
+                <h:form id="frmPortafolio">
+                	<style type="text/css">
+                        .content{height: 700px;}
+                    </style>
+                    <p:panel id="panPortafolio">
+                        <h:outputText value="Fondo :" style="padding-right: 5px;"/>
+                        <p:selectOneMenu id="lstFondo" style="width: 180px;" 
+                                         value="#{portafolioController.selectedFondo}" >
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
+										   itemValue="#{fondo.id}" itemLabel="#{fondo.nombre}" />
+                            <p:ajax event="change" update="grdFondo"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Emisor :" style="padding-left: 20px;"/>
+						<p:selectOneMenu id="lstEmisor" style="width: 180px;" 
+										 value="#{portafolioController.selectedEmisor}">
+							<f:selectItem itemLabel="Todos" itemValue="-1" />
+							<f:selectItems value="#{portafolioController.listaEmisor}" var="emisor" 
+										   itemValue="#{emisor.cdIdemisor}" itemLabel="#{emisor.nbNomEmisor}" />
+							<p:ajax event="change" update="grdFondo" />
+						</p:selectOneMenu>
+						<h:outputText value="Vence Hoy :" style="padding-left: 20px;"/>
+						<p:selectOneMenu id="lstCondicion" style="width: 100px;" 
+                                         value="#{portafolioController.selectedCondicion}" >
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItem itemLabel="SI" itemValue="SI" />
+                            <f:selectItem itemLabel="NO" itemValue="NO" />
+                            <p:ajax event="change" update="grdFondo"/>
+                        </p:selectOneMenu>
+                        <p:megaMenu orientation="horizontal" style="margin-top:10px">
+                        	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
+                        		<p:column>
+	                        		<p:submenu label="Depósito" >
+	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
+	                        						update=":dlgMensajeVal"></p:menuitem>
+	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" ></p:menuitem>
+	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" ></p:menuitem>
+	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" ></p:menuitem>
+	                        		</p:submenu>
+                        		</p:column>
+                        		<p:column>
+	                        		<p:submenu label="Compra / Venta USD" >
+	                        			<p:menuitem value="Spot" icon="ui-icon-cart" ></p:menuitem>
+	                        			<p:menuitem value="FWD" icon="ui-icon-cart" ></p:menuitem>
+	                        		</p:submenu>
+                        		</p:column>
+                        		<p:column>
+                        			<p:submenu label="Cuenta Ahorros" >
+                        				<p:menuitem value="Abono / Cargo" url="#" icon="ui-icon-transferthick-e-w" ></p:menuitem>
+                        			</p:submenu>                        		
+                        		</p:column>
+                        	</p:submenu>
+                        	<p:submenu label="Renta fija" icon="fa fa-files-o" >
+                        		<p:column>
+	                        		<p:submenu label="Operación" >
+	                        			<p:menuitem value="Opción" icon="ui-icon-clock" ></p:menuitem>
+	                        		</p:submenu>
+                        		</p:column>
+                        	</p:submenu>
+                        	<p:submenu label="Renta Variable" icon="fa fa-flag" >
+                        		<p:column>
+	                        		<p:submenu label="Operación" >
+	                        			<p:menuitem value="Opción" icon="ui-icon-clock" ></p:menuitem>
+	                        		</p:submenu>
+                        		</p:column>
+                        	</p:submenu>
+                        </p:megaMenu>
+						<p:dataTable id="grdFondo" value="#{portafolioController.listaPortafolio}"
+							var="item" scrollable="true" scrollHeight="520" scrollWidth="600" resizableColumns="true" reflow="false"
+							emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
+							selectionMode="single" rowIndexVar="index" rowKey="#{item.cdIdinfoport}"
+							selection="#{portafolioController.selectedInfo}"
+							frozenColumns="5" style="width:100%;" styleClass="infoport">
+							<p:column headerText="Nombre del Fondo" sortBy="#{item.nbNomFondo}" 
+										style="width:100px;text-align: left;">
+								<h:outputText value="#{item.nbNomFondo}" />
+							</p:column>
+							<p:column headerText="Tipo" style="width:20px;text-align: left;">
+								<h:outputText value="#{item.tpTipfondo}" />
+							</p:column>
+							<p:column headerText="Emisor" sortBy="#{item.nbNomEmisor}" 
+									style="width:80px;text-align: left;">
+								<h:outputText value="#{item.nbNomEmisor}" />
+							</p:column>
+							<p:column headerText="Rating" style="width:30px;text-align: left;">
+								<h:outputText value="#{item.tpRatingEmisor}" />
+							</p:column>
+							<p:column headerText="Especie" sortBy="#{item.nbEspecie}"  
+										style="width:80px;text-align: left;">
+								<h:outputText value="#{item.nbEspecie}" />
+							</p:column>
+							<p:column headerText="Emisión" sortBy="#{item.fhFecEmision}"  
+										style="width:60px;text-align: center;">
+                                <h:outputText value="#{item.fhFecEmision}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Vencimiento" sortBy="#{item.fhFecVencimiento}"  
+                            			style="width:80px;text-align: center;">
+                                <h:outputText value="#{item.fhFecVencimiento}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+							<p:column headerText="Nominal en miles" style="width:90px;text-align: left;">
+								<h:outputText value="#{item.imNominalEnMil}" style="text-align: right;display: block;">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Cupón" style="width:60px;text-align: center;">
+								<h:outputText value="#{item.imCupon}" style="text-align: right;display: block;" />
+							</p:column>
+							<p:column headerText="Fec. Ult. Cupón" style="width:80px;text-align: center;">
+                                <h:outputText value="#{item.fhFecUltCupon}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Modal." style="width:50px;text-align: center;">
+								<h:outputText value="#{item.tpModalidad}" />
+							</p:column>
+							<p:column headerText="Precio Limpio" style="width:70px;text-align: center;">
+								<h:outputText value="#{item.imPrecioLimpio}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Precio Sucio" style="width:60px;text-align: center;">
+								<h:outputText value="#{item.imPrecioSucio}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Valor sin intereses" style="width:100px;text-align: center;">
+								<h:outputText value="#{item.imValorSinInter}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="2" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Intereses corridos" style="width:90px;text-align: center;">
+								<h:outputText value="#{item.imInteresCorrid}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Val. Mon. Ref." style="width:70px;text-align: center;">
+								<h:outputText value="#{item.imValorMonRef}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Moneda" style="width:40px;text-align: center;">
+								<h:outputText value="#{item.tpAbrevMoneda}" />
+							</p:column>
+							<p:column headerText="Val. Mon. Local" style="width:80px;text-align: center;">
+								<h:outputText value="#{item.imValorMonLocal}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Tot. Ctas. Cobrar" style="width:90px;text-align: center;">
+								<h:outputText value="#{item.imTotCtasCobrar}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Tot. Ctas. Pagar" style="width:80px;text-align: center;">
+								<h:outputText value="#{item.imTotCtasPagar}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Período" style="width:50px;text-align: center;">
+								<h:outputText value="#{item.nuPeriodo}" />
+							</p:column>
+							<p:column headerText="Ytm" style="width:40px;text-align: center;">
+								<h:outputText value="#{item.imYtm}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Durac. Norm" style="width:80px;text-align: center;">
+								<h:outputText value="#{item.imDuracNorm}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Durac. Modif" style="width:80px;text-align: center;">
+								<h:outputText value="#{item.imDuracModif}">
+									<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="7" />
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Clasifica" style="width:60px;text-align: center;">
+								<h:outputText value="#{item.tpClasifica}" />
+							</p:column>
+							<p:column headerText="Precio Act." style="width:70px;text-align: center;">
+								<h:outputText value="#{item.imPrecioAct}">
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Precio Com." style="width:70px;text-align: center;">
+								<h:outputText value="#{item.imPrecCom}">
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Isim" style="width:90px;text-align: center;">
+								<h:outputText value="#{item.nbIsim}" />
+							</p:column>
+							<p:column headerText="Mnemonico" style="width:80px;text-align: center;">
+								<h:outputText value="#{item.nbMnemoniaco}" />
+							</p:column>
+							<p:column headerText="Nro Dias Vcto" style="width:60px;text-align: center;">
+								<h:outputText value="#{item.nuNumDiasVcto}" />
+							</p:column>
+							<p:column headerText="FecVcto. Sgt. Cupón" style="width:80px;text-align: center;">
+                                <h:outputText value="#{item.fhFecvctoSgtCup}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fec. Ult. Operación" style="width:90px;text-align: center;">
+                                <h:outputText value="#{item.fhFecUltOperac}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Durac.Nor. Libor" style="width:90px;text-align: center;">
+								<h:outputText value="#{item.imDuracNorLibor}">
+								</h:outputText>
+							</p:column>
+							<p:column headerText="Compra T más N" style="width:90px;text-align: center;">
+								<h:outputText value="#{item.imCompraTMasN}" />
+							</p:column>
+							<p:column headerText="Observación" style="width:150px;text-align: left;">
+								<h:outputText value="#{item.nbObservacion}" />
+							</p:column>
+						</p:dataTable>
+					</p:panel>
+                </h:form>
+                
+                <p:dialog id="dlgMensajeVal" modal="true" header="Mensaje" widgetVar="msjVal" resizable="false"
+                    width="200" height="110" dynamic="true">
+                    <p:panel style="border: 0px">
+                    <table>
+                        <tbody>
+                            <tr>
+                            	<td><h:outputLabel value="#{portafolioController.mensajeValida}"/><br/><br/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>                           
+                            <tr>
+                            	<td style="text-align: center">
+                                    <p:commandButton value="Cerrar" icon="ui-icon-close" onclick="msjVal.hide()" 
+                                                     update=":frmPortafolio:grdFondo"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                   </p:panel>
+                </p:dialog>
+                
+                
+                
+                <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

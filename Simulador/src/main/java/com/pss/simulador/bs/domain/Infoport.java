@@ -15,7 +15,7 @@ import javax.persistence.TemporalType;
 * @since 1.0
 */
 @Entity
-@Table(name = "TSI002_INFOPORT")
+@Table(name = "TSI002_INFOPORT", schema="BBVATESOR")
 public class Infoport implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

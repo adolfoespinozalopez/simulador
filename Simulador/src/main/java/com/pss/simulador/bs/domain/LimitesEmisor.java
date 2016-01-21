@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI011_LIMITESEMISOR")
+@Table(name = "TSI011_LIMITESEMISOR", schema="BBVATESOR")
 public class LimitesEmisor implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

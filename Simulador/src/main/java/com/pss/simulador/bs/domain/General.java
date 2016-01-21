@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 * @since 1.0
 */
 @Entity
-@Table(name = "TSI005_GENERAL")
+@Table(name = "TSI005_GENERAL", schema="BBVATESOR")
 public class General implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;

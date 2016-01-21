@@ -35,6 +35,11 @@ public class GeneralController {
 	@Autowired
     private GeneralManager generalManager;
 	
+	/*
+	 * Modal
+	 */
+	private List<String> lstGeneralDominioActivos = new ArrayList<String>();
+	
 	public GeneralController() {
 
 	}
@@ -42,14 +47,15 @@ public class GeneralController {
 	@PostConstruct
 	public void init() {
 		lstGeneralDominio = new ArrayList<String>();
-		lstGeneralDominio = generalManager.findAllDomainsActive();
+		lstGeneralDominio = generalManager.findAllDomains();
+		lstGeneralDominioActivos = generalManager.findAllDomainsActive();
 		
 		listaGeneral = new ArrayList<General>();		
 		selectedGeneral = null;
 	}
 	
 	public void buscar() {
-		listaGeneral = generalManager.findByDomain(Constante.NO_OPTION_SELECTED);
+		listaGeneral = generalManager.findByDomain(selectedGeneralDominio);
 	}
 
 	public void crear() {
@@ -100,6 +106,14 @@ public class GeneralController {
 
 	public void setListaGeneral(List<General> listaGeneral) {
 		this.listaGeneral = listaGeneral;
+	}
+
+	public List<String> getLstGeneralDominioActivos() {
+		return lstGeneralDominioActivos;
+	}
+
+	public void setLstGeneralDominioActivos(List<String> lstGeneralDominioActivos) {
+		this.lstGeneralDominioActivos = lstGeneralDominioActivos;
 	}
 	
 }
