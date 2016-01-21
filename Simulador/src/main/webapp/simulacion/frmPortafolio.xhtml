@@ -63,20 +63,24 @@
                         		</p:column>
                         		<p:column>
 	                        		<p:submenu label="Compra / Venta USD" >
-	                        			<p:menuitem value="Spot" icon="ui-icon-cart" ></p:menuitem>
-	                        			<p:menuitem value="FWD" icon="ui-icon-cart" ></p:menuitem>
+	                        			<p:menuitem value="Spot" icon="ui-icon-cart" actionListener="#{portafolioController.validarSpot}"
+	                        						update=":dlgMensajeVal, :dlgSpot, :frmSpot:panelSpot"></p:menuitem>
+	                        			<p:menuitem value="Forward" icon="ui-icon-cart" actionListener="#{portafolioController.validarFwd}"
+	                        						update=":dlgMensajeVal, :dlgFwd, :frmFwd:panelFwd"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
                         			<p:submenu label="Cuenta Ahorros" >
-                        				<p:menuitem value="Abono / Cargo" url="#" icon="ui-icon-transferthick-e-w" ></p:menuitem>
+                        				<p:menuitem value="Abono / Cargo" icon="ui-icon-transferthick-e-w" actionListener="#{portafolioController.validarAbonoCargo}"
+	                        						update=":dlgMensajeVal, :dlgAbonoCargo, :frmAbonoCargo:panelAbonoCargo"></p:menuitem>
                         			</p:submenu>                        		
                         		</p:column>
                         	</p:submenu>
                         	<p:submenu label="Renta fija" icon="fa fa-files-o" >
                         		<p:column>
 	                        		<p:submenu label="Operación" >
-	                        			<p:menuitem value="Opción" icon="ui-icon-clock" ></p:menuitem>
+	                        			<p:menuitem value="Opción" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaFija}"
+	                        						update=":dlgMensajeVal, :dlgRentaFija, :frmRentaFija:panelRentaFija"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         	</p:submenu>
@@ -270,28 +274,56 @@
                 		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="320">
                     <ui:include src="frmCancelarDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=":frmPortafolio:grdFondo, :frmCancelarDeposito" />
+                            update=" :frmCancelarDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgPreCancelarDeposito" modal="true" header="Pre - Cancelación de Depósitos a Plazo" 
                 		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="340">
                     <ui:include src="frmPreCancelarDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=":frmPortafolio:grdFondo, :frmPreCancelarDeposito" />
+                            update=" :frmPreCancelarDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgAperturaDeposito" modal="true" header="Apertura de Depósito a Plazo" 
-                		  widgetVar="mantePreAperturaDeposito" resizable="false" width="490" height="270">
+                		  widgetVar="manteAperturaDeposito" resizable="false" width="490" height="270">
                     <ui:include src="frmAperturaDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=":frmPortafolio:grdFondo, :frmAperturaDeposito" />
+                            update=" :frmAperturaDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
                 		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="270">
                 	<ui:include src="frmRenuevaDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=":frmPortafolio:grdFondo, :frmRenuevaDeposito" />
+                            update=" :frmRenuevaDeposito" />
+                </p:dialog>
+                
+                <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
+                		  widgetVar="manteSpot" resizable="false" width="540" height="400">
+                    <ui:include src="frmSpot.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmSpot" />
+                </p:dialog>
+                
+                <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 
+                		  widgetVar="manteFwd" resizable="false" width="540" height="500">
+                    <ui:include src="frmFwd.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmFwd" />
+                </p:dialog>
+                
+                <p:dialog id="dlgAbonoCargo" modal="true" header="Abono / Cargo de Cuenta de Ahorros" 
+                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="200">
+                    <ui:include src="frmAbonoCargo.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmAbonoCargo" />
+                </p:dialog>
+                
+                <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija" 
+                		  widgetVar="manteRentaFija" resizable="false" width="540" height="400">
+                    <ui:include src="frmRentaFija.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmRentaFija" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

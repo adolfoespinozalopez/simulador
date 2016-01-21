@@ -69,6 +69,25 @@ public class PortafolioController {
 	private String plazoRenova;
 	private Date fechaVctoRenova;
 	
+	private String selectedTipoSpot = Constante.NO_OPTION_SELECTED;
+	private String selectedContraSpot = Constante.NO_OPTION_SELECTED;
+	private String tipoCambioSpot;
+	
+	private String montoUno;
+	private String montoTotal;
+	
+	private String selectedTipoFwd = Constante.NO_OPTION_SELECTED;
+	private String selectedContraFwd = Constante.NO_OPTION_SELECTED;
+	private String selectedSettleFwd = Constante.NO_OPTION_SELECTED;
+	private String puntosFwd;
+	private String tipoCambioFwd;
+	private String plazoFwd;
+	
+	private String selectedFondoAbono = Constante.NO_OPTION_SELECTED;
+	private String selectedTipoAbono = Constante.NO_OPTION_SELECTED;
+	private String selectedContraAbono = Constante.NO_OPTION_SELECTED;
+	private String montoAbono;
+	
 	@PostConstruct
 	public void init() {
 		listaPortafolio = new ArrayList<Infoport>();
@@ -251,6 +270,128 @@ public class PortafolioController {
 		this.fechaVctoRenova = fechaVctoRenova;
 	}
 
+	public String getSelectedTipoSpot() {
+		return selectedTipoSpot;
+	}
+
+	public void setSelectedTipoSpot(String selectedTipoSpot) {
+		this.selectedTipoSpot = selectedTipoSpot;
+	}
+
+	public String getSelectedContraSpot() {
+		return selectedContraSpot;
+	}
+
+	public void setSelectedContraSpot(String selectedContraSpot) {
+		this.selectedContraSpot = selectedContraSpot;
+	}
+
+	public String getTipoCambioSpot() {
+		return tipoCambioSpot;
+	}
+
+	public void setTipoCambioSpot(String tipoCambioSpot) {
+		this.tipoCambioSpot = tipoCambioSpot;
+	}
+
+	public String getMontoUno() {
+		return montoUno;
+	}
+
+	public void setMontoUno(String montoUno) {
+		this.montoUno = montoUno;
+	}
+
+	public String getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(String montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+	
+	
+
+	public String getSelectedTipoFwd() {
+		return selectedTipoFwd;
+	}
+
+	public void setSelectedTipoFwd(String selectedTipoFwd) {
+		this.selectedTipoFwd = selectedTipoFwd;
+	}
+
+	public String getSelectedContraFwd() {
+		return selectedContraFwd;
+	}
+
+	public void setSelectedContraFwd(String selectedContraFwd) {
+		this.selectedContraFwd = selectedContraFwd;
+	}
+
+	public String getSelectedSettleFwd() {
+		return selectedSettleFwd;
+	}
+
+	public void setSelectedSettleFwd(String selectedSettleFwd) {
+		this.selectedSettleFwd = selectedSettleFwd;
+	}
+
+	public String getTipoCambioFwd() {
+		return tipoCambioFwd;
+	}
+
+	public void setTipoCambioFwd(String tipoCambioFwd) {
+		this.tipoCambioFwd = tipoCambioFwd;
+	}
+
+	public String getPuntosFwd() {
+		return puntosFwd;
+	}
+
+	public void setPuntosFwd(String puntosFwd) {
+		this.puntosFwd = puntosFwd;
+	}
+
+	public String getPlazoFwd() {
+		return plazoFwd;
+	}
+
+	public void setPlazoFwd(String plazoFwd) {
+		this.plazoFwd = plazoFwd;
+	}
+
+	public String getSelectedFondoAbono() {
+		return selectedFondoAbono;
+	}
+
+	public void setSelectedFondoAbono(String selectedFondoAbono) {
+		this.selectedFondoAbono = selectedFondoAbono;
+	}
+
+	public String getSelectedTipoAbono() {
+		return selectedTipoAbono;
+	}
+
+	public void setSelectedTipoAbono(String selectedTipoAbono) {
+		this.selectedTipoAbono = selectedTipoAbono;
+	}
+
+	public String getSelectedContraAbono() {
+		return selectedContraAbono;
+	}
+
+	public void setSelectedContraAbono(String selectedContraAbono) {
+		this.selectedContraAbono = selectedContraAbono;
+	}
+
+	public String getMontoAbono() {
+		return montoAbono;
+	}
+
+	public void setMontoAbono(String montoAbono) {
+		this.montoAbono = montoAbono;
+	}
+
 	public void cancelar() {
 		selectedInfo = null;
 	}
@@ -281,7 +422,7 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	context.execute("PF('mantePreAperturaDeposito').show()");
+        	context.execute("PF('manteAperturaDeposito').show()");
         }
 	}
 	
@@ -294,4 +435,45 @@ public class PortafolioController {
         	context.execute("PF('manteRenuevaDeposito').show()");
         }
 	}
+	
+	public void validarSpot(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('manteSpot').show()");
+        }
+	}
+	
+	public void validarFwd(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('manteFwd').show()");
+        }
+	}
+	
+	public void validarAbonoCargo(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('manteAbonoCargo').show()");
+        }
+	}
+	
+	public void validarRentaFija(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		if (selectedInfo == null) {
+            mensajeValida = "Debe seleccionar un registro.";
+            context.execute("PF('msjVal').show()");
+        }else{
+        	context.execute("PF('manteRentaFija').show()");
+        }
+	}
+	
 }
