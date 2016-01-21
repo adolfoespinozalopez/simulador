@@ -44,4 +44,26 @@ public class PerfilFondoPK implements Serializable{
 	public void setCdIdfondo(Integer cdIdfondo) {
 		this.cdIdfondo = cdIdfondo;
 	}
+	
+    public int hashCode() {
+        int hash = 0;
+        hash += (cdIdperfil != null ? cdIdperfil.hashCode() : 0);
+        hash += (cdIdfondo != null ? cdIdfondo.hashCode() : 0);
+        return hash;
+    }
+
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof PerfilFondoPK)) {
+            return false;
+        }
+        PerfilFondoPK other = (PerfilFondoPK) object;
+        if ((this.cdIdperfil == null && other.cdIdperfil != null) || (this.cdIdperfil != null && !this.cdIdperfil.equals(other.cdIdperfil))) {
+            return false;
+        }
+        if ((this.cdIdfondo == null && other.cdIdfondo != null) || (this.cdIdfondo != null && !this.cdIdfondo.equals(other.cdIdfondo))) {
+            return false;
+        }
+        return true;
+    }
 }

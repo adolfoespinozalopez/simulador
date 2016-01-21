@@ -4,10 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.General;
@@ -18,8 +16,7 @@ import com.pss.simulador.bs.domain.General;
 * @since 1.0
 */
 @Component
-@ManagedBean(name = "loginController")
-@SessionScoped
+@Scope("session")
 public class LoginController implements Serializable {
 	
 	private static final Logger LOG = Logger.getLogger(LoginController.class);

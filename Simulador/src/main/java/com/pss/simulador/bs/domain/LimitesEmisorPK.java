@@ -45,4 +45,25 @@ public class LimitesEmisorPK implements Serializable {
 		this.cdIdemisor = cdIdemisor;
 	}
 
+    public int hashCode() {
+        int hash = 0;
+        hash += (cdIdlimite != null ? cdIdlimite.hashCode() : 0);
+        hash += (cdIdemisor != null ? cdIdemisor.hashCode() : 0);
+        return hash;
+    }
+
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof LimitesEmisorPK)) {
+            return false;
+        }
+        LimitesEmisorPK other = (LimitesEmisorPK) object;
+        if ((this.cdIdlimite == null && other.cdIdlimite != null) || (this.cdIdlimite != null && !this.cdIdlimite.equals(other.cdIdlimite))) {
+            return false;
+        }
+        if ((this.cdIdemisor == null && other.cdIdemisor != null) || (this.cdIdemisor != null && !this.cdIdemisor.equals(other.cdIdemisor))) {
+            return false;
+        }
+        return true;
+    }
 }
