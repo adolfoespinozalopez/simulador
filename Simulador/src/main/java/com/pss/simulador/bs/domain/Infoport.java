@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
 *
@@ -108,6 +109,11 @@ public class Infoport implements java.io.Serializable {
 	@Column(name = "ST_CONDICION")
 	private String stCondicion;
 
+	@Transient
+	private String tipoApertura;
+	@Transient
+	private Integer plazo;
+	
 	public Infoport() {
 	}
 
@@ -442,4 +448,21 @@ public class Infoport implements java.io.Serializable {
 	public void setStCondicion(String stCondicion) {
 		this.stCondicion = stCondicion;
 	}
+
+	public String getTipoApertura() {
+		return tipoApertura;
+	}
+
+	public void setTipoApertura(String tipoApertura) {
+		this.tipoApertura = tipoApertura;
+	}
+
+	public Integer getPlazo() {
+		return plazo;
+	}
+
+	public void setPlazo(Integer plazo) {
+		this.plazo = plazo;
+	}
+	
 }

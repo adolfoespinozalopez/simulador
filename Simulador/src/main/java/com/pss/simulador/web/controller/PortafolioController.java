@@ -17,6 +17,7 @@ import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.InfoportManager;
 import com.pss.simulador.util.Constante;
+import com.pss.simulador.util.Utilitarios;
 import com.pss.simulador.web.bean.Fondo;
 
 /**
@@ -402,6 +403,13 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
+        	if(selectedInfo.getNbIsim().trim().endsWith("C")){
+        		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
+        	}
+        	selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
+        	Double nominalAnterior = selectedInfo.getImValorSinInter();
+        	Double valorDeposito = nominalAnterior * Math.pow((1 + selectedInfo.getImCupon() / 100), selectedInfo.getPlazo() / 360);
         	context.execute("PF('manteCancelarDeposito').show()");
         }
 	}
