@@ -3,57 +3,69 @@ package com.pss.simulador.web.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import com.pss.simulador.bs.domain.TipoCambio;
+import com.pss.simulador.bs.service.TipoCambioManager;
+import com.pss.simulador.util.Constante;
+import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
-*
-* @author Adolfo Espinoza
-* @version 1.0, 18/01/2016
-* @since 1.0
-*/
+ *
+ * @author Adolfo Espinoza
+ * @version 1.0, 18/01/2016
+ * @since 1.0
+ */
 @Component
-@ManagedBean(name = "tipoCambioController")
-@RequestScoped
-public class TipoCambioController {
+@Scope("session")
+public class TipoCambioController extends GenericController {
 
-	private static final Logger LOG = Logger.getLogger(TipoCambioController.class);
+	private static final Logger logger = Logger.getLogger(TipoCambioController.class);
 	private TipoCambio selectedTipoCambio;
 	private List<TipoCambio> listaTipoCambio = new ArrayList<TipoCambio>();
-	
-	public TipoCambioController(){
+
+	@Autowired
+	private TipoCambioManager tipoCambioManager;
+
+	public TipoCambioController() {
 		
 	}
-	
+
 	@PostConstruct
-	public void init() {
-		listaTipoCambio = new ArrayList<TipoCambio>();
-		TipoCambio tipoCambio = new TipoCambio(1);
-		tipoCambio.setNuValor(3.43);
-		tipoCambio.setFhFecIngreso(new Date());
-		tipoCambio.setStEstado("1");
-		listaTipoCambio.add(tipoCambio);
+	public void inicializar() {
+		listaTipoCambio = tipoCambioManager.findAll();
 	}
-	
+
 	public void crear() {
 		selectedTipoCambio = new TipoCambio();
 		selectedTipoCambio.setFhFecIngreso(new Date());
+	}
+	public void guardarTipoCambio() {
+		if(selectedTipoCambio!=null){
+			selectedTipoCambio.setStEstado(Constante.ESTADO_ACTIVO);
+			tipoCambioManager.save(selectedTipoCambio);
+		};
+		selectedTipoCambio.setFhFecIngreso(new Date());
+		selectedTipoCambio.setFhFecCreacion(new Date());
+		selectedTipoCambio.setCdUsuCreacion("COMPLETARR");
 	}
 
 	public void verDetalles(TipoCambio tipoCambio) {
 		selectedTipoCambio = tipoCambio;
 	}
-	
+
 	public void eliminar() {
 		if (selectedTipoCambio != null) {
 			selectedTipoCambio.setStEstado("0");
 		}
 	}
-	
+
 	public void cancelar() {
 		selectedTipoCambio = null;
 	}
@@ -73,5 +85,5 @@ public class TipoCambioController {
 	public void setListaTipoCambio(List<TipoCambio> listaTipoCambio) {
 		this.listaTipoCambio = listaTipoCambio;
 	}
-	
+
 }

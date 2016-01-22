@@ -33,4 +33,16 @@ public class Constante {
      * Combos
      */
     public static final String  NO_OPTION_SELECTED = "-1";
+    
+    /**
+     * Perfil
+     */
+    public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
+    
+    public static class Perfil{
+    	public static final Integer ID_ADMINISTRADOR_SISTEMA = 1;
+    	public static final Integer ID_ADMINISTRADOR_INVERSORES = 2;
+    	public static final Integer ID_INVERSINISTA_EUR = 3;
+    	public static final Integer ID_INVERSIONISTA_BBVA = 4;
+    }
 }

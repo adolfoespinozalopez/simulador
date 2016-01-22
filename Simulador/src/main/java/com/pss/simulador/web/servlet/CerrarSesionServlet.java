@@ -26,9 +26,9 @@ public class CerrarSesionServlet extends HttpServlet {
         HttpSession session = request.getSession();
         LoginController login = (LoginController) session.getAttribute("loginController");
         if (session != null && login != null) {
-            login.setLogueado(false);
-            login.setUsuario("");
-            login.setContrasena("");
+//            login.setLogueado(false);
+//            login.setUsuario("");
+//            login.setContrasena("");
             session.invalidate();
         }
         response.sendRedirect(request.getContextPath()+"/");
