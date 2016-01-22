@@ -1,12 +1,17 @@
 package com.pss.simulador.bs.domain;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 /**
  *
  * @author Adolfo Espinoza
@@ -14,11 +19,13 @@ import javax.persistence.TemporalType;
  * @since 1.0
  */
 @Entity
-@Table(name = "TSI004_TIPOCAMBIO", schema="BBVATESOR")
+@Table(name = "TSI004_TIPOCAMBIO", schema = "BBVATESOR")
 public class TipoCambio implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
+	@SequenceGenerator(name = "secTipoCambio", sequenceName = "BBVATESOR.SEQ_TIPOCAMBIO", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secTipoCambio")
 	@Column(name = "CD_IDTIPOCAMBIO", nullable = false)
 	private Integer cdIdtipocambio;
 	@Column(name = "FH_FEC_INGRESO")

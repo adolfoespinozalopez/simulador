@@ -1,0 +1,42 @@
+package com.pss.simulador.bs.service.impl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.pss.simulador.bs.domain.TipoCambio;
+import com.pss.simulador.bs.repository.data.TipoCambioRepository;
+import com.pss.simulador.bs.service.TipoCambioManager;
+/**
+ * @author pierre.obregon
+ * @version 21/1/2016
+ */
+@Service("tipoCambioManager")
+@Transactional(readOnly=true)
+public class TipoCambioManagerImpl implements TipoCambioManager {
+
+	private static final Logger logger = Logger.getLogger(TipoCambioManagerImpl.class);
+	
+	@Autowired
+	private TipoCambioRepository tipoCambioRepository;
+	
+	@Transactional
+	public TipoCambio save(TipoCambio tipoCambio) {
+		return tipoCambioRepository.save(tipoCambio);
+	}
+	@Transactional
+	public void delete(TipoCambio tipoCambio) {
+		tipoCambioRepository.delete(tipoCambio.getCdIdtipocambio());
+	}
+	public List<TipoCambio> findAll(){
+		return (List<TipoCambio>) tipoCambioRepository.findAll();
+	}
+	
+	
+
+	
+
+}
