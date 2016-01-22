@@ -31,14 +31,14 @@
                     </p>
                     <div class="input-group">
                       <span class="input-group-addon"><i class="icon_profile"></i></span>
-                      <p:inputText id="usuario" styleClass="form-control" placeholder="Usuario" value="#{loginController.usuario}" required="true" autocomplete="off" requiredMessage="Ingrese el usuario"  /> 
+                      <p:inputText id="codUsuarioLocal" value="P004036" styleClass="form-control" placeholder="Usuario"  required="true" autocomplete="off" requiredMessage="Ingrese el usuario"  /> 
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="icon_key_alt"></i></span>
-                        <p:password id="contrasena" styleClass="form-control" placeholder="Contraseña" value="#{loginController.contrasena}" required="true" redisplay="true" requiredMessage="Ingrese el password" />
+                        <p:password id="contrasena" styleClass="form-control" placeholder="Contraseña" redisplay="true"  />
                     </div>
-                    <p:commandButton process="@this, usuario, contrasena" id="loginButton" value="Ingresar"
-                                     action="#{loginController.login()}" styleClass="btn" update="usuario, contrasena, mensaje"/>
+                    <p:commandButton process="@this" id="loginButton" value="Ingresar"
+                                     actionListener="#{loginController.login }" styleClass="btn" ajax="false" action="#{loginController.loginToHome}" />
                 </div>
                 <div>
                     <p:messages id="mensaje" showDetail="true" showSummary="false"/>  

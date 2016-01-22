@@ -122,7 +122,7 @@ CREATE TABLE bbvatesor.TSI002_Infoport (
   cd_idinfoport  INTEGER  NOT NULL 
 );
 
-COMMENT ON TABLE bbvatesor.TSI002_Infoport IS 'Almacena la información del portafolio';
+COMMENT ON TABLE bbvatesor.TSI002_Infoport IS 'Almacena la informaciï¿½n del portafolio';
 
 CREATE  UNIQUE INDEX ISI002P1_Infoport ON bbvatesor.TSI002_Infoport (cd_idinfoport  ASC);
 
@@ -401,3 +401,27 @@ CREATE or replace SYNONYM TSI009_PerfilFondo 	 FOR bbvatesor.TSI009_PerfilFondo;
 CREATE or replace SYNONYM TSI010_Emisor 		 FOR bbvatesor.TSI010_Emisor;
 CREATE or replace SYNONYM TSI011_LimitesEmisor 	 FOR bbvatesor.TSI011_LimitesEmisor;
 CREATE or replace SYNONYM TSI012_LimFondoEspecie FOR bbvatesor.TSI012_LimFondoEspecie;
+
+
+/*
+ *******************************************
+ * SEQUENCES
+ *******************************************
+ */
+CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO;
+
+
+/*
+ *******************************************
+ * INSERTS
+ *******************************************
+ */
+insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
+values (1, 'Administrador de Sistema', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
+values (2, 'Administrador de Inversiones', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
+values (4, 'Inversionista BBVA Soles', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
+values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+commit;

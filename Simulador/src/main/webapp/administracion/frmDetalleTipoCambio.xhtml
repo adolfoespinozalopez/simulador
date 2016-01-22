@@ -35,8 +35,8 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle" validateClient="true" 
-                                 style="margin-right:10px" />
+                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle" validateClient="true" action="#{tipoCambioController.guardarTipoCambio}"
+                                 ajax="false" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteTipoCambio').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

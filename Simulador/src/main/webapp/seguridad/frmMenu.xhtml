@@ -14,7 +14,7 @@
             <h:form id="frmMenuAccesos">
                 <p:menubar  autoDisplay="false" style="border: 0px;" styleClass="nav">
                     <p:menuitem value="" url="/" icon="fa fa-home"/>
-                    <p:submenu label="Seguridad" icon="fa fa-users" rendered="#{loginController.BEsAdmin}">
+                    <p:submenu label="Seguridad" icon="fa fa-users" rendered="#{__USUARIO_SESSION__.bEsAdmin}">
                         <p:menuitem value="Perfiles" url="/seguridad/frmPerfiles.jsf" icon="fa fa-user"/>
                     </p:submenu> 
                     <p:submenu label="Administración" icon="fa fa-cogs">
