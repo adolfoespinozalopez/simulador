@@ -46,10 +46,21 @@ public class Constante {
      */
     public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
     
+    public static final String WSLDAP_ENDPOINT = "http://118.180.14.23:8080/ws-ldap3/wService?wsdl";
     public static class Perfil{
     	public static final Integer ID_ADMINISTRADOR_SISTEMA = 1;
     	public static final Integer ID_ADMINISTRADOR_INVERSORES = 2;
     	public static final Integer ID_INVERSINISTA_EUR = 3;
     	public static final Integer ID_INVERSIONISTA_BBVA = 4;
+    }
+    
+    public static class Mensajes{
+    	public static final String MSJ_REGISTRO_OK = "Se registraron los datos exitosamente.";
+    	public static final String MSJ_ACTUALIZACION_OK = "Se actualizaron los datos exitosamente.";
+		public static final String MSJ_ELIMINACION_OK = "Se eliminó el registro exitosamente.";
+
+		public static final String MSJ_REGISTRO_FAIL = "Ocurrió un error al registrar los datos.";
+		public static final String MSJ_ACTUALIZACION_FAIL = "Ocurrió un error al actualizar los datos.";
+		public static final String MSJ_ELIMINACION_FAIL = "Ocurrió un error al eliminar los datos.";
     }
 }

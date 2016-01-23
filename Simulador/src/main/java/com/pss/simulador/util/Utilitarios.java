@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
+import org.apache.log4j.Logger;
 /**
 *
 * @author Adolfo Espinoza
@@ -15,6 +16,7 @@ import javax.faces.context.FacesContext;
 * @since 1.0
 */
 public class Utilitarios {
+	private static final Logger logger = Logger.getLogger(Utilitarios.class);
 
 	public static void mostrarMensajeInfo(String objectName, String summary, String details) {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -62,4 +64,6 @@ public class Utilitarios {
 			return 0;
 		}
     }
+    
+   
 }

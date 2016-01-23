@@ -3,6 +3,7 @@ package com.pss.simulador.bs.service;
 import java.util.List;
 
 import com.pss.simulador.bs.domain.TipoCambio;
+import com.pss.simulador.web.bean.UsuarioSession;
 
 /**
  * @author pierre.obregon
@@ -11,7 +12,8 @@ import com.pss.simulador.bs.domain.TipoCambio;
 public interface TipoCambioManager {
 
 	public TipoCambio save(TipoCambio tipoCambio);
-	public void delete(TipoCambio tipoCambio);
 	public List<TipoCambio> findAll();
+	public List<TipoCambio> findAllActivo();
+	public TipoCambio saveNuevoTipoCambio(TipoCambio tipoCambio, UsuarioSession usuarioSession);
 	
 }
