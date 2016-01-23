@@ -22,6 +22,14 @@
 	</properties>
 
 	<dependencies>
+
+		<!-- INIT-Acceso a Usuarios Banco -->
+		<!--<dependency>
+			<groupId>ws-ldap3</groupId>
+			<artifactId>ws-ldap3-cliente</artifactId>
+			<version>1.0</version>
+		</dependency>-->
+
 		<!-- WAS8 y produccion -->
 		<!-- <dependency> <groupId>com.grupobbva.bc.per.tele</groupId> <artifactId>ldap</artifactId> 
 			<version>1.0</version> </dependency> -->
@@ -33,7 +41,8 @@
 			<artifactId>ldapLocal</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<!-- END: Local TOMCAT -->
+		<!-- END-Local TOMCAT -->
+		<!-- -->
 
 		<dependency>
 			<groupId>javax.annotation</groupId>

@@ -39,12 +39,13 @@ public class LoginController extends GenericController implements Serializable  
     public void login() {
     	String codigoUsuario = "";
     	try {
-		
+
 	    	ServiciosSeguridadBbva ssBbva = new ServiciosSeguridadBbva(this.getRequest());
 			if (ssBbva != null) {
 				ssBbva.obtener_ID();
 				codigoUsuario = (ssBbva!=null && ssBbva.getUsuario()!=null)? ssBbva.getUsuario().toUpperCase():"";
 			}
+			
     	} catch (Exception e) {
 			logger.error(e, e);
 		}
@@ -52,11 +53,19 @@ public class LoginController extends GenericController implements Serializable  
 			codigoUsuario = this.getRequest().getParameter("frmLoginCuadro:codUsuarioLocal");	
 		}
 		IILDPeUsuario usuarioLdap = null;
+//		pe.com.bbva.ws.ldap.cliente.wsmodel.Usuario usuarioWsLdap;
 		try {
+    		// Validación por BD - IIWX
 			usuarioLdap = IILDPeUsuario.recuperarUsuario(codigoUsuario);
+			// Validación por IDM
+//			WsLdapClient client = new WsLdapClientImpl(Constante.WSLDAP_ENDPOINT);
+//			usuarioWsLdap = client.obtenerUsuarioPorCodigoUsuario(codigoUsuario);
 		} catch (IILDPeExcepcion e) {
-			logger.error(e);
-		}
+			logger.error(e,e);
+		} 
+//		catch (WSLdapException_Exception e) {
+//			logger.error(e,e);
+//		}
 		
 		if(usuarioLdap!=null){
 			Usuario usuario = accesoManager.findByRegUser(usuarioLdap.getUID());
@@ -67,7 +76,7 @@ public class LoginController extends GenericController implements Serializable  
 		}
     }
     public String loginToHome(){
-    	if (this.getSession().getAttribute(Constante.__USUARIO_SESSION__)!=null){
+    	if (this.getUsuarioSession()!=null){
     		return "to_home";	
     	}else{
     		return "to_sinacceso";

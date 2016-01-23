@@ -23,6 +23,7 @@ public class GenericController {
 			.getExternalContext().getRequest();
 	HttpServletResponse response = (HttpServletResponse)this.getFacesContext()
 			.getExternalContext().getResponse();
+	HttpSession session = (HttpSession) getFacesContext().getExternalContext().getSession(false);
 
 	public FacesContext getFacesContext() {
 		return facesContext == null ? FacesContext.getCurrentInstance()
@@ -42,7 +43,7 @@ public class GenericController {
 	}
 	
 	public UsuarioSession getUsuarioSession(){
-		return (UsuarioSession)this.getSession().getAttribute(Constante.__USUARIO_SESSION__);
+		return (UsuarioSession) session.getAttribute(Constante.__USUARIO_SESSION__);
 	}
 	
 
