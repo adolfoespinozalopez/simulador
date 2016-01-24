@@ -12,7 +12,7 @@
 		<partial-view-context-factory>org.primefaces.context.PrimePartialViewContextFactory</partial-view-context-factory>
 		<!-- <exception-handler-factory>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory</exception-handler-factory> -->
 	</factory>
-	
+
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
@@ -29,5 +29,15 @@
 			</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	
+	<!-- INIT Admistracion -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>to_administracion_tipocambio</from-outcome>
+			<to-view-id>administracion/frmTipoCambio.jsf
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- INIT Admistracion -->
+
 </faces-config>

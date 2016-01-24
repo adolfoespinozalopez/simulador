@@ -15,6 +15,7 @@
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         value="#{tipoCambioController.selectedTipoCambio.fhFecIngreso}" 
                                         required="true" showOn="button">
+                                        <p:clientValidator />
                             </p:calendar>
                         </td>
                         <td><p:message for="fecInicio" display="icon" /></td>
@@ -23,7 +24,9 @@
                         <td style="width: 60px;"><p:outputLabel value="Valor:" for="valorCambio" /></td>
                         <td>
                             <p:inputText id="valorCambio" style="width: 83px;" maxlength="8" required="true"
-                                         value="#{tipoCambioController.selectedTipoCambio.nuValor}" />
+                                         value="#{tipoCambioController.selectedTipoCambio.nuValor}" >
+                                         <p:clientValidator />
+                            </p:inputText>
                         </td>
                         <td><p:message for="valorCambio" display="icon" /></td>
                     </tr>
@@ -35,9 +38,11 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle" validateClient="true" action="#{tipoCambioController.guardarTipoCambio}"
-                                 ajax="false" style="margin-right:10px" />
-                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteTipoCambio').hide()" />
+                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle, growl" validateClient="true" actionListener="#{tipoCambioController.guardarTipoCambio}"
+                                 ajax="true" style="margin-right:10px" action="to_administracion_tipocambio" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" >
+                	<p:ajax update="dlgTipoCambio" resetValues="true" />
+                </p:commandButton>
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>

@@ -425,3 +425,6 @@ values (4, 'Inversionista BBVA Soles', to_date('21-01-2016', 'dd-mm-yyyy'), to_d
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
 values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
 commit;
+
+insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
+values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'P004036', null, null, null, null, '1', 1);

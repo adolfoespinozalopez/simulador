@@ -19,7 +19,7 @@
                         <p:toolbar style="padding: 4px;margin: 4px 0px;">
                             <p:toolbarGroup align="left">  
                                 <p:commandButton process="@this" value="Agregar" icon="ui-icon-document" actionListener="#{tipoCambioController.crear}" 
-                                                 update=":frmDetalleTipoCambio" oncomplete="PF('manteTipoCambio').show()">
+                                                 update=":frmDetalleTipoCambio" oncomplete="PF('manteTipoCambio').show()" >
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -50,7 +50,7 @@
                                 <p:commandButton icon="ui-icon-pencil" actionListener="#{tipoCambioController.verDetalles(item)}" 
                                                  oncomplete="PF('manteTipoCambio').show()" update=":dlgTipoCambio"
                                                  style="width: 20px; height: 20px;" >
-                                    <p:resetInput target="dlgTipoCambio" />
+                                    
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdTipoCambio" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
                                                  style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}">
@@ -76,7 +76,7 @@
                                     <tr>
                                         <td>
                                             <p:commandButton process="@this" value="Sí" action="#{tipoCambioController.eliminar()}" 
-                                                             oncomplete="PF('dlgConfirmacion').hide()"/>  
+                                                             oncomplete="PF('dlgConfirmacion').hide()" update="growl" />  
                                             <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
                                         </td>
                                     </tr>
@@ -90,11 +90,12 @@
                 <p:dialog id="dlgTipoCambio" modal="true" header="Mantenimiento Tipo de Cambio" 
                 		  widgetVar="manteTipoCambio" resizable="false" width="300" height="200">
                     <ui:include src="frmDetalleTipoCambio.xhtml" />
-                    <p:ajax event="close" listener="#{tipoCambioController.cancelar()}" 
-                            update=":frmGestionarTipoCambio:panTipoCambio, :frmDetalleTipoCambio" />
+                    <p:ajax event="close"  
+                            update=":frmGestionarTipoCambio:panTipoCambio, :frmDetalleTipoCambio, dlgTipoCambio" resetValues="true" >
+                    </p:ajax>
                 </p:dialog>  
 
-                <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
+                <p:growl id="growl" sticky="false" showDetail="false" showSummary="true" life="2000" />
             </ui:define>
         </ui:composition>
     </h:body>
