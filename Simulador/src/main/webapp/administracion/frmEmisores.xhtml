@@ -27,7 +27,7 @@
                                          value="#{emisorController.selectedTipoEmisor}" >
                         	<f:selectItem itemValue="-1" itemLabel="TODOS"></f:selectItem>
                         	<f:selectItems value="#{emisorController.lstGeneralDominio}" var="tipoEmisor" 
-	                                       itemValue="#{tipoEmisor}" itemLabel="#{tipoEmisor}"/>
+	                                       itemValue="#{tipoEmisor.cdIdgeneral}" itemLabel="#{tipoEmisor.nbValorGeneral}"/>
                         </p:selectOneMenu>
                         <p:toolbar style="padding: 4px;margin: 4px 0px;">
                             <p:toolbarGroup align="left">  
@@ -98,7 +98,7 @@
                                     <tr>
                                         <td>
                                             <p:commandButton process="@this" value="Sí" action="#{emisorController.eliminar()}" 
-                                                             oncomplete="PF('dlgConfirmacion').hide()"/>
+                                                             oncomplete="PF('dlgConfirmacion').hide()" update="growl" />
                                             <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
                                         </td>
                                     </tr>
@@ -112,15 +112,15 @@
                 <p:dialog id="dlgEmisor" modal="true" header="Mantenimiento Emisor" widgetVar="manteEmisores" resizable="false"
                           width="420" height="270">
                     <ui:include src="frmDetalleEmisor.xhtml" />
-                    <p:ajax event="close" listener="#{emisorController.cancelar()}" 
-                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisor" />
+                    <p:ajax event="close"  
+                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisor, dlgEmisor" resetValues="true" />
                 </p:dialog>
 
 				<p:dialog id="dlgEmisorLimite" modal="true" header="Mantenimiento Límites Por Emisor" widgetVar="manteEmisorLimite" resizable="false"
                           width="580" height="280">
                     <ui:include src="frmDetalleEmisorLimite.xhtml" />
-                    <p:ajax event="close" listener="#{emisorController.cancelar()}" 
-                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisorLimite" />
+                    <p:ajax event="close" 
+                            update=":frmGestionarEmisores:grdEmisores, :frmDetalleEmisorLimite, dlgEmisorLimite" resetValues="true" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

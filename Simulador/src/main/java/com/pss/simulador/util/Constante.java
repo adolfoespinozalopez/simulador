@@ -29,6 +29,9 @@ public class Constante {
     public static final String MONEDA_OPERACION = "MONEDAOPERACION";
     public static final String TIPO_OPERACION_FWD = "TIPOOPERACIONFWD";
     public static final String TIPO_OPERACION_CUENTA = "TIPOOPERACIONCUENTA";
+    public static class Dominio{
+    	public static final String TIPO_EMISOR = "TIPOEMISOR";
+    }
     
     /**
      * Valores Dominio
@@ -41,6 +44,7 @@ public class Constante {
      * Combos
      */
     public static final String  NO_OPTION_SELECTED = "-1";
+    public static final Integer NO_OPTION_SELECTED_INT = -1;
     
     /**
      * Perfil

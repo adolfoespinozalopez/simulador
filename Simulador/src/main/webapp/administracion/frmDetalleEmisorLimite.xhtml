@@ -64,8 +64,9 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelEmisorLimiteDetalle" validateClient="true" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelEmisorLimiteDetalle, growl" validateClient="true" 
+                					actionListener="#{emisorController.guardarEmisorLimite}" ajax="true" 
+                					style="margin-right:10px" action="to_administracion_emisor" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteEmisorLimite').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

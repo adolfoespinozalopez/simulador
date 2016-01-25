@@ -1,9 +1,13 @@
 package com.pss.simulador.bs.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.SequenceGenerator;
 /**
  *
  * @author Adolfo Espinoza
@@ -15,6 +19,8 @@ public class LimitesEmisorPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Basic(optional = false)
+	@SequenceGenerator(name = "secLimiteEmisor", sequenceName = "BBVATESOR.SEQ_LIMITESEMISOR", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secLimiteEmisor")
 	@Column(name = "CD_IDLIMITE", nullable = false)
 	private Integer cdIdlimite;
 	@Basic(optional = false)

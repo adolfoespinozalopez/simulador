@@ -13,6 +13,7 @@
 		<!-- <exception-handler-factory>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerFactory</exception-handler-factory> -->
 	</factory>
 
+	<!-- INIT GeneralAPP -->
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
@@ -29,6 +30,7 @@
 			</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<!-- END GeneralAPP -->
 	<!-- INIT Admistracion -->
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
@@ -46,6 +48,14 @@
 			</to-view-id>
 		</navigation-case>
 	</navigation-rule>
-	<!-- INIT Admistracion -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>to_administracion_emisor</from-outcome>
+			<to-view-id>administracion/frmEmisores.jsf
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- END Admistracion -->
 
 </faces-config>

@@ -414,7 +414,8 @@ CREATE or replace SYNONYM TSI012_LimFondoEspecie FOR bbvatesor.TSI012_LimFondoEs
  */
 CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO;
 CREATE SEQUENCE bbvatesor.SEQ_GENERAL start with 10;
-
+CREATE SEQUENCE bbvatesor.SEQ_EMISOR;
+CREATE SEQUENCE bbvatesor.SEQ_LIMITESEMISOR;
 
 /*
  *******************************************
@@ -434,5 +435,13 @@ commit;
 insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
 values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'P004036', null, null, null, null, '1', 1);
 
+insert into bbvatesor.TSI005_GENERAL (cd_idgeneral, nb_dominio, nb_desc_general, nb_valor_general, st_estado, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, fg_editable)
+values (3, 'TIPOEMISOR', 'Bancos Locales', 'Bancos Locales', '1', to_date('25-01-2016', 'dd-mm-yyyy'), 'P000000', null, null, null, null, '1');
+insert into bbvatesor.TSI005_GENERAL (cd_idgeneral, nb_dominio, nb_desc_general, nb_valor_general, st_estado, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, fg_editable)
+values (4, 'TIPOEMISOR', 'Corps. Locales', 'Corps. Locales', '1', to_date('25-01-2016', 'dd-mm-yyyy'), 'P000000', null, null, null, null, '1');
+insert into bbvatesor.TSI005_GENERAL (cd_idgeneral, nb_dominio, nb_desc_general, nb_valor_general, st_estado, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, fg_editable)
+values (5, 'TIPOEMISOR', 'LATAM', 'LATAM', '1', to_date('25-01-2016', 'dd-mm-yyyy'), 'P000000', null, null, null, null, '1');
+insert into bbvatesor.TSI005_GENERAL (cd_idgeneral, nb_dominio, nb_desc_general, nb_valor_general, st_estado, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, fg_editable)
+values (6, 'TIPOEMISOR', 'Otros', 'Otros', '1', to_date('25-01-2016', 'dd-mm-yyyy'), 'P000000', null, null, null, null, '1');
 
 
