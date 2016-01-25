@@ -18,4 +18,6 @@ public interface GeneralManager {
 	public List<String> findAllDomainsActive();
 	
 	public List<String> findAllDomains();
+	
+	public General save(General general);
 }

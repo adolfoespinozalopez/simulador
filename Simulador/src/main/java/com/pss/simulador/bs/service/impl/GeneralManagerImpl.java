@@ -5,10 +5,12 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.repository.data.GeneralRepository;
 import com.pss.simulador.bs.service.GeneralManager;
+import com.pss.simulador.util.Constante;
 
 /**
 *
@@ -18,6 +20,7 @@ import com.pss.simulador.bs.service.GeneralManager;
 */
 
 @Service("generalManager")
+@Transactional(readOnly=true)
 public class GeneralManagerImpl implements GeneralManager {
 
 	private static final Logger LOG = Logger.getLogger(GeneralManagerImpl.class);
@@ -27,11 +30,10 @@ public class GeneralManagerImpl implements GeneralManager {
 	
 	public List<General> findByDomainAndState(String domain, String stEstado) {
 		return generalRepository.findByDomainAndState(domain, stEstado);
-//		return generalDao.findByDomainAndState(domain, stEstado);
 	}
 
 	public List<General> findByDomain(String domain) {
-		return generalRepository.findByDomain(domain);
+		return generalRepository.findByDomain(domain,Constante.ESTADO_ACTIVO);
 	}
 
 	public List<String> findAllDomainsActive() {
@@ -40,6 +42,10 @@ public class GeneralManagerImpl implements GeneralManager {
 
 	public List<String> findAllDomains() {
 		return generalRepository.findAllDomains();
+	}
+	@Transactional
+	public General save(General general){
+		return generalRepository.save(general);
 	}
 
 }

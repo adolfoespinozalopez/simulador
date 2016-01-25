@@ -1,5 +1,7 @@
 package com.pss.simulador.web.controller.generic;
 
+import java.io.Serializable;
+
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +17,9 @@ import com.pss.simulador.web.bean.UsuarioSession;
  * @author pierre.obregon
  * @version 21/1/2016
  */
-public class GenericController {
+public class GenericController implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	FacesContext facesContext;
 	public ApplicationContext ctx = FacesContextUtils
 			.getWebApplicationContext(this.getFacesContext());

@@ -174,12 +174,16 @@ CREATE TABLE bbvatesor.TSI005_General (
   fh_fec_modifica  DATE  NULL ,
   cd_usu_modifica  VARCHAR2(10)  NULL ,
   fh_fec_elimina  DATE  NULL ,
-  cd_usu_elimina  VARCHAR2(10)  NULL 
+  cd_usu_elimina  VARCHAR2(10)  NULL ,
+  fg_editable char(1) NULL
 );
 
 CREATE  UNIQUE INDEX ISI005P1_General ON bbvatesor.TSI005_General (cd_idgeneral  ASC);
 
 ALTER TABLE bbvatesor.TSI005_General ADD CONSTRAINT  ISI005P1_General PRIMARY KEY (cd_idgeneral);
+
+comment on column BBVATESOR.TSI005_GENERAL.fg_editable
+  is '1-EDITABLE 0-NOEDITABLE';
 
 CREATE TABLE bbvatesor.TSI006_Usuario (
   cd_idusuario  INTEGER  NOT NULL ,
@@ -409,6 +413,7 @@ CREATE or replace SYNONYM TSI012_LimFondoEspecie FOR bbvatesor.TSI012_LimFondoEs
  *******************************************
  */
 CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO;
+CREATE SEQUENCE bbvatesor.SEQ_GENERAL start with 10;
 
 
 /*
@@ -428,3 +433,6 @@ commit;
 
 insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
 values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'P004036', null, null, null, null, '1', 1);
+
+
+

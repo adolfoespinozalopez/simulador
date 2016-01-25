@@ -38,6 +38,14 @@
 			</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>to_administracion_general</from-outcome>
+			<to-view-id>administracion/frmGenerales.jsf
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	<!-- INIT Admistracion -->
 
 </faces-config>

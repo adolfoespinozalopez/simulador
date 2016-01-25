@@ -21,8 +21,8 @@ public interface GeneralRepository extends CrudRepository<General, Integer> {
 	@Query(value = "SELECT g FROM General g WHERE g.nbDominio LIKE :domain AND g.stEstado = :estado")	
 	public abstract List<General> findByDomainAndState(@Param("domain") String strNbDominio, @Param("estado") String strStEstado);
 	
-	@Query(value = "SELECT g FROM General g WHERE (g.nbDominio = :domain OR :domain = '-1') ")
-	public abstract List<General> findByDomain(@Param("domain") String domain);
+	@Query(value = "SELECT g FROM General g WHERE (g.nbDominio = :domain OR :domain = '-1') AND ( g.fgEditable = :flagEdit OR :flagEdit = '-1'  )")
+	public abstract List<General> findByDomain(@Param("domain") String domain, @Param("flagEdit") String flagEdit);
 	
 	@Query(value = "SELECT distinct g.nbDominio FROM General g WHERE g.stEstado = 1")
 	public abstract List<String> findAllDomainsActive();

@@ -58,9 +58,12 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Grabar" icon="ui-icon-disk" update="panelGeneralDetalle" validateClient="true" 
-                                 style="margin-right:10px" />
-                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteGenerales').hide()" />
+                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelGeneralDetalle, growl" validateClient="true" 
+								actionListener="#{generalController.guardarGeneral}"
+                                 ajax="true" style="margin-right:10px" action="to_administracion_general" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" >
+                	<p:ajax update="dlgGeneral" resetValues="true" />
+                </p:commandButton>
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>

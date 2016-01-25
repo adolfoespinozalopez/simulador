@@ -2,11 +2,15 @@ package com.pss.simulador.bs.domain;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +27,8 @@ public class General implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
+	@SequenceGenerator(name = "secGeneral", sequenceName = "BBVATESOR.SEQ_GENERAL", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secGeneral")
 	@Column(name = "CD_IDGENERAL", nullable = false)
 	private Integer cdIdgeneral;
 	@Column(name = "NB_DOMINIO", length = 30)
@@ -48,6 +54,8 @@ public class General implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
+	@Column(name = "FG_EDITABLE")
+	private String fgEditable;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
 	private List<LimFondoEspecie> limFondoEspecieList;
 
@@ -152,6 +160,14 @@ public class General implements java.io.Serializable {
 
 	public void setLimFondoEspecieList(List<LimFondoEspecie> limFondoEspecieList) {
 		this.limFondoEspecieList = limFondoEspecieList;
+	}
+
+	public String getFgEditable() {
+		return fgEditable;
+	}
+	
+	public void setFgEditable(String fgEditable) {
+		this.fgEditable = fgEditable;
 	}
 
 }
