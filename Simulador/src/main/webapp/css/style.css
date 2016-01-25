@@ -579,3 +579,7 @@ h1.title-sh {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#489D01', endColorstr='#347201', GradientType=0) !important;
     border: 1px solid #245C28 !important;
 }
+
+.ordenes .fa{
+	font-size: 14px !important;
+}	
