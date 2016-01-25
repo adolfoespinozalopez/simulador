@@ -16,13 +16,13 @@
 				<p:column headerText="N°" style="width: 5%;text-align: center;">
 					<h:outputText value="#{index+1}" />
 				</p:column>
-				<p:column headerText="Fondo" style="text-align: left;">
+				<p:column headerText="Fondo" style="width: 8%;text-align: left;">
 					<h:outputText value="#{item.nombreFondo}" />
 				</p:column>
-				<p:column headerText="Operación" style="text-align: left;">
+				<p:column headerText="Operación" style="width: 10%;text-align: left;">
 					<h:outputText value="#{item.nombreOperacion}" />
 				</p:column>
-				<p:column headerText="Moneda" style="text-align: left;">
+				<p:column headerText="Moneda" style="width: 8%;text-align: left;">
 					<h:outputText value="#{item.moneda}" />
 				</p:column>
 				<p:column headerText="Contraparte" style="text-align: left;">
@@ -37,7 +37,7 @@
 				<p:column headerText="Mnemoniaco" style="text-align: left;">
 					<h:outputText value="#{item.mnemoniaco}" />
 				</p:column>
-				<p:column headerText="Activo" style="text-align: center;">
+				<p:column headerText="Activo" style="width: 8%;text-align: center;">
 					<p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}"
 						disabled="true" />
 				</p:column>
