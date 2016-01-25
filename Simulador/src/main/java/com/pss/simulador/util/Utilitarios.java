@@ -1,5 +1,7 @@
 package com.pss.simulador.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,5 +67,21 @@ public class Utilitarios {
 		}
     }
     
+    public static boolean isDouble(String cadena) {
+		try {
+			Double.parseDouble(cadena);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+    
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
    
 }

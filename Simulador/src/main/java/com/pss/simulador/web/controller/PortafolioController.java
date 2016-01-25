@@ -1,13 +1,19 @@
 package com.pss.simulador.web.controller;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.event.ValueChangeEvent;
 
+import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,6 +25,7 @@ import com.pss.simulador.bs.service.InfoportManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
 import com.pss.simulador.web.bean.Fondo;
+import com.pss.simulador.web.bean.Ordenes;
 
 /**
 *
@@ -31,6 +38,8 @@ import com.pss.simulador.web.bean.Fondo;
 @RequestScoped
 public class PortafolioController {
 
+	private static final Logger LOG = Logger.getLogger(PortafolioController.class);
+	
 	private List<Fondo> listaFondo = new ArrayList<Fondo>();
 	private String selectedFondo = Constante.NO_OPTION_SELECTED;
 	
@@ -38,11 +47,18 @@ public class PortafolioController {
 	private String selectedEmisor = Constante.NO_OPTION_SELECTED;
 	
 	private String selectedCondicion = Constante.NO_OPTION_SELECTED;
+	private String selectedOperacion = Constante.NO_OPTION_SELECTED;
 	
 	private List<Infoport> listaPortafolio = new ArrayList<Infoport>();
 	private Infoport selectedInfo;
 	
 	private String mensajeValida;
+	private String fechaActual;
+	private String valorTipoCambio;
+	
+	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
+	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
 	
 	@Autowired
     private GeneralManager generalManager;
@@ -89,12 +105,59 @@ public class PortafolioController {
 	private String selectedContraAbono = Constante.NO_OPTION_SELECTED;
 	private String montoAbono;
 	
+	private Date fechaInicial;
+	private Date fechaFinal;
+	
+	private List<Ordenes> listaOrdenes = new ArrayList<Ordenes>();
+	private Ordenes selectedOrden;
+	
 	@PostConstruct
 	public void init() {
 		listaPortafolio = new ArrayList<Infoport>();
-		listaPortafolio = infoportManager.findAllInfo();
+		ejecutarbusqueda();
+		fechaInicial = Constante.FECHA_ACTUAL;
+		fechaActual = formatoFecha.format(fechaInicial);
+		//Cambiar por obtenerTipoDeCambio
+		valorTipoCambio = "3.40";
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTime(fechaInicial);
+		cal.add(Calendar.DATE, 3);
+		fechaFinal = cal.getTime();
+		Ordenes orden1 = new Ordenes(1, "BBVA SOLES", "Renta Fija", "PEN", "LUZ DEL SUR", "Bonos corporativos", "PEP70252M226", "PEP70252M226", Constante.FECHA_ACTUAL, "1");
+		Ordenes orden2 = new Ordenes(2, "BBVA SOLES", "Renta Fija", "PEN", "CINEPLEX S.A.", "Bonos corporativos", "PEP72840M010", "PEP72840M010", Constante.FECHA_ACTUAL, "1");
+		listaOrdenes = new ArrayList<Ordenes>();
+		listaOrdenes.add(orden1);
+		listaOrdenes.add(orden2);
 	}
 
+	public void realizarFiltroDeFondo(ValueChangeEvent event) {
+        Object objNew = event.getNewValue();
+        if (objNew != null) {
+        	setSelectedFondo(objNew.toString());
+        }
+        ejecutarbusqueda();
+    }
+	
+	public void realizarFiltroDeEmisor(ValueChangeEvent event) {
+        Object objNew = event.getNewValue();
+        if (objNew != null) {
+        	setSelectedEmisor(objNew.toString());
+        }
+        ejecutarbusqueda();
+    }
+	
+	public void realizarFiltroDeOperacion(ValueChangeEvent event) {
+        Object objNew = event.getNewValue();
+        if (objNew != null) {
+        	setSelectedOperacion(objNew.toString());
+        }
+        ejecutarbusqueda();
+    }
+	
+	public void ejecutarbusqueda(){
+		listaPortafolio = infoportManager.findByFilter(selectedFondo, selectedEmisor, selectedCondicion, selectedOperacion);
+	}
+	
 	public List<Infoport> getListaPortafolio() {
 		return listaPortafolio;
 	}
@@ -149,6 +212,14 @@ public class PortafolioController {
 
 	public void setSelectedCondicion(String selectedCondicion) {
 		this.selectedCondicion = selectedCondicion;
+	}
+	
+	public String getSelectedOperacion() {
+		return selectedOperacion;
+	}
+
+	public void setSelectedOperacion(String selectedOperacion) {
+		this.selectedOperacion = selectedOperacion;
 	}
 
 	public String getMensajeValida() {
@@ -392,6 +463,54 @@ public class PortafolioController {
 	public void setMontoAbono(String montoAbono) {
 		this.montoAbono = montoAbono;
 	}
+	
+	public String getFechaActual() {
+		return fechaActual;
+	}
+
+	public void setFechaActual(String fechaActual) {
+		this.fechaActual = fechaActual;
+	}
+
+	public String getValorTipoCambio() {
+		return valorTipoCambio;
+	}
+
+	public void setValorTipoCambio(String valorTipoCambio) {
+		this.valorTipoCambio = valorTipoCambio;
+	}
+	
+	public Date getFechaInicial() {
+		return fechaInicial;
+	}
+
+	public void setFechaInicial(Date fechaInicial) {
+		this.fechaInicial = fechaInicial;
+	}
+
+	public Date getFechaFinal() {
+		return fechaFinal;
+	}
+
+	public void setFechaFinal(Date fechaFinal) {
+		this.fechaFinal = fechaFinal;
+	}
+	
+	public List<Ordenes> getListaOrdenes() {
+		return listaOrdenes;
+	}
+
+	public void setListaOrdenes(List<Ordenes> listaOrdenes) {
+		this.listaOrdenes = listaOrdenes;
+	}
+	
+	public Ordenes getSelectedOrden() {
+		return selectedOrden;
+	}
+
+	public void setSelectedOrden(Ordenes selectedOrden) {
+		this.selectedOrden = selectedOrden;
+	}
 
 	public void cancelar() {
 		selectedInfo = null;
@@ -407,11 +526,23 @@ public class PortafolioController {
         	if(selectedInfo.getNbIsim().trim().endsWith("C")){
         		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
         	}
-        	selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
-        	Double nominalAnterior = selectedInfo.getImValorSinInter();
-        	Double valorDeposito = nominalAnterior * Math.pow((1 + selectedInfo.getImCupon() / 100), selectedInfo.getPlazo() / 360);
+        	verDetallesDeCancelarDeposito();
         	context.execute("PF('manteCancelarDeposito').show()");
         }
+	}
+	
+	public void verDetallesDeCancelarDeposito(){
+		try {
+			selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
+	    	Double valorDepositoMo = Utilitarios.round(selectedInfo.getImValorSinInter() * Math.pow((1 + selectedInfo.getImCupon() / 100), (selectedInfo.getPlazo().doubleValue() / 360)), 2);
+	    	Double intereses = (valorDepositoMo - selectedInfo.getImValorSinInter());
+	    	selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
+	    	selectedInfo.setMontoIntereses(formato.format(intereses));
+	    	selectedInfo.setMontoTotal(formato.format(selectedInfo.getImValorSinInter() + intereses));
+		} catch (Exception e) {
+			LOG.error("Error obteniendo los calculos de cancelar deposito.", e);
+		}
+		
 	}
 	
 	public void validarPreCancelarDeposito(){
@@ -420,8 +551,30 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	verDetallesDePreCancelarDeposito();
         	context.execute("PF('mantePreCancelarDeposito').show()");
         }
+	}
+	
+	public void verDetallesDePreCancelarDeposito(){
+		try {
+			selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
+			selectedInfo.setMontoIntereses(formatoTasa.format(selectedInfo.getImCupon()));
+			selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(new Date(), selectedInfo.getFhFecEmision()));
+			tasaPreCancelacion = formatoTasa.format(selectedInfo.getImCupon());
+			calcularMontoPreCancelacion();
+		} catch (Exception e) {
+			LOG.error("Error obteniendo los calculos de pre cancelar deposito.", e);
+		}
+	}
+	
+	public void calcularMontoPreCancelacion(){
+		tasaPreCancelacion = tasaPreCancelacion.replace(",", ".");
+		if(Utilitarios.isDouble(tasaPreCancelacion)){
+			montoPreCancelacion = formato.format(selectedInfo.getImValorSinInter() * Math.pow((1 + Double.parseDouble(tasaPreCancelacion) / 100), (selectedInfo.getPlazo().doubleValue() / 360)));
+		}else{
+			Utilitarios.mostrarMensajeAdvertencia("txtTasaPre", "Error en tasa", "Error en tasa 2");
+		}
 	}
 	
 	public void validarAperturaDeposito(){
@@ -430,8 +583,20 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	inicializaDatosDeApertura();
         	context.execute("PF('manteAperturaDeposito').show()");
         }
+	}
+	
+	public void inicializaDatosDeApertura(){
+		selectedFondoAper = Constante.NO_OPTION_SELECTED;
+    	selectedContraAper = Constante.NO_OPTION_SELECTED;
+    	selectedMonedaAper = Constante.NO_OPTION_SELECTED;
+    	selectedTipoAper = Constante.NO_OPTION_SELECTED;
+    	importeAper = "";
+    	tasaAper = "";
+    	plazoAper = "";
+    	fechaVctoAper = null;
 	}
 	
 	public void validarRenovarDeposito(){
@@ -440,8 +605,16 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	inicializaDatosDeRenovacion();
         	context.execute("PF('manteRenuevaDeposito').show()");
         }
+	}
+	
+	public void inicializaDatosDeRenovacion(){
+		importeRenova = formato.format(selectedInfo.getImValorSinInter());
+		tasaRenova = "";
+		plazoRenova = "";
+		fechaVctoRenova = null;
 	}
 	
 	public void validarSpot(){
@@ -450,8 +623,15 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	inicializaDatosDeSpot();
         	context.execute("PF('manteSpot').show()");
         }
+	}
+	
+	public void inicializaDatosDeSpot(){
+		selectedTipoSpot = Constante.NO_OPTION_SELECTED;
+		selectedContraSpot = Constante.NO_OPTION_SELECTED;
+		tipoCambioSpot = "";
 	}
 	
 	public void validarFwd(){
@@ -460,8 +640,18 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	inicializaDatosDeFwd();
         	context.execute("PF('manteFwd').show()");
         }
+	}
+	
+	public void inicializaDatosDeFwd(){
+		selectedTipoFwd = Constante.NO_OPTION_SELECTED;
+		selectedContraFwd = Constante.NO_OPTION_SELECTED;
+		selectedSettleFwd = Constante.NO_OPTION_SELECTED;
+		puntosFwd = "";
+		tipoCambioFwd = "";
+		plazoFwd = "";
 	}
 	
 	public void validarAbonoCargo(){
@@ -470,8 +660,16 @@ public class PortafolioController {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
+        	inicializaDatosDeAbonoCargo();
         	context.execute("PF('manteAbonoCargo').show()");
         }
+	}
+	
+	public void inicializaDatosDeAbonoCargo(){
+		selectedFondoAbono = Constante.NO_OPTION_SELECTED;
+		selectedTipoAbono = Constante.NO_OPTION_SELECTED;
+		selectedContraAbono = Constante.NO_OPTION_SELECTED;
+		montoAbono = "";
 	}
 	
 	public void validarRentaFija(){
