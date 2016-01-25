@@ -562,3 +562,20 @@ h1.title-sh {
 .disabled input{
 	opacity: 0.8 !important;
 }
+
+.ordenes {
+    background: #59C000 !important;
+    background: linear-gradient(to bottom,#59C000 0,#499900 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#59c000', endColorstr='#499900', GradientType=0) !important;
+    border: 1px solid #499900 !important;
+    color: #fff !important;
+    margin-left: 70px;
+    margin-right: 0px;
+}
+
+.ordenes:hover {
+    background: #489D01 !important;
+    background: linear-gradient(to bottom,#489D01 0,#347201 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#489D01', endColorstr='#347201', GradientType=0) !important;
+    border: 1px solid #245C28 !important;
+}

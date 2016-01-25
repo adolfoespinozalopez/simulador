@@ -10,6 +10,19 @@
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
+                		<td style="width: 100px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+                        <td>
+                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
+                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                                        showOn="button" readonlyInput="true"
+                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        mindate="#{portafolioController.fechaInicial}"
+                                        maxdate="#{portafolioController.fechaFinal}">
+                            </p:calendar>
+                        </td>
+                        <td><p:message for="txtEfectividad" display="icon" /></td>
+                    </tr>
+                	<tr>
                         <td style="width: 100px;"><h:outputLabel value="Fondo:"/></td>
                         <td colspan="2">
                             <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 210px;" 
@@ -51,7 +64,7 @@
                     </tr>
                     <tr>
                         <td><p:outputLabel value="Monto en USD:" for="txtMontoAbono"/></td>
-                        <td colspan="4">
+                        <td>
 	                        <p:inputText id="txtMontoAbono" style="width: 200px;" maxlength="30" required="true"
                                          value="#{portafolioController.montoAbono}" />
                         </td>

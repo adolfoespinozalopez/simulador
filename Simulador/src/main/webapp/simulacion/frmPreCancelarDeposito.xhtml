@@ -10,6 +10,19 @@
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
+                		<td style="width: 80px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+                        <td colspan="2">
+                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
+                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                                        showOn="button" readonlyInput="true"
+                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        mindate="#{portafolioController.fechaInicial}"
+                                        maxdate="#{portafolioController.fechaFinal}">
+                            </p:calendar>
+                        </td>
+                        <td><p:message for="txtEfectividad" display="icon" /></td>
+                    </tr>
+                	<tr>
                         <td style="width: 80px;"><h:outputLabel value="Fondo:"/></td>
                         <td colspan="3">
                             <p:inputText id="txtnomFondo" style="width: 320px;" readonly="true" 
@@ -27,7 +40,7 @@
                         <td><h:outputLabel value="Monto Inicial:"/></td>
                         <td colspan="3">
                             <p:inputText id="txtmontoInicial" style="width: 320px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.imValorMonRef}" />
+                                         value="#{portafolioController.selectedInfo.montoCapital}" />
                         </td>
                     </tr>
                     <tr>
@@ -39,7 +52,7 @@
                         <td style="width: 100px;"><h:outputLabel value="Tasa Original:"/></td>
                         <td>
 	                        <p:inputText id="txtTasa" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+                                         value="#{portafolioController.selectedInfo.montoIntereses}" />
                         </td>
                     </tr>
                     <tr>
@@ -54,7 +67,7 @@
                         <td><h:outputLabel value="Días transcurridos:"/></td>
                         <td>
 	                        <p:inputText id="txtDias" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.nuNumDiasVcto}" />
+                                         value="#{portafolioController.selectedInfo.plazo}" />
                         </td>
                     </tr>
                     <tr>
@@ -72,14 +85,16 @@
                              				 value="#{portafolioController.tasaPreCancelacion}" />
                             </td>
                             <td><p:message for="txtTasaPre" display="icon" /></td>
-                            <td><p:commandButton value="Calcular" icon="ui-icon-calculator" update="fldPreCancelar" validateClient="true" /></td>
+                            <td><p:commandButton value="Calcular" icon="ui-icon-calculator" validateClient="true"
+                            					 actionListener="#{portafolioController.calcularMontoPreCancelacion}" 
+                            					 update="lblMontoPreCancel" process="@this, txtTasaPre" /></td>
             			</tr>
             			<tr>
                     		<td colspan="4"><BR/></td>
                     	</tr>
             			<tr>
             				<td><h:outputLabel value="Monto:"/></td>
-            				<td><h:outputLabel value="#{portafolioController.montoPreCancelacion}"/></td>
+            				<td><h:outputLabel id="lblMontoPreCancel" value="#{portafolioController.montoPreCancelacion}"/></td>
             			</tr>
             		</tbody>
             	</table>

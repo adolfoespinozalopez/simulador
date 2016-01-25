@@ -13,8 +13,14 @@
                 <ui:include src="/seguridad/frmMenu.xhtml"/>
             </ui:define>
             <ui:define name="content" >
-            	<h1 class="title-sh">Portafolio</h1>
-            	<p:separator />
+            	<div style="float: left;"><h1 class="title-sh">Portafolio</h1></div>
+            	<div style="float: right;padding-top: 15px;color: #0078d2;">
+            		<h:outputText value="Tipo de cambio al" style="font-size: 12px;"/>
+            		<h:outputLabel value="#{portafolioController.fechaActual}" style="font-weight:bold;font-size: 14px;"/>
+            		<h:outputText value=" con valor de" style="font-size: 12px;"/>
+            		<h:outputLabel value="#{portafolioController.valorTipoCambio}" style="font-weight:bold;font-size: 14px;"/>
+            	</div>
+            	<p:separator style="clear:both;" />
                 <h:form id="frmPortafolio">
                 	<style type="text/css">
                         .content{height: 700px;}
@@ -22,32 +28,48 @@
                     <p:panel id="panPortafolio">
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
                         <p:selectOneMenu id="lstFondo" style="width: 180px;" 
-                                         value="#{portafolioController.selectedFondo}" >
+                                         value="#{portafolioController.selectedFondo}" 
+                                         valueChangeListener="#{portafolioController.realizarFiltroDeFondo}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
                             <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
                             <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
                             <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.id}" itemLabel="#{fondo.nombre}" />
-                            <p:ajax event="change" update="grdFondo"/>
+                            <p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
-                        <h:outputText value="Emisor :" style="padding-left: 20px;"/>
+                        <h:outputText value="Emisor :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstEmisor" style="width: 180px;" 
-										 value="#{portafolioController.selectedEmisor}">
+										 value="#{portafolioController.selectedEmisor}"
+										 valueChangeListener="#{portafolioController.realizarFiltroDeEmisor}">
 							<f:selectItem itemLabel="Todos" itemValue="-1" />
+							<f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
+							<f:selectItem itemLabel="MEF" itemValue="MEF" />
 							<f:selectItems value="#{portafolioController.listaEmisor}" var="emisor" 
 										   itemValue="#{emisor.cdIdemisor}" itemLabel="#{emisor.nbNomEmisor}" />
-							<p:ajax event="change" update="grdFondo" />
+							<p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
 						</p:selectOneMenu>
-						<h:outputText value="Vence Hoy :" style="padding-left: 20px;"/>
+						<h:outputText value="Vence Hoy :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstCondicion" style="width: 100px;" 
                                          value="#{portafolioController.selectedCondicion}" >
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
-                            <f:selectItem itemLabel="SI" itemValue="SI" />
-                            <f:selectItem itemLabel="NO" itemValue="NO" />
+                            <f:selectItem itemLabel="SI" itemValue="VENCE HOY" />
+                            <f:selectItem itemLabel="NO" itemValue="ACTIVO" />
                             <p:ajax event="change" update="grdFondo"/>
                         </p:selectOneMenu>
-                        <p:megaMenu orientation="horizontal" style="margin-top:10px">
+                        <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
+						<p:selectOneMenu id="lstOperacion" style="width: 150px;" 
+                                         value="#{portafolioController.selectedOperacion}" 
+                                         valueChangeListener="#{portafolioController.realizarFiltroDeOperacion}">
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItem itemLabel="Money Market" itemValue="M" />
+                            <f:selectItem itemLabel="Renta Fija" itemValue="F" />
+                            <f:selectItem itemLabel="Renta Variable" itemValue="V" />
+                            <p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
+                        </p:selectOneMenu>
+                        <p:commandButton process="@this" value="Ver mis ordenes" icon="ui-icon-search" 
+                        				 styleClass="ordenes" onclick="PF('manteOrdenes').show()"/>
+                        <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px">
                         	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
@@ -271,49 +293,49 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgCancelarDeposito" modal="true" header="Cancelación de Depósitos a Plazo" 
-                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="320">
+                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="350">
                     <ui:include src="frmCancelarDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmCancelarDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgPreCancelarDeposito" modal="true" header="Pre - Cancelación de Depósitos a Plazo" 
-                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="340">
+                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="360">
                     <ui:include src="frmPreCancelarDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmPreCancelarDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgAperturaDeposito" modal="true" header="Apertura de Depósito a Plazo" 
-                		  widgetVar="manteAperturaDeposito" resizable="false" width="490" height="270">
+                		  widgetVar="manteAperturaDeposito" resizable="false" width="490" height="290">
                     <ui:include src="frmAperturaDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmAperturaDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
-                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="270">
+                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="290">
                 	<ui:include src="frmRenuevaDeposito.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmRenuevaDeposito" />
                 </p:dialog>
                 
                 <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
-                		  widgetVar="manteSpot" resizable="false" width="540" height="400">
+                		  widgetVar="manteSpot" resizable="false" width="540" height="420">
                     <ui:include src="frmSpot.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmSpot" />
                 </p:dialog>
                 
                 <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 
-                		  widgetVar="manteFwd" resizable="false" width="540" height="500">
+                		  widgetVar="manteFwd" resizable="false" width="540" height="520">
                     <ui:include src="frmFwd.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmFwd" />
                 </p:dialog>
                 
                 <p:dialog id="dlgAbonoCargo" modal="true" header="Abono / Cargo de Cuenta de Ahorros" 
-                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="200">
+                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="220">
                     <ui:include src="frmAbonoCargo.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmAbonoCargo" />
@@ -324,6 +346,13 @@
                     <ui:include src="frmRentaFija.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmRentaFija" />
+                </p:dialog>
+                
+                <p:dialog id="dlgOrdenes" modal="true" header="Ordenes" 
+                		  widgetVar="manteOrdenes" resizable="false" width="800" height="400">
+                    <ui:include src="frmVerOrdenes.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmOrdenes" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

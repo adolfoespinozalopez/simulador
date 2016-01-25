@@ -10,6 +10,19 @@
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
+                		<td style="width: 110px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+                        <td>
+                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
+                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                                        showOn="button" readonlyInput="true"
+                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        mindate="#{portafolioController.fechaInicial}"
+                                        maxdate="#{portafolioController.fechaFinal}">
+                            </p:calendar>
+                        </td>
+                        <td><p:message for="txtEfectividad" display="icon" /></td>
+                    </tr>
+                	<tr>
                     	<td><h:outputLabel value="Tipo Operación:"/></td>
                     	<td colspan="2">
 	                        <p:selectOneMenu id="lstTipoOperacionSpot" required="true" style="width: 110px;" 

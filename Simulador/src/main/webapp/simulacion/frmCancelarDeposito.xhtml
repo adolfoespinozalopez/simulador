@@ -10,6 +10,19 @@
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
+                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+                        <td colspan="2">
+                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
+                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                                        showOn="button" readonlyInput="true"
+                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        mindate="#{portafolioController.fechaInicial}"
+                                        maxdate="#{portafolioController.fechaFinal}">
+                            </p:calendar>
+                        </td>
+                        <td><p:message for="txtEfectividad" display="icon" /></td>
+                    </tr>
+                	<tr>
                         <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
                         <td colspan="3">
                             <p:inputText id="txtnomFondo" style="width: 285px;" readonly="true" 
@@ -69,21 +82,21 @@
                         <td><h:outputLabel value="Capital (K):"/></td>
                         <td colspan="3">
                             <p:inputText id="txtCapital" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.imValorSinInter}" />
+                                         value="#{portafolioController.selectedInfo.montoCapital}" />
                         </td>
                     </tr>
                     <tr>
                         <td><h:outputLabel value="Intereses (I):"/></td>
                         <td colspan="3">
                             <p:inputText id="txtInteres" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.imInteresCorrid}" />
+                                         value="#{portafolioController.selectedInfo.montoIntereses}" />
                         </td>
                     </tr>
                     <tr>
                         <td><h:outputLabel value="(K) + (I):"/></td>
                         <td colspan="3">
                             <p:inputText id="txtSuma" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.imValorMonRef}" />
+                                         value="#{portafolioController.selectedInfo.montoTotal}" />
                         </td>
                     </tr>
                     <tr>
