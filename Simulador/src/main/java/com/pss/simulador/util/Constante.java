@@ -35,6 +35,7 @@ public class Constante {
      */
     public static final String TIPOAPERTURA_COBERTURADO = "COBERTURADO";
     public static final String TIPOAPERTURA_NORMAL = "NORMAL";
+    public static final String VENCE_HOY = "VENCE HOY";
     
     /**
      * Combos

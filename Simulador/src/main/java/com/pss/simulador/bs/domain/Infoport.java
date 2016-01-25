@@ -104,15 +104,29 @@ public class Infoport implements java.io.Serializable {
 	private Double imValorPorYtm;
 	@Column(name = "NU_DIA_PARA_VENC")
 	private Integer nuDiaParaVenc;
-	@Column(name = "ST_ESTADO", length = 9)
-	private String stEstado;
+	@Column(name = "ST_ESTADO_PORT", length = 9)
+	private String stEstadoPort;
 	@Column(name = "ST_CONDICION")
 	private String stCondicion;
-
+	
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
+	@Column(name = "FH_FEC_IMPORTA")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fhFecImporta;
+	@Column(name = "TP_OPERACION")
+	private String tpOperacion;
+	
 	@Transient
 	private String tipoApertura;
 	@Transient
 	private Integer plazo;
+	@Transient
+	private String montoCapital;
+	@Transient
+	private String montoIntereses;
+	@Transient
+	private String montoTotal;
 	
 	public Infoport() {
 	}
@@ -433,12 +447,12 @@ public class Infoport implements java.io.Serializable {
 		this.nuDiaParaVenc = nuDiaParaVenc;
 	}
 
-	public String getStEstado() {
-		return stEstado;
+	public String getStEstadoPort() {
+		return stEstadoPort;
 	}
 
-	public void setStEstado(String stEstado) {
-		this.stEstado = stEstado;
+	public void setStEstadoPort(String stEstadoPort) {
+		this.stEstadoPort = stEstadoPort;
 	}
 
 	public String getStCondicion() {
@@ -447,6 +461,30 @@ public class Infoport implements java.io.Serializable {
 
 	public void setStCondicion(String stCondicion) {
 		this.stCondicion = stCondicion;
+	}
+	
+	public String getStEstado() {
+		return stEstado;
+	}
+
+	public void setStEstado(String stEstado) {
+		this.stEstado = stEstado;
+	}
+
+	public Date getFhFecImporta() {
+		return fhFecImporta;
+	}
+
+	public void setFhFecImporta(Date fhFecImporta) {
+		this.fhFecImporta = fhFecImporta;
+	}
+
+	public String getTpOperacion() {
+		return tpOperacion;
+	}
+
+	public void setTpOperacion(String tpOperacion) {
+		this.tpOperacion = tpOperacion;
 	}
 
 	public String getTipoApertura() {
@@ -463,6 +501,30 @@ public class Infoport implements java.io.Serializable {
 
 	public void setPlazo(Integer plazo) {
 		this.plazo = plazo;
+	}
+
+	public String getMontoCapital() {
+		return montoCapital;
+	}
+
+	public void setMontoCapital(String montoCapital) {
+		this.montoCapital = montoCapital;
+	}
+
+	public String getMontoIntereses() {
+		return montoIntereses;
+	}
+
+	public void setMontoIntereses(String montoIntereses) {
+		this.montoIntereses = montoIntereses;
+	}
+
+	public String getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(String montoTotal) {
+		this.montoTotal = montoTotal;
 	}
 	
 }
