@@ -24,6 +24,7 @@
                         <td style="width: 60px;"><p:outputLabel value="Valor:" for="valorCambio" /></td>
                         <td>
                             <p:inputText id="valorCambio" style="width: 83px;" maxlength="8" required="true"
+                            			 requiredMessage="Debe ingresar el campo Valor"
                                          value="#{tipoCambioController.selectedTipoCambio.nuValor}" >
                                          <p:clientValidator />
                             </p:inputText>
@@ -38,7 +39,8 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle, growl" validateClient="true" actionListener="#{tipoCambioController.guardarTipoCambio}"
+                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelTipoCambioDetalle, growl" 
+                				 validateClient="true" actionListener="#{tipoCambioController.guardarTipoCambio}"
                                  ajax="true" style="margin-right:10px" action="to_administracion_tipocambio" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" >
                 	<p:ajax update="dlgTipoCambio" resetValues="true" />

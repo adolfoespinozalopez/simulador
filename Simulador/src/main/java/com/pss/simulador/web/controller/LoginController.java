@@ -35,6 +35,7 @@ public class LoginController extends GenericController implements Serializable  
 	private AccesoManager accesoManager;
    
     private List<General> listaMoneda = new ArrayList<General>();
+    private boolean logueado;
     
     public void login() {
     	String codigoUsuario = "";
@@ -74,7 +75,9 @@ public class LoginController extends GenericController implements Serializable  
 			}
 			
 		}
+		logueado = true;
     }
+    
     public String loginToHome(){
     	if (this.getUsuarioSession()!=null){
     		return "to_home";	
@@ -103,6 +106,14 @@ public class LoginController extends GenericController implements Serializable  
 
 	public void setListaMoneda(List<General> listaMoneda) {
 		this.listaMoneda = listaMoneda;
+	}
+
+	public boolean isLogueado() {
+		return logueado;
+	}
+
+	public void setLogueado(boolean logueado) {
+		this.logueado = logueado;
 	}
     
 }
