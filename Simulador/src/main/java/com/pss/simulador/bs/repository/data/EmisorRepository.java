@@ -21,4 +21,8 @@ public interface EmisorRepository extends CrudRepository<Emisor, Integer> {
 			+ " WHERE g.nbNomEmisor LIKE (CONCAT('%', :nombEmisor , '%')) AND ( -1 = :tipoEmisor OR g.tpTipemisor = :tipoEmisor ) AND g.stEstado = :estado")	
 	public abstract List<Emisor> findByNameAndType(@Param("nombEmisor") String strNombEmisor, @Param("tipoEmisor") Integer tipoEmisor, @Param("estado") String strStEstado);
 
+	@Query(value = "SELECT DISTINCT e FROM Emisor e, Infoport f "
+			+ "WHERE f.nbNomFondo LIKE :nomFondo "
+			+ "AND e.nbNomEmisor = f.nbNomEmisor AND e.stEstado = 1")
+	public abstract List<Emisor> findByFund(@Param("nomFondo") String strNomFondo);
 }

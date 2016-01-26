@@ -41,13 +41,16 @@
                                      selectionMode="single" scrollable="true" scrollHeight="390" 
                                      rowIndexVar="index" rowKey="#{item.cdIdgeneral}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="15"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
                             <p:column headerText="Dominio" style="text-align: left;">
                                 <h:outputText value="#{item.nbDominio}"/>
+                            </p:column>
+                            <p:column headerText="Descripción" style="text-align: left;">
+                                <h:outputText value="#{item.nbDescGeneral}"/>
                             </p:column>
                             <p:column headerText="Valor" style="text-align: left;">
                                 <h:outputText value="#{item.nbValorGeneral}"/>

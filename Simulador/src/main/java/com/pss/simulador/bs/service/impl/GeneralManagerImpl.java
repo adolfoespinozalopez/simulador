@@ -48,4 +48,8 @@ public class GeneralManagerImpl implements GeneralManager {
 		return generalRepository.save(general);
 	}
 
+	public List<General> findByFundAndTransmitter(String strNomFondo, String strNomEmisor) {
+		return generalRepository.findByFundAndTransmitter(strNomFondo, strNomEmisor);
+	}
+
 }

@@ -1,0 +1,126 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+    <p:blockUI block=":frmDetalleLimFondoEspecie:pnlEspecie" widgetVar="blkPanelEspecie">
+    	Espere mientras se cargan los datos<br />
+        <p:graphicImage value="/img/loading.gif" style="width: 45px; height: 40px;"/>
+    </p:blockUI>
+    <p:blockUI block=":frmDetalleLimFondoEspecie:panelLimite" widgetVar="blkPanelLimite">
+    	Espere mientras se cargan los datos<br />
+        <p:graphicImage value="/img/loading.gif" style="width: 45px; height: 40px;"/>
+    </p:blockUI>
+    <h:form id="frmDetalleLimFondoEspecie">
+        <p:panel id="panelLimFondoEspecieDetalle" header="Detalle Límite Por Emisor y Especie" 
+                 rendered="#{(fondoController.selectedFondo != null)?true:false}">
+            <table style="width: 100%;margin-bottom: 5px;">
+                <tbody>
+                    <tr>
+                        <td style="width: 60px;"><h:outputLabel value="Fondo:" /></td>
+                        <td>
+                            <p:inputText style="width: 465px;" readonly="true"
+                                         value="#{fondoController.selectedFondo.nombre}" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="width: 100%;height: 240px;">
+                <tbody>
+                    <tr>
+                        <td>
+                        	<h:panelGrid id="pnlEmisores">
+	                        	<p:dataTable id="grdEmisores" value="#{fondoController.listaEmisor}" var="item"  
+	                                     selection="#{fondoController.selectedEmisor}" reflow="false"
+	                                     selectionMode="single" scrollable="true" scrollHeight="200" 
+	                                     rowIndexVar="index" rowKey="#{item.cdIdemisor}"
+	                                     emptyMessage="No se encontraron registros." >
+	                                <p:ajax event="rowSelect" listener="#{fondoController.onEmisorRowSelect}" 
+	                                		update=":frmDetalleLimFondoEspecie:grdEspecie" 
+	                                		onstart="PF('blkPanelEspecie').show()" oncomplete="PF('blkPanelEspecie').hide()"/>
+	                            	<p:column headerText="Emisor" style="text-align: left;">
+	                                	<h:outputText value="#{item.nbNomEmisor}"/>
+	                            	</p:column>
+	                        	</p:dataTable>
+                        	</h:panelGrid>
+                        </td>
+                        <td>
+                        	<h:panelGrid id="pnlEspecie">
+	                        	<p:dataTable id="grdEspecie" value="#{fondoController.listaEspecie}" var="item"  
+	                                     selection="#{fondoController.selectedEspecie}" reflow="false"
+	                                     selectionMode="single" scrollable="true" scrollHeight="200" 
+	                                     rowIndexVar="index" rowKey="#{item.cdIdgeneral}"
+	                                     emptyMessage="No se encontraron registros.">
+	                                <p:ajax event="rowSelect" listener="#{fondoController.onEspecieRowSelect}" 
+	                                		update=":frmDetalleLimFondoEspecie:fldLimite" 
+	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()"/>
+	                            	<p:column headerText="Especie" style="text-align: left;">
+	                                	<h:outputText value="#{item.nbDescGeneral}"/>
+	                            	</p:column>
+	                        	</p:dataTable>
+                        	</h:panelGrid>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h:panelGrid id="panelLimite" style="width: 100%;">
+	            <p:fieldset legend="Límites" id="fldLimite">
+	                <table style="width: 100%;">
+		                <tbody>
+		                    <tr>
+		                        <td><p:outputLabel value="Inicial:" for="valPorInicio" /></td>
+		                        <td>
+	                                <p:spinner id="valPorInicio" required="true" prefix="%"
+	                                		   value="#{fondoController.selectedLimFondoEspecie.pcPorcIni}" 
+	                                		   min="0" max="100" stepFactor="0.25" />
+		                        </td>
+		                        <td><p:message for="valPorInicio" display="icon" /></td>
+		                        <td><p:outputLabel value="Final:" for="valPorFin" /></td>
+		                        <td>
+		                        	<p:spinner id="valPorFin" required="true" prefix="%"
+	                                		   value="#{fondoController.selectedLimFondoEspecie.pcPorcFin}" 
+	                                		   min="0" max="100" stepFactor="0.25"/>
+		                        </td>
+		                        <td><p:message for="valPorFin" display="icon" /></td>
+		                    </tr>
+		                    <tr>
+		                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
+		                        <td>
+			                       	<p:inputText id="valInicio" value="#{fondoController.selectedLimFondoEspecie.nuMontoIni}" 
+			                        			 required="true" maxlength="30" style="width: 130px;">
+			                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+		                			</p:inputText>
+		                        </td>
+		                        <td><p:message for="valInicio" display="icon" /></td>
+		                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
+		                        <td>
+		                        	<p:inputText id="valFin" value="#{fondoController.selectedLimFondoEspecie.nuMontoFin}" 
+			                        			 required="true" maxlength="30" style="width: 130px;">
+			                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+		                			</p:inputText>
+		                        </td>
+		                        <td><p:message for="valFin" display="icon" /></td>
+		                    </tr>
+		                    <tr>
+		                    	<td colspan="6">
+		                    		<p:toolbar>
+							            <p:toolbarGroup align="right">
+							                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="fldLimite, growl" validateClient="true" 
+							                				 actionListener="#{fondoController.guardarEmisorEspecieLimite}" ajax="true" />
+							            </p:toolbarGroup>
+							        </p:toolbar>
+		                    	</td>
+		                    </tr>
+		                </tbody>
+		            </table>
+	            </p:fieldset>
+            </h:panelGrid>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteLimFondoEspecie').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

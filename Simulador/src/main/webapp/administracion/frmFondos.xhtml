@@ -67,7 +67,8 @@
                                 				 oncomplete="PF('manteFondos').show()" update=":dlgFondo" 
                                                  style="width: 20px; height: 20px;" title="Ver detalles">
                                 </p:commandButton>
-                                <p:commandButton icon="ui-icon-wrench"  actionListener="#{fondoController.verLimites(item)}" 
+                                <p:commandButton icon="ui-icon-wrench"  actionListener="#{fondoController.verLimites(item)}"
+                                				 oncomplete="PF('manteLimFondoEspecie').show()" update=":dlgLimFondoEspecie"  
                                 				 style="width: 20px; height: 20px;" title="Ver límites">
                                 </p:commandButton>
                             </p:column>
@@ -80,7 +81,13 @@
                     <ui:include src="frmDetalleFondo.xhtml" />
                     <p:ajax event="close" listener="#{fondoController.cancelar()}" 
                             update=":frmGestionarFondos:grdFondos, :frmDetalleFondo" />
-                </p:dialog>  
+                </p:dialog>
+                
+                <p:dialog id="dlgLimFondoEspecie" modal="true" header="Mantenimiento Límites Por Emisor y Especie" widgetVar="manteLimFondoEspecie" resizable="false"
+                          width="600" height="480">
+                    <ui:include src="frmDetalleLimFondoEspecie.xhtml" />
+                    <p:ajax event="close" update=":frmGestionarFondos:grdFondos, :frmDetalleLimFondoEspecie, dlgLimFondoEspecie" resetValues="true" />
+                </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
             </ui:define>

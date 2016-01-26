@@ -7,8 +7,16 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import org.apache.log4j.Logger;
+import org.primefaces.event.SelectEvent;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.pss.simulador.bs.domain.Emisor;
+import com.pss.simulador.bs.domain.General;
+import com.pss.simulador.bs.domain.LimFondoEspecie;
 import com.pss.simulador.bs.domain.Saldo;
+import com.pss.simulador.bs.service.EmisorManager;
+import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.web.bean.Fondo;
 
 /**
@@ -26,6 +34,21 @@ public class FondoController {
 	private String fondoNombreBus = "";
 	private Fondo selectedFondo;
 	private List<Fondo> listaFondos = new ArrayList<Fondo>();
+	
+	//Limites por Emisor y Especie
+	private List<Emisor> listaEmisor = new ArrayList<Emisor>();
+	private Emisor selectedEmisor;
+	
+	private List<General> listaEspecie = new ArrayList<General>();
+	private General selectedEspecie;
+	
+	private LimFondoEspecie selectedLimFondoEspecie;
+	
+	@Autowired
+    private GeneralManager generalManager;
+	
+	@Autowired
+    private EmisorManager emisorManager;
 	
 	public FondoController(){
 		
@@ -88,6 +111,10 @@ public class FondoController {
 
 	public void verLimites(Fondo fondo) {
 		selectedFondo = fondo;
+		listaEmisor = emisorManager.findByFund(selectedFondo.getNombre());
+		selectedEmisor = null;
+		listaEspecie = new ArrayList<General>();
+		selectedEspecie = null;
 	}
 	
 	public void eliminar() {
@@ -96,8 +123,22 @@ public class FondoController {
 		}
 	}
 
+	public void onEmisorRowSelect(SelectEvent event) {
+		selectedEmisor = (Emisor) event.getObject();
+		listaEspecie = generalManager.findByFundAndTransmitter(selectedFondo.getNombre(), selectedEmisor.getNbNomEmisor());
+		selectedEspecie = null;
+    }
+	
+	public void onEspecieRowSelect(SelectEvent event) {
+        ((General) event.getObject()).getCdIdgeneral();
+    }
+	
 	public void cancelar() {
 		selectedFondo = null;
+	}
+	
+	public void guardarEmisorEspecieLimite() {
+		
 	}
 	
 	public String getFondoNombreBus() {
@@ -122,6 +163,46 @@ public class FondoController {
 
 	public void setListaFondos(List<Fondo> listaFondos) {
 		this.listaFondos = listaFondos;
+	}
+
+	public LimFondoEspecie getSelectedLimFondoEspecie() {
+		return selectedLimFondoEspecie;
+	}
+
+	public void setSelectedLimFondoEspecie(LimFondoEspecie selectedLimFondoEspecie) {
+		this.selectedLimFondoEspecie = selectedLimFondoEspecie;
+	}
+
+	public List<Emisor> getListaEmisor() {
+		return listaEmisor;
+	}
+
+	public void setListaEmisor(List<Emisor> listaEmisor) {
+		this.listaEmisor = listaEmisor;
+	}
+
+	public Emisor getSelectedEmisor() {
+		return selectedEmisor;
+	}
+
+	public void setSelectedEmisor(Emisor selectedEmisor) {
+		this.selectedEmisor = selectedEmisor;
+	}
+
+	public List<General> getListaEspecie() {
+		return listaEspecie;
+	}
+
+	public void setListaEspecie(List<General> listaEspecie) {
+		this.listaEspecie = listaEspecie;
+	}
+
+	public General getSelectedEspecie() {
+		return selectedEspecie;
+	}
+
+	public void setSelectedEspecie(General selectedEspecie) {
+		this.selectedEspecie = selectedEspecie;
 	}
 	
 }
