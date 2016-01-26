@@ -444,4 +444,14 @@ values (5, 'TIPOEMISOR', 'LATAM', 'LATAM', '1', to_date('25-01-2016', 'dd-mm-yyy
 insert into bbvatesor.TSI005_GENERAL (cd_idgeneral, nb_dominio, nb_desc_general, nb_valor_general, st_estado, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, fg_editable)
 values (6, 'TIPOEMISOR', 'Otros', 'Otros', '1', to_date('25-01-2016', 'dd-mm-yyyy'), 'P000000', null, null, null, null, '1');
 
+/*
+ ******************************************************
+ * Agregación de campos en la tabla TSI002_INFOPORT
+ ******************************************************
+ */
+alter table BBVATESOR.TSI002_INFOPORT rename column ST_ESTADO to ST_ESTADO_PORT; 
+
+alter table BBVATESOR.TSI002_INFOPORT add TP_OPERACION CHAR(1);
+alter table BBVATESOR.TSI002_INFOPORT add ST_ESTADO CHAR(1);
+alter table BBVATESOR.TSI002_INFOPORT add FH_FEC_IMPORTA date;
 
