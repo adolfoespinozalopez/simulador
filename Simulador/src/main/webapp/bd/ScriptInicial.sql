@@ -419,7 +419,7 @@ CREATE SEQUENCE bbvatesor.SEQ_LIMITESEMISOR;
 
 /*
  *******************************************
- * INSERTS
+ * INSERTS TSI007_PERFIL
  *******************************************
  */
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
@@ -432,9 +432,19 @@ insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, 
 values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
 commit;
 
+/*
+ *******************************************
+ * INSERTS TSI006_USUARIO
+ *******************************************
+ */
 insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
 values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'P004036', null, null, null, null, '1', 1);
 
+/*
+ *******************************************
+ * INSERTS TSI005_GENERAL
+ *******************************************
+ */
 --MONEDA
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
 values (1, 'MONEDA', 'PEN', 'PEN', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
@@ -475,6 +485,69 @@ values (13, 'TIPOOPERACIONCUENTA', 'ABONO', 'ABONO', '1', to_date('13-01-2016', 
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
 values (14, 'TIPOOPERACIONCUENTA', 'CARGO', 'CARGO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
+--ESPECIE
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (15, 'ESPECIE', 'Acciones', 'Acciones', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (16, 'ESPECIE', 'Bonos corporativos', 'Bonos corporativos', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (17, 'ESPECIE', 'Bonos de arrendami', 'Bonos de arrendami', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (18, 'ESPECIE', 'Bonos subordinados', 'Bonos subordinados', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (19, 'ESPECIE', 'Certificados', 'Certificados', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (20, 'ESPECIE', 'Depositos a plazo', 'Depositos a plazo', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (21, 'ESPECIE', 'Depositos de ahorr', 'Depositos de ahorr', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (22, 'ESPECIE', 'Instrum.Coberturad', 'Instrum.Coberturad', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (23, 'ESPECIE', 'Instrumentos de go', 'Instrumentos de go', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (24, 'ESPECIE', 'Letras del Tesoro', 'Letras del Tesoro', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (25, 'ESPECIE', 'Papeles Comerciale', 'Papeles Comerciale', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+
+--CONTRAPARTE
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (26, 'CONTRAPARTE', 'BANCO CONTINENTAL', 'BANCO CONTINENTAL', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (27, 'CONTRAPARTE', 'BANCO DE CREDITO', 'BANCO DE CREDITO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (28, 'CONTRAPARTE', 'BANCO FALABELLA PERU S.A.', 'BANCO FALABELLA PERU S.A.', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (29, 'CONTRAPARTE', 'BANCO GNB', 'BANCO GNB', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (30, 'CONTRAPARTE', 'BANCO RIPLEY', 'BANCO RIPLEY', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (31, 'CONTRAPARTE', 'BANCO SANTANDER', 'BANCO SANTANDER', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (32, 'CONTRAPARTE', 'BIF', 'BIF', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (33, 'CONTRAPARTE', 'CREDISCOTIA FINANCIERA S.A.', 'CREDISCOTIA FINANCIERA S.A.', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (34, 'CONTRAPARTE', 'DEUTSCHE BANK', 'DEUTSCHE BANK', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (35, 'CONTRAPARTE', 'EMPRESA FINANCIERA EDYFICAR', 'EMPRESA FINANCIERA EDYFICAR', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (36, 'CONTRAPARTE', 'FINANCIERA CONFIANZA S.A.A.', 'FINANCIERA CONFIANZA S.A.A.', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (37, 'CONTRAPARTE', 'INTERBANK', 'INTERBANK', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (38, 'CONTRAPARTE', 'MI BANCO', 'MI BANCO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (39, 'CONTRAPARTE', 'SCOTIABANK PERU', 'SCOTIABANK PERU', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (40, 'CONTRAPARTE', 'BBVA NY', 'BBVA NY', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (41, 'CONTRAPARTE', 'BANCOLOMBIA PANAMA', 'BANCOLOMBIA PANAMA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (42, 'CONTRAPARTE', 'BANCO DAVIVIENDA SA', 'BANCO DAVIVIENDA SA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (43, 'CONTRAPARTE', 'BANCO DE BOGOTA NY', 'BANCO DE BOGOTA NY', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (44, 'CONTRAPARTE', 'SANTANDER BRASIL', 'SANTANDER BRASIL', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 
 /*
  ******************************************************
@@ -486,4 +559,44 @@ alter table BBVATESOR.TSI002_INFOPORT rename column ST_ESTADO to ST_ESTADO_PORT;
 alter table BBVATESOR.TSI002_INFOPORT add TP_OPERACION CHAR(1);
 alter table BBVATESOR.TSI002_INFOPORT add ST_ESTADO CHAR(1);
 alter table BBVATESOR.TSI002_INFOPORT add FH_FEC_IMPORTA date;
+
+/*
+ *******************************************
+ * INSERTS TSI010_EMISOR
+ *******************************************
+ */
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (1, 'MI BANCO', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (2, 'MEF', 'I', 0, 6, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (3, 'SCOTIABANK PERU', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (4, 'SAGA FALABELLA S.A.', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (5, 'INTERBANK', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (6, 'BANCO DE CREDITO', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (7, 'LUZ DEL SUR', 'I', 0, 4, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (8, 'CINEPLEX S.A.', 'I', 0, 4, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (9, 'BANCO FALABELLA PERU S.A.', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (10, 'SUPERMERCADOS PERUANOS', 'I', 0, 4, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (11, 'CREDISCOTIA FINANCIERA S.A.', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (12, 'COFIDE', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (13, 'BANCO CONTINENTAL', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (14, 'GLORIA', 'I', 0, 4, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (15, 'BANCO GNB', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (16, 'EMPRESA FINANCIERA EDYFICAR', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
+values (17, 'BANCO CENTRAL DE RESERVA', 'I', 0, 6, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 
