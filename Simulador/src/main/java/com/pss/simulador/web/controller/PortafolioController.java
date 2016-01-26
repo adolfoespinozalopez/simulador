@@ -611,6 +611,10 @@ public class PortafolioController {
 	}
 	
 	public void inicializaDatosDeRenovacion(){
+		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
+    	if(selectedInfo.getNbIsim().trim().endsWith("C")){
+    		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
+    	}
 		importeRenova = formato.format(selectedInfo.getImValorSinInter());
 		tasaRenova = "";
 		plazoRenova = "";
