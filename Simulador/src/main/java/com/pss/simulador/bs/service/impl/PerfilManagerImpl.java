@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.Perfil;
 import com.pss.simulador.bs.domain.PerfilFondo;
@@ -78,6 +77,8 @@ public class PerfilManagerImpl implements PerfilManager {
 		
 		return perfil;
 	}
+	
+	@Transactional
 	public Perfil savePerfil(Perfil perfil) {
 		return perfilRepository.save(perfil);
 	}
