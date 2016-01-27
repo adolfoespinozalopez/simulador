@@ -28,8 +28,10 @@ public class InfoportManagerImpl implements InfoportManager {
 		if(nomEmisor.equals(Constante.NO_OPTION_SELECTED)){
 			nomEmisor = null;
 		}
-		if(!vencehoy.equals(Constante.VENCE_HOY) || vencehoy.equals(Constante.NO_OPTION_SELECTED)){
+		if(vencehoy.equals(Constante.NO_OPTION_SELECTED)){
 			vencehoy = null;
+		}else{
+			vencehoy += "%"; 
 		}
 		if(operacion.equals(Constante.NO_OPTION_SELECTED)){
 			operacion = null;

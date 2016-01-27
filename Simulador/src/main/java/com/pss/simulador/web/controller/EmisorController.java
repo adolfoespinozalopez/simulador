@@ -51,18 +51,11 @@ public class EmisorController extends GenericController {
 	@PostConstruct
 	public void init() {
 		listaEmisor = new ArrayList<Emisor>();
-//		Emisor emisorDemo = new Emisor(1);
-//		emisorDemo.setNbNomEmisor("BANCO CONTINENTAL");
-//		emisorDemo.setStEstado("1");
-//		emisorDemo.setTpRating("S.C.");
-//		emisorDemo.setImPasivo(1000000000.00);
-//		emisorDemo.setTpTipemisor(1);
-//		listaEmisor.add(emisorDemo);
 		selectedEmisor = new Emisor();
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
 		
-		lstGeneralDominio = generalManager.findByDomain(Constante.Dominio.TIPO_EMISOR);
+		lstGeneralDominio = generalManager.findByDomainAndState(Constante.Dominio.TIPO_EMISOR, Constante.ESTADO_ACTIVO);
 	}
 	
 	public void buscar() {

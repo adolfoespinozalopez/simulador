@@ -20,9 +20,9 @@ import com.pss.simulador.bs.domain.Infoport;
 public interface InfoportRepository extends CrudRepository<Infoport, Integer> {
 
 	@Query(value = "SELECT f FROM Infoport f WHERE f.fhFecImporta >= :fecImporta AND f.stEstado = 1 "
-			+ "AND (:nomFondo IS NULL OR f.nbNomFondo LIKE :nomFondo) "
+			+ "AND (:nomFondo  IS NULL OR f.nbNomFondo LIKE :nomFondo) "
 			+ "AND (:nomEmisor IS NULL OR f.nbNomEmisor =:nomEmisor) "
-			+ "AND (:vencehoy IS NULL OR f.stEstadoPort LIKE :vencehoy) "
+			+ "AND (:vencehoy  IS NULL OR f.stEstadoPort LIKE :vencehoy) "
 			+ "AND (:operacion IS NULL OR f.tpOperacion LIKE :operacion) "
 			+ "ORDER BY f.cdIdinfoport")
 	public abstract List<Infoport> findByFilter(@Param("fecImporta") Date fechaActual, @Param("nomFondo") String nomFondo, @Param("nomEmisor") String nomEmisor, @Param("vencehoy") String vencehoy, @Param("operacion") String operacion);

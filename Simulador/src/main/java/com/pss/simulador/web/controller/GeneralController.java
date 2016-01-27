@@ -50,7 +50,7 @@ public class GeneralController extends GenericController {
 	public void init() {
 		lstGeneralDominio = new ArrayList<String>();
 		lstGeneralDominio = generalManager.findAllDomains();
-		
+		lstGeneralDominioActivos = generalManager.findAllDomainsActive();
 		listaGeneral = new ArrayList<General>();
 		selectedGeneral = null;
 	}
@@ -61,7 +61,6 @@ public class GeneralController extends GenericController {
 
 	public void crear() {
 		selectedGeneral = new General();
-		lstGeneralDominioActivos = generalManager.findAllDomainsActive();
 	}
 	
 	public void guardarGeneral() {

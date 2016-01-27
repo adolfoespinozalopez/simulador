@@ -146,6 +146,14 @@ public class PortafolioController {
         ejecutarbusqueda();
     }
 	
+	public void realizarFiltroDeCondicion(ValueChangeEvent event) {
+        Object objNew = event.getNewValue();
+        if (objNew != null) {
+        	setSelectedCondicion(objNew.toString());
+        }
+        ejecutarbusqueda();
+    }
+	
 	public void realizarFiltroDeOperacion(ValueChangeEvent event) {
         Object objNew = event.getNewValue();
         if (objNew != null) {
