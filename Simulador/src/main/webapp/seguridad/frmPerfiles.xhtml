@@ -25,7 +25,7 @@
                         <p:toolbar style="padding: 4px;margin: 4px 0px;">
                             <p:toolbarGroup align="left">  
                                 <p:commandButton id="btnBuscar" process="@this, nombrePerfilBus" value="Buscar" icon="ui-icon-search" 
-                                                 update=":frmGestionarPerfiles:grdPerfiles, :growl" actionListener="#{perfilController.buscar}"/>
+                                                 update=":frmGestionarPerfiles:grdPerfiles, :growl" actionListener="#{perfilController.buscarPerfiles}"/>
                                 <p:commandButton process="@this" value="Agregar" icon="ui-icon-document" actionListener="#{perfilController.crear}" 
                                                  update=":frmDetallePerfil" oncomplete="PF('mantePerfiles').show()">
                                 </p:commandButton>
@@ -34,7 +34,7 @@
                         <p:dataTable id="grdPerfiles" value="#{perfilController.listaPerfiles}" var="item"  
                                      selection="#{perfilController.selectedPerfil}" reflow="false"
                                      selectionMode="single" scrollable="true" scrollHeight="390" 
-                                     rowIndexVar="index" rowKey="#{item.id}"
+                                     rowIndexVar="index" rowKey="#{item.cdIdperfil}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
@@ -42,23 +42,23 @@
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
                             <p:column headerText="Nombre" style="text-align: left;">
-                                <h:outputText value="#{item.nombre}"/>
+                                <h:outputText value="#{item.nbMonPerfil}"/>
                             </p:column>
                             <p:column headerText="Inicio" style="text-align: center;">
-                                <h:outputText value="#{item.fecInicio}">
+                                <h:outputText value="#{item.fhFecInicio}">
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Fin" style="text-align: center;">
-                                <h:outputText value="#{item.fecFin}">
+                                <h:outputText value="#{item.fhFecFin}">
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Tipo Perfil" style="text-align: center;">
-                                <h:outputText value="#{(item.tipo=='1')?'Administrador':'Inversionista'}"/>
+                                <h:outputText value="#{(item.tpTipperfil==1)?'Administrador':'Inversionista'}"/>
                             </p:column>
                             <p:column headerText="Activo" style="text-align: center;">
-                                <p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}" disabled="true"/>
+                                <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>
                             </p:column>
                             <p:column headerText="Opciones" style="text-align: center;">
                                 <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
@@ -67,7 +67,7 @@
                                     <p:resetInput target="dlgPerfil" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdPerfiles" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.estado!='1'}" title="Eliminar">
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!=1}" title="Eliminar">
                                     <f:setPropertyActionListener value="#{item}" target="#{perfilController.selectedPerfil}" />
                                 </p:commandButton>
                             </p:column>
@@ -90,7 +90,7 @@
                                     <tr>
                                         <td>
                                             <p:commandButton process="@this" value="Sí" action="#{perfilController.eliminar()}" 
-                                                             oncomplete="PF('dlgConfirmacion').hide()"/>  
+                                                             oncomplete="PF('dlgConfirmacion').hide()" update="growl"/>  
                                             <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
                                         </td>
                                     </tr>
@@ -106,6 +106,9 @@
                     <ui:include src="frmDetallePerfil.xhtml" />
                     <p:ajax event="close" listener="#{perfilController.cancelar()}" 
                             update=":frmGestionarPerfiles:grdPerfiles, :frmDetallePerfil" />
+                    <p:ajax event="close"  
+                            update=":frmGestionarPerfiles:grdPerfiles, :frmDetallePerfil, dlgPerfil" resetValues="true" >
+                    </p:ajax>
                 </p:dialog>  
 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

@@ -416,6 +416,7 @@ CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO;
 CREATE SEQUENCE bbvatesor.SEQ_GENERAL start with 10;
 CREATE SEQUENCE bbvatesor.SEQ_EMISOR;
 CREATE SEQUENCE bbvatesor.SEQ_LIMITESEMISOR;
+CREATE SEQUENCE bbvatesor.SEQ_PERFIL START WITH 10;
 
 /*
  *******************************************
