@@ -15,6 +15,7 @@ public class Constante {
      */
     public static final String ESTADO_ACTIVO = "1";
     public static final String ESTADO_INACTIVO = "0"; 
+    public static final String ESTADO_TODOS = "-1";
     
     /**
      * Fecha Inicial

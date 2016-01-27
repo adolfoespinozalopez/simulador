@@ -5,16 +5,23 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.pss.simulador.web.bean.Fondo;
-import com.pss.simulador.web.bean.Perfil;
+import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.domain.Perfil;
+import com.pss.simulador.bs.domain.PerfilFondo;
+import com.pss.simulador.bs.repository.data.PerfilFondoRepository;
+import com.pss.simulador.bs.service.FondoManager;
+import com.pss.simulador.bs.service.PerfilManager;
+import com.pss.simulador.util.Constante;
+import com.pss.simulador.util.Utilitarios;
+import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
 *
@@ -23,62 +30,103 @@ import com.pss.simulador.web.bean.Perfil;
 * @since 1.0
 */
 @Component
-@ManagedBean(name = "perfilController")
-@RequestScoped
-public class PerfilController {
+@Scope("session")
+public class PerfilController extends GenericController {
 
-	private static final Logger LOG = Logger.getLogger(PerfilController.class);
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger logger = Logger.getLogger(PerfilController.class);
 
 	private String perfilNombreBus = "";
 	private Perfil selectedPerfil;
 	private List<Perfil> listaPerfiles = new ArrayList<Perfil>();
 	private DualListModel<Fondo> fondos;
-
+	
+	@Autowired
+	PerfilManager perfilManager;
+	@Autowired
+	FondoManager fondoManager;
+	
 	public PerfilController() {
 
 	}
 
 	@PostConstruct
 	public void init() {
-		listaPerfiles = new ArrayList<Perfil>();
-		listaPerfiles.add(new Perfil(1, "Administrador del Sistema", 1));
-		listaPerfiles.add(new Perfil(2, "Administrador de Inversiones", 2));
-		listaPerfiles.add(new Perfil(3, "Inversionista EUR", 2));
-		listaPerfiles.add(new Perfil(4, "Inversionista BBVA Soles", 2));
+		buscarPerfiles();
 		selectedPerfil = null;
-
-		List<Fondo> fondoOrigen = new ArrayList<Fondo>();
-		fondoOrigen.add(new Fondo(1, "CASH SOLES"));
-		fondoOrigen.add(new Fondo(2, "BBVA S.MONETAR."));
-		fondoOrigen.add(new Fondo(3, "BBVA PERU SOLES"));
-		fondoOrigen.add(new Fondo(4, "BBVA SOLES"));
-		fondoOrigen.add(new Fondo(5, "BBVA MODERADO-S"));
-		fondoOrigen.add(new Fondo(6, "BBVA BALANC-S"));
-		fondoOrigen.add(new Fondo(7, "BBVA CREC.SOLES"));
-		fondoOrigen.add(new Fondo(8, "BBVA AGRESIVO-S"));
-		fondoOrigen.add(new Fondo(9, "CASH DOLARES"));
-		fondoOrigen.add(new Fondo(10, "BBVA D.MONETAR."));
-
+		this.resetFormulario();
+	}
+	
+	public void resetFormulario(){
+		List<Fondo> fondoOrigen = fondoManager.findFondoAll();
 		List<Fondo> fondoDestino = new ArrayList<Fondo>();
 		fondos = new DualListModel<Fondo>(fondoOrigen, fondoDestino);
 	}
 
-	public void buscar() {
-
+	public void buscarPerfiles() {
+		listaPerfiles = perfilManager.findPerfilByName(perfilNombreBus, Constante.ESTADO_ACTIVO);
 	}
 
 	public void crear() {
-		selectedPerfil = new Perfil(5, "", 2);
+		selectedPerfil = new Perfil();
+		selectedPerfil.setTpTipperfil(Constante.Perfil.ID_ADMINISTRADOR_INVERSORES);
+		this.resetFormulario();
+	}
+	
+	public void guardarPerfil() {
+		try {
+			if(selectedPerfil!=null){
+				if (selectedPerfil!=null)
+				selectedPerfil.setStEstado(Constante.ESTADO_ACTIVO);
+				if (selectedPerfil.getCdIdperfil()!=null){//Actualizacion
+					selectedPerfil.setFhFecModifica(new Date());
+					selectedPerfil.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
+				}else{// Registro
+					selectedPerfil.setFhFecCreacion(new Date());
+					selectedPerfil.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+				}
+				selectedPerfil=perfilManager.savePerfilAndDetail(selectedPerfil, fondos, this.getUsuarioSession());
+			}
+			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);	
+		} catch (Exception e) {
+			logger.error(e,e);
+			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+		this.buscarPerfiles();
 	}
 
 	public void verDetalles(Perfil perfil) {
 		selectedPerfil = perfil;
+		List<Fondo> fondoOrigen = new ArrayList<Fondo>();
+		List<Fondo> fondoDestino = new ArrayList<Fondo>();
+		List<Fondo> fondoAll = fondoManager.findFondoAll();
+		for (Fondo fondo : fondoAll) {
+			boolean isSelected = false; 
+			for (PerfilFondo perfilFondoIter : selectedPerfil.getPerfilFondoList()) {
+				if(fondo.getCdIdfondo() == perfilFondoIter.getPerfilFondoPK().getCdIdfondo() &&
+						perfilFondoIter.getStEstado().equals(Constante.ESTADO_ACTIVO)){
+					fondoDestino.add(fondo);
+					isSelected = true;
+					break;
+				}
+			}
+			if (!isSelected){
+				fondoOrigen.add(fondo);
+			}
+		}
+		fondos = new DualListModel<Fondo>(fondoOrigen, fondoDestino);
 	}
 
 	public void eliminar() {
 		if (selectedPerfil != null) {
-			selectedPerfil.setEstado("0");
+			selectedPerfil.setStEstado(Constante.ESTADO_INACTIVO);
+			selectedPerfil.setFhFecElimina(new Date());
+			selectedPerfil.setCdUsuElimina(this.getUsuarioSession().getUsuario().getUID());
 		}
+		selectedPerfil = perfilManager.savePerfil(selectedPerfil);
+		this.buscarPerfiles();
+		Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_ELIMINACION_OK, null);
 	}
 
 	public void cancelar() {
@@ -90,15 +138,15 @@ public class PerfilController {
 	 */
 	public void cambiaFechaFiltroInicial(SelectEvent event) {
 		Date fecInicio = (Date) event.getObject();
-		if (selectedPerfil.getFecFin().before(fecInicio)) {
-			selectedPerfil.setFecFin(fecInicio);
+		if (selectedPerfil.getFhFecFin().before(fecInicio)) {
+			selectedPerfil.setFhFecFin(fecInicio);
 		}
 	}
 
 	public void cambiaFechaFiltroFinal(SelectEvent event) {
 		Date fecFin = (Date) event.getObject();
-		if (selectedPerfil.getFecInicio().after(fecFin)) {
-			selectedPerfil.setFecInicio(fecFin);
+		if (selectedPerfil.getFhFecInicio().after(fecFin)) {
+			selectedPerfil.setFhFecInicio(fecFin);
 		}
 	}
 
@@ -133,4 +181,6 @@ public class PerfilController {
 	public void setFondos(DualListModel<Fondo> fondos) {
 		this.fondos = fondos;
 	}
+
+	
 }
