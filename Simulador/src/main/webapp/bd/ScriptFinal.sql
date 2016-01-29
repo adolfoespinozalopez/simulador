@@ -51,7 +51,7 @@ DROP SEQUENCE bbvatesor.SEQ_PERFIL;
 DROP SEQUENCE bbvatesor.SEQ_SALDO;
 
 CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO INCREMENT BY 1 START WITH 1;
-CREATE SEQUENCE bbvatesor.SEQ_GENERAL INCREMENT BY 1 START WITH 44;
+CREATE SEQUENCE bbvatesor.SEQ_GENERAL INCREMENT BY 1 START WITH 51;
 CREATE SEQUENCE bbvatesor.SEQ_COBRANZAPAGO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE bbvatesor.SEQ_DETALLEORDEN INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE bbvatesor.SEQ_EMISOR INCREMENT BY 1 START WITH 17;
@@ -161,7 +161,7 @@ CREATE TABLE bbvatesor.TSI002_Infoport (
 	tp_operacion  CHAR(1)  NULL
 );
 
-COMMENT ON TABLE bbvatesor.TSI002_Infoport IS 'Almacena la información del portafolio';
+COMMENT ON TABLE bbvatesor.TSI002_Infoport IS 'Almacena la informaciï¿½n del portafolio';
 
 CREATE  UNIQUE INDEX bbvatesor.ISI002P1_Infoport ON bbvatesor.TSI002_Infoport(cd_idinfoport  ASC);
 
@@ -386,7 +386,8 @@ CREATE TABLE bbvatesor.TSI013_Orden (
 	cd_idcontraparte  INTEGER  NULL ,
 	cd_idfondo  INTEGER  NULL ,
 	cd_idemisor  INTEGER  NULL ,
-	cd_idgeneral  INTEGER  NULL ,
+	cd_idTipoOperacion  INTEGER  NULL ,
+	cd_idEspecie  INTEGER  NULL ,
 	fh_fec_efectividad  DATE  NULL ,
 	tp_tipmoneda  INTEGER  NULL ,
 	im_tasa  NUMBER  NULL ,
@@ -425,8 +426,9 @@ CREATE INDEX ISI013S2_Orden ON bbvatesor.TSI013_Orden (cd_idfondo  ASC);
 
 CREATE INDEX ISI013S3_Orden ON bbvatesor.TSI013_Orden (cd_idemisor  ASC);
 
-CREATE INDEX ISI013S4_Orden ON bbvatesor.TSI013_Orden (cd_idgeneral  ASC);
+CREATE INDEX ISI013S4_Orden ON bbvatesor.TSI013_Orden (cd_idTipoOperacion  ASC);
 
+CREATE INDEX ISI013S5_Orden ON bbvatesor.TSI013_Orden (cd_idEspecie  ASC);
 
 CREATE TABLE bbvatesor.TSI014_OrdenEstado (
 	cd_idestOrden  INTEGER  NOT NULL ,
@@ -528,14 +530,17 @@ ALTER TABLE bbvatesor.TSI012_LimFondoEspecie
   ADD (CONSTRAINT  R008012 FOREIGN KEY (cd_idfondo) REFERENCES bbvatesor.TSI008_Fondo(cd_idfondo));
 
 ALTER TABLE bbvatesor.TSI013_Orden
+  ADD (CONSTRAINT  R008013 FOREIGN KEY (cd_idfondo) REFERENCES bbvatesor.TSI008_Fondo(cd_idfondo));
+  
+ALTER TABLE bbvatesor.TSI013_Orden
   ADD (CONSTRAINT  R0050131 FOREIGN KEY (cd_idcontraparte) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
 
 ALTER TABLE bbvatesor.TSI013_Orden
-  ADD (CONSTRAINT  R008013 FOREIGN KEY (cd_idfondo) REFERENCES bbvatesor.TSI008_Fondo(cd_idfondo));
+  ADD (CONSTRAINT  R0050132 FOREIGN KEY (cd_idTipoOperacion) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
 
 ALTER TABLE bbvatesor.TSI013_Orden
-  ADD (CONSTRAINT  R0050132 FOREIGN KEY (cd_idgeneral) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
-
+  ADD (CONSTRAINT  R0050133 FOREIGN KEY (cd_idEspecie) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
+  
 ALTER TABLE bbvatesor.TSI013_Orden
   ADD (CONSTRAINT  R010013 FOREIGN KEY (cd_idemisor) REFERENCES bbvatesor.TSI010_Emisor(cd_idemisor));
 
@@ -559,9 +564,9 @@ values (1, 'Administrador de Sistema', to_date('21-01-2016', 'dd-mm-yyyy'), to_d
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
 values (2, 'Administrador de Inversiones', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 2, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (4, 'Inversionista BBVA Soles', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (4, 'Inversionista BBVA Soles', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 2, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
 commit;
 
 
@@ -571,7 +576,14 @@ commit;
  *******************************************
  */
 insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
-values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'P004036', null, null, null, null, '1', 1);
+values (1, null, null, null, 'P004036', null, 1, '1', to_date('21-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1', 4);
+
+insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
+values (2, null, null, null, 'P005738', null, 1, '1', to_date('29-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1', 1);
+
+insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
+values (3, null, null, null, 'P020188', null, 1, '1', to_date('29-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1', 2);
+
 commit;
 
 
@@ -685,6 +697,23 @@ insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL,
 values (44, 'CONTRAPARTE', 'SANTANDER BRASIL', 'SANTANDER BRASIL', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 commit;
 
+--TIPOOPERACION
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (45, 'TIPOOPERACION', 'Money Market', 'M', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (46, 'TIPOOPERACION', 'Renta Fija', 'F', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (47, 'TIPOOPERACION', 'Renta Variable', 'V', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+
+--ESTADOORDEN
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (48, 'ESTADOORDEN', 'Generado', '1', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (49, 'ESTADOORDEN', 'Aprobado', '2', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (50, 'ESTADOORDEN', 'Rechazado', '3', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (51, 'ESTADOORDEN', 'Enviado', '4', '1', to_date('28-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
  /*
  *******************************************

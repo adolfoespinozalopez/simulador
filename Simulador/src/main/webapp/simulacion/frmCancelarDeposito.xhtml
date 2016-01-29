@@ -15,7 +15,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -107,8 +107,8 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Cancelar Depósito" icon="ui-icon-disk" update="panelCancelarDeposito" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Cancelar Depósito" icon="ui-icon-disk" update="panelCancelarDeposito, growl" 
+                                 actionListener="#{portafolioController.guardaOpCancelarDeposito}" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteCancelarDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

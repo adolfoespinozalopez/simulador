@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:body>
+        <ui:composition
+            template="/WEB-INF/facelets/templates/mainLayout.xhtml">
+            <ui:define name="menuPrincipal">
+                <ui:include src="/seguridad/frmMenu.xhtml"/>
+            </ui:define>
+            <ui:define name="content" >
+            	<p:blockUI block=":frmGestionarOrdenes:panOrdenes" widgetVar="blkPanel">
+                    Espere mientras se cargan los datos<br /> 
+                    <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
+                </p:blockUI>
+                <h1 class="title-sh">Ordenes</h1>
+                <p:separator />
+                <h:form id="frmGestionarOrdenes" onkeypress="if (event.keyCode == 13) return false;">
+                    <p:panel id="panOrdenes">
+                        <h:outputText value="Estado :" style="padding-right: 5px;" />
+                        <p:selectOneMenu id="lstEstado" style="width: 160px;" 
+                                         value="#{ordenController.selectedEstado}" 
+                                         valueChangeListener="#{ordenController.realizarFiltroDeEstado}">
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItems value="#{ordenController.listaOrdenEstado}" var="estado" 
+										   itemValue="#{estado.nbValorGeneral}" itemLabel="#{estado.nbDescGeneral}" />
+                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"/>
+                        </p:selectOneMenu>
+                        <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
+						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
+                                         value="#{ordenController.selectedTipoOperacion}" 
+                                         valueChangeListener="#{ordenController.realizarFiltroDeOperacion}">
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItems value="#{ordenController.listaTipoOperacion}" var="tipo" 
+										   itemValue="#{tipo.cdIdgeneral}" itemLabel="#{tipo.nbDescGeneral}" />
+                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"/>
+                        </p:selectOneMenu>
+                        <p:toolbar style="padding: 4px;margin: 4px 0px;">
+                            <p:toolbarGroup align="left">  
+                                <p:commandButton process="@this" value="Nuevo" icon="ui-icon-document" >
+                                </p:commandButton>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                        <p:dataTable id="grdOrdenes" value="#{ordenController.listaOrdenes}" var="item"  
+                                     selection="#{ordenController.selectedOrden}" reflow="false"
+                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     rowIndexVar="index" rowKey="#{item.cdIdorden}"
+                                     emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
+                                     paginator="true" rows="17"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+                            <p:column headerText="N°" style="width: 5%;text-align: center;">
+                                <h:outputText value="#{index+1}"/>
+                            </p:column>
+                            <p:column headerText="Fondo" style="text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
+                                <h:outputText value="#{item.fondo.nbNomFondo}"/>
+                            </p:column>
+                            <p:column headerText="Operación" style="text-align: left;" sortBy="#{item.cdIdgeneral.nbDescGeneral}">
+                                <h:outputText value="#{item.cdIdgeneral.nbDescGeneral}"/>
+                            </p:column>
+                            <p:column headerText="Moneda" style="text-align: left;">
+                                <h:outputText value="#{item.tpTipmoneda}"/>
+                            </p:column>
+                            <p:column headerText="Contraparte" style="text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
+                                <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
+                            </p:column>
+                            <p:column headerText="Especie" style="text-align: left;">
+                                <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
+                            </p:column>
+                            <p:column headerText="Mnemonico" style="text-align: left;">
+                                <h:outputText value="#{item.nbMnemonico}"/>
+                            </p:column>
+                            <p:column headerText="Monto / Cantidad" style="text-align: left;">
+                                <h:outputText value="#{item.imMontoFinal}"/>
+                            </p:column>
+                            <p:column headerText="Usuario" style="text-align: left;" sortBy="#{item.cdUsuCreacion}">
+                                <h:outputText value="#{item.cdUsuCreacion}"/>
+                            </p:column>
+                            <p:column headerText="Estado" style="text-align: center;">
+                                <h:outputText value="#{item.stEstado}"/>
+                            </p:column>
+                            <p:column headerText="Efectividad" style="text-align: center;" sortBy="#{item.fhFecEfectividad}">
+                                <h:outputText value="#{item.fhFecEfectividad}">
+                                    <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Opciones" style="text-align: center;">
+                                <p:commandButton icon="ui-icon-pencil" 
+                                                 style="width: 20px; height: 20px;" title="Ver detalles">
+                                </p:commandButton>
+                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionEnvio').show()" icon="ui-icon-trash" 
+                                                 style="width: 20px; height: 20px;" >
+                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>
+                <p:dialog modal="true" header="Confirmación de Envío" widgetVar="dlgConfirmacionEnvio" 
+                          resizable="false" width="380" height="100" id="dlgMensaje">
+                    <h:form id="frmConfirmacion">
+                        <p:panel>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" style="margin-bottom: 10px;"></span>
+                                            <h:outputLabel style="font-size: 10pt;" value="¿Está seguro de eviar la(s) orden(es) seleccionada(s)?"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <p:commandButton process="@this" value="Sí" action="#{perfilController.eliminar()}" 
+                                                             oncomplete="PF('dlgConfirmacion').hide()" update="growl"/>  
+                                            <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>      
+                        </p:panel>
+                    </h:form>
+                    <p:ajax event="close" update="frmGestionarOrdenes:grdOrdenes"/> 
+                </p:dialog>  
+
+                <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

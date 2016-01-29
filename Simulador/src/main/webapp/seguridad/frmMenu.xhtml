@@ -17,7 +17,7 @@
                     <p:submenu label="Seguridad" icon="fa fa-users" rendered="#{__USUARIO_SESSION__.bEsAdmin}">
                         <p:menuitem value="Perfiles" url="/seguridad/frmPerfiles.jsf" icon="fa fa-user"/>
                     </p:submenu> 
-                    <p:submenu label="Administración" icon="fa fa-cogs">
+                    <p:submenu label="Administración" icon="fa fa-cogs" rendered="#{__USUARIO_SESSION__.bEsAdmin}">
                         <p:menuitem value="Fondos" url="/administracion/frmFondos.jsf" icon="fa fa-building-o"/>
                         <p:menuitem value="Tipo de Cambio" url="/administracion/frmTipoCambio.jsf" icon="fa fa-usd"/>
                         <p:menuitem value="Generales" url="/administracion/frmGenerales.jsf" icon="fa fa-support"/>
@@ -26,7 +26,7 @@
                     <p:submenu label="Simulación" icon="fa fa-paper-plane-o">
                     	<p:menuitem value="Portafolio" url="/simulacion/frmPortafolio.jsf" icon="fa fa-briefcase"/>
                         <p:menuitem value="Exposición" url="/simulacion/frmSimulacion.jsf" icon="fa fa-globe"/>
-                        <p:menuitem value="Ordenes" url="#" icon="fa fa-inbox"/>
+                        <p:menuitem value="Ordenes" url="/simulacion/frmOrdenes.jsf" icon="fa fa-inbox"/>
                     </p:submenu>
                 </p:menubar>
             </h:form>
