@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.LimitesEmisor;
-import com.pss.simulador.bs.domain.LimitesEmisorPK;
 
 /**
  * @author pierre.obregon
@@ -18,6 +17,6 @@ public interface EmisorManager {
 	public List<Emisor> findEmisorByNameAndType(Emisor emisorBusqueda);
 	public Emisor save(Emisor emisor);
 	public LimitesEmisor saveLimiteEmisor(LimitesEmisor limitesEmisor);
-	public List<LimitesEmisor> findLimiteEmisorByPK(LimitesEmisorPK limitesEmisor);
+	public List<LimitesEmisor> findLimiteEmisorByPK(Integer cdIdlimite);
 	public List<Emisor> findByFund(String strNomFondo);
 }

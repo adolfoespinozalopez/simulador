@@ -42,7 +42,12 @@ public class CobranzaPago implements java.io.Serializable {
 	private Double imMtoMonFondo;
 	@Column(name = "CD_SIGLA", length = 3)
 	private String cdSigla;
-
+	@Column(name="ST_ESTADO")
+	private String stEstado;
+	@Temporal(TemporalType.DATE)
+	@Column(name="FH_FEC_IMPORTA")
+	private Date fhFecImporta;
+	
 	public CobranzaPago() {
 	}
 
@@ -130,4 +135,20 @@ public class CobranzaPago implements java.io.Serializable {
 		this.cdSigla = cdSigla;
 	}
 
+	public String getStEstado() {
+		return stEstado;
+	}
+
+	public void setStEstado(String stEstado) {
+		this.stEstado = stEstado;
+	}
+
+	public Date getFhFecImporta() {
+		return fhFecImporta;
+	}
+
+	public void setFhFecImporta(Date fhFecImporta) {
+		this.fhFecImporta = fhFecImporta;
+	}
+	
 }

@@ -531,7 +531,7 @@ public class PortafolioController {
             context.execute("PF('msjVal').show()");
         }else{
         	selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
-        	if(selectedInfo.getNbIsim().trim().endsWith("C")){
+        	if(selectedInfo.getNbIsin().trim().endsWith("C")){
         		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
         	}
         	verDetallesDeCancelarDeposito();
@@ -620,7 +620,7 @@ public class PortafolioController {
 	
 	public void inicializaDatosDeRenovacion(){
 		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
-    	if(selectedInfo.getNbIsim().trim().endsWith("C")){
+    	if(selectedInfo.getNbIsin().trim().endsWith("C")){
     		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
     	}
 		importeRenova = formato.format(selectedInfo.getImValorSinInter());

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.LimitesEmisor;
-import com.pss.simulador.bs.domain.LimitesEmisorPK;
 import com.pss.simulador.bs.service.EmisorManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.util.Constante;
@@ -98,12 +97,12 @@ public class EmisorController extends GenericController {
 		try {
 			if(selectedlimiteEmisor!=null){
 				selectedlimiteEmisor.setStEstado(Constante.ESTADO_ACTIVO);
-				if (selectedlimiteEmisor.getLimitesEmisorPK()!=null &&
-						selectedlimiteEmisor.getLimitesEmisorPK().getCdIdlimite()!=null){//Actualizacion
+				if (selectedlimiteEmisor.getCdIdlimite()!=null){//Actualizacion
 					selectedlimiteEmisor.setFhFecModifica(new Date());
 					selectedlimiteEmisor.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
 				}else{// Registro
-					selectedlimiteEmisor.setLimitesEmisorPK(new LimitesEmisorPK(null, selectedEmisor.getCdIdemisor()));
+					//selectedlimiteEmisor.setLimitesEmisorPK(new LimitesEmisorPK(null, selectedEmisor.getCdIdemisor()));
+					selectedlimiteEmisor.setCdIdlimite(null);
 					selectedlimiteEmisor.setFhFecCreacion(new Date());
 					selectedlimiteEmisor.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				}

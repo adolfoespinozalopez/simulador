@@ -17,7 +17,7 @@ import com.pss.simulador.bs.domain.LimFondoEspecie;
 @Repository
 public interface LimFondoEspecieRepository extends CrudRepository<LimFondoEspecie, Integer> {
 
-	@Query(value = "SELECT g FROM LimFondoEspecie g WHERE g.cdIdemisor.cdIdemisor = :cdIdemisor AND g.cdIdfondo.cdIdfondo = :cdIdfondo AND g.cdIdgeneral.cdIdgeneral = :cdIdEspecie AND g.stEstado = :estado")	
+	@Query(value = "SELECT g FROM LimFondoEspecie g WHERE g.emisor.cdIdemisor = :cdIdemisor AND g.fondo.cdIdfondo = :cdIdfondo AND g.general.cdIdgeneral = :cdIdEspecie AND g.stEstado = :estado")	
 	public abstract LimFondoEspecie findByFondoAndEmisorAndEspecie(@Param("cdIdfondo") Integer idFondo, @Param("cdIdemisor") Integer idEmisor, @Param("cdIdEspecie") Integer cdIdEspecie, @Param("estado") String strStEstado);
 	
 }

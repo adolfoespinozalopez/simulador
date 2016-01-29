@@ -1,11 +1,15 @@
 package com.pss.simulador.bs.domain;
 
 import java.util.Date;
+
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,8 +24,11 @@ import javax.persistence.TemporalType;
 public class LimitesEmisor implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	@EmbeddedId
-	protected LimitesEmisorPK limitesEmisorPK;
+	@Id
+	@SequenceGenerator(name = "secLimiteEmisor", sequenceName = "BBVATESOR.SEQ_LIMITESEMISOR", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secLimiteEmisor")
+	@Column(name = "CD_IDLIMITE", nullable = false)
+	private Integer cdIdlimite;
 	@Column(name = "PC_PORC_INI")
 	private Double pcPorcIni;
 	@Column(name = "PC_PORC_FIN")
@@ -47,27 +54,26 @@ public class LimitesEmisor implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
+	@JoinColumn(name = "CD_IDFONDO", referencedColumnName = "CD_IDFONDO", nullable = false, insertable = false, updatable = false)
+	@ManyToOne(optional = false)
+	private Fondo fondo;
 	@JoinColumn(name = "CD_IDEMISOR", referencedColumnName = "CD_IDEMISOR", nullable = false, insertable = false, updatable = false)
 	@ManyToOne(optional = false)
 	private Emisor emisor;
-
+	
 	public LimitesEmisor() {
 	}
 
-	public LimitesEmisor(LimitesEmisorPK limitesEmisorPK) {
-		this.limitesEmisorPK = limitesEmisorPK;
+	public LimitesEmisor(Integer cdIdlimite) {
+		this.cdIdlimite = cdIdlimite;
 	}
 
-	public LimitesEmisor(Integer cdIdlimite, Integer cdIdemisor) {
-		this.limitesEmisorPK = new LimitesEmisorPK(cdIdlimite, cdIdemisor);
+	public Integer getCdIdlimite() {
+		return cdIdlimite;
 	}
 
-	public LimitesEmisorPK getLimitesEmisorPK() {
-		return limitesEmisorPK;
-	}
-
-	public void setLimitesEmisorPK(LimitesEmisorPK limitesEmisorPK) {
-		this.limitesEmisorPK = limitesEmisorPK;
+	public void setCdIdlimite(Integer cdIdlimite) {
+		this.cdIdlimite = cdIdlimite;
 	}
 
 	public Double getPcPorcIni() {
@@ -158,6 +164,14 @@ public class LimitesEmisor implements java.io.Serializable {
 		this.cdUsuElimina = cdUsuElimina;
 	}
 
+	public Fondo getFondo() {
+		return fondo;
+	}
+
+	public void setFondo(Fondo fondo) {
+		this.fondo = fondo;
+	}
+	
 	public Emisor getEmisor() {
 		return emisor;
 	}

@@ -37,6 +37,8 @@ public class Usuario implements java.io.Serializable {
 	private Integer tpTipdocumento;
 	@Column(name = "NU_DOCUMENTO", length = 14)
 	private String nuDocumento;
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
 	@Column(name = "FH_FEC_CREACION")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecCreacion;
@@ -52,11 +54,9 @@ public class Usuario implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
-	@Column(name = "ST_ESTADO")
-	private String stEstado;
 	@JoinColumn(name = "CD_IDPERFIL", referencedColumnName = "CD_IDPERFIL", nullable = false)
 	@ManyToOne(optional = false)
-	private Perfil cdIdperfil;
+	private Perfil perfil;
 
 	public Usuario() {
 	}
@@ -185,11 +185,11 @@ public class Usuario implements java.io.Serializable {
 		this.stEstado = stEstado;
 	}
 
-	public Perfil getCdIdperfil() {
-		return cdIdperfil;
+	public Perfil getPerfil() {
+		return perfil;
 	}
 
-	public void setCdIdperfil(Perfil cdIdperfil) {
-		this.cdIdperfil = cdIdperfil;
+	public void setPerfil(Perfil perfil) {
+		this.perfil = perfil;
 	}
 }

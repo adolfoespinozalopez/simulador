@@ -1,28 +1,36 @@
 package com.pss.simulador.bs.domain;
 
+import java.io.Serializable;
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
 *
 * @author Adolfo Espinoza
-* @version 1.0, 12/01/2016
+* @version 1.0, 28/01/2016
 * @since 1.0
 */
 @Entity
-@Table(name = "TSI002_INFOPORT", schema="BBVATESOR")
-public class Infoport implements java.io.Serializable {
-
+@Table(name="TSI015_DETALLEORDEN", schema="BBVATESOR")
+public class DetalleOrden implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	@Id
-	@Column(name = "CD_IDINFOPORT", nullable = false)
-	private Integer cdIdinfoport;
+	@SequenceGenerator(name = "secDetalleOrden", sequenceName = "BBVATESOR.SEQ_DETALLEORDEN", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secDetalleOrden")
+	@Column(name="CD_IDDETALLE")
+	private Integer cdIddetalle;
 	@Column(name = "NB_NOM_FONDO", length = 40)
 	private String nbNomFondo;
 	@Column(name = "TP_TIPFONDO")
@@ -115,31 +123,19 @@ public class Infoport implements java.io.Serializable {
 	private Date fhFecImporta;
 	@Column(name = "TP_OPERACION")
 	private String tpOperacion;
-	
-	@Transient
-	private String tipoApertura;
-	@Transient
-	private Integer plazo;
-	@Transient
-	private String montoCapital;
-	@Transient
-	private String montoIntereses;
-	@Transient
-	private String montoTotal;
-	
-	public Infoport() {
+	@JoinColumn(name = "CD_IDORDEN", referencedColumnName = "CD_IDORDEN")
+    @ManyToOne(optional = false)
+	private Orden orden;
+
+	public DetalleOrden() {
 	}
 
-	public Infoport(Integer cdIdinfoport) {
-		this.cdIdinfoport = cdIdinfoport;
+	public Integer getCdIddetalle() {
+		return cdIddetalle;
 	}
 
-	public Integer getCdIdinfoport() {
-		return cdIdinfoport;
-	}
-
-	public void setCdIdinfoport(Integer cdIdinfoport) {
-		this.cdIdinfoport = cdIdinfoport;
+	public void setCdIddetalle(Integer cdIddetalle) {
+		this.cdIddetalle = cdIddetalle;
 	}
 
 	public String getNbNomFondo() {
@@ -461,7 +457,7 @@ public class Infoport implements java.io.Serializable {
 	public void setStCondicion(String stCondicion) {
 		this.stCondicion = stCondicion;
 	}
-	
+
 	public String getStEstado() {
 		return stEstado;
 	}
@@ -486,44 +482,12 @@ public class Infoport implements java.io.Serializable {
 		this.tpOperacion = tpOperacion;
 	}
 
-	public String getTipoApertura() {
-		return tipoApertura;
+	public Orden getOrden() {
+		return orden;
 	}
 
-	public void setTipoApertura(String tipoApertura) {
-		this.tipoApertura = tipoApertura;
-	}
-
-	public Integer getPlazo() {
-		return plazo;
-	}
-
-	public void setPlazo(Integer plazo) {
-		this.plazo = plazo;
-	}
-
-	public String getMontoCapital() {
-		return montoCapital;
-	}
-
-	public void setMontoCapital(String montoCapital) {
-		this.montoCapital = montoCapital;
-	}
-
-	public String getMontoIntereses() {
-		return montoIntereses;
-	}
-
-	public void setMontoIntereses(String montoIntereses) {
-		this.montoIntereses = montoIntereses;
-	}
-
-	public String getMontoTotal() {
-		return montoTotal;
-	}
-
-	public void setMontoTotal(String montoTotal) {
-		this.montoTotal = montoTotal;
+	public void setOrden(Orden orden) {
+		this.orden = orden;
 	}
 	
 }

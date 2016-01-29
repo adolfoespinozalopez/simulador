@@ -93,7 +93,7 @@ public class LoginController extends GenericController implements Serializable  
 	private void asignarValoresUsuario(IILDPeUsuario usuarioLdap,Usuario usuarioPerf) {
 		UsuarioSession usuarioSession = new UsuarioSession();
 		usuarioSession.setUsuario(usuarioLdap);
-		usuarioSession.setPerfil(usuarioPerf.getCdIdperfil());
+		usuarioSession.setPerfil(usuarioPerf.getPerfil());
 		usuarioSession.setbEsAdmin(true);
 		usuarioSession.setbEsInversion(true);
 		this.getSession().setAttribute(Constante.__USUARIO_SESSION__, usuarioSession);

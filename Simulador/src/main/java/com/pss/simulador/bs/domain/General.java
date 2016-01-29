@@ -56,9 +56,15 @@ public class General implements java.io.Serializable {
 	private String cdUsuElimina;
 	@Column(name = "FG_EDITABLE")
 	private String fgEditable;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contraparte")
+    private List<Orden> ordenContraparteList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
+    private List<Orden> ordenList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
+    private List<OrdenEstado> ordenEstadoList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "general")
 	private List<LimFondoEspecie> limFondoEspecieList;
-
+	
 	public General() {
 	}
 
@@ -168,6 +174,30 @@ public class General implements java.io.Serializable {
 	
 	public void setFgEditable(String fgEditable) {
 		this.fgEditable = fgEditable;
+	}
+
+	public List<Orden> getOrdenContraparteList() {
+		return ordenContraparteList;
+	}
+
+	public void setOrdenContraparteList(List<Orden> ordenContraparteList) {
+		this.ordenContraparteList = ordenContraparteList;
+	}
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
+	}
+
+	public List<OrdenEstado> getOrdenEstadoList() {
+		return ordenEstadoList;
+	}
+
+	public void setOrdenEstadoList(List<OrdenEstado> ordenEstadoList) {
+		this.ordenEstadoList = ordenEstadoList;
 	}
 
 }

@@ -58,9 +58,9 @@ public class FondoManagerImpl implements FondoManager {
 	
 	public LimFondoEspecie findLimFondoEspecieByFondoAndEmisorAndEspecie(LimFondoEspecie limFondoEspecie){
 		return limFondoEspecieRepository.findByFondoAndEmisorAndEspecie(
-				limFondoEspecie.getCdIdfondo().getCdIdfondo(), 
-				limFondoEspecie.getCdIdemisor().getCdIdemisor(),
-				limFondoEspecie.getCdIdgeneral().getCdIdgeneral(), 
+				limFondoEspecie.getFondo().getCdIdfondo(), 
+				limFondoEspecie.getEmisor().getCdIdemisor(),
+				limFondoEspecie.getGeneral().getCdIdgeneral(), 
 				Constante.ESTADO_ACTIVO);
 	}
 	

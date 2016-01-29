@@ -15,7 +15,7 @@ import com.pss.simulador.bs.domain.LimitesEmisor;
 @Repository
 public interface LimiteEmisorRepository extends CrudRepository<LimitesEmisor, Integer> {
 
-	@Query(value = "SELECT g FROM LimitesEmisor g WHERE g.limitesEmisorPK.cdIdlimite = :cdIdlimite AND g.limitesEmisorPK.cdIdemisor = :cdIdemisor AND g.stEstado = :estado")	
-	public abstract List<LimitesEmisor> findByPK(@Param("cdIdlimite") Integer cdIdlimite, @Param("cdIdemisor") Integer cdIdemisor, @Param("estado") String strStEstado);
+	@Query(value = "SELECT g FROM LimitesEmisor g WHERE g.cdIdlimite = :cdIdlimite AND g.stEstado = :estado")	
+	public abstract List<LimitesEmisor> findByPK(@Param("cdIdlimite") Integer cdIdlimite, @Param("estado") String strStEstado);
 
 }

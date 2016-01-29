@@ -39,6 +39,8 @@ public class Emisor implements java.io.Serializable {
 	private Double imPasivo;
 	@Column(name = "TP_TIPEMISOR")
 	private Integer tpTipemisor;
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
 	@Column(name = "FH_FEC_CREACION")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecCreacion;
@@ -54,13 +56,13 @@ public class Emisor implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
-	@Column(name = "ST_ESTADO")
-	private String stEstado;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdemisor")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "emisor")
+    private List<Orden> ordenList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "emisor")
 	private List<LimFondoEspecie> limFondoEspecieList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "emisor")
 	private List<LimitesEmisor> limitesEmisorList;
-
+	
 	public Emisor() {
 	}
 
@@ -108,6 +110,14 @@ public class Emisor implements java.io.Serializable {
 		this.tpTipemisor = tpTipemisor;
 	}
 
+	public String getStEstado() {
+		return stEstado;
+	}
+
+	public void setStEstado(String stEstado) {
+		this.stEstado = stEstado;
+	}
+	
 	public Date getFhFecCreacion() {
 		return fhFecCreacion;
 	}
@@ -156,14 +166,6 @@ public class Emisor implements java.io.Serializable {
 		this.cdUsuElimina = cdUsuElimina;
 	}
 
-	public String getStEstado() {
-		return stEstado;
-	}
-
-	public void setStEstado(String stEstado) {
-		this.stEstado = stEstado;
-	}
-
 	public List<LimFondoEspecie> getLimFondoEspecieList() {
 		return limFondoEspecieList;
 	}
@@ -178,6 +180,14 @@ public class Emisor implements java.io.Serializable {
 
 	public void setLimitesEmisorList(List<LimitesEmisor> limitesEmisorList) {
 		this.limitesEmisorList = limitesEmisorList;
+	}
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
 	}
 
 }

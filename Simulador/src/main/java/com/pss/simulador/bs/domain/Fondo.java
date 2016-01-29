@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -33,9 +32,13 @@ public class Fondo implements java.io.Serializable {
 	@Column(name = "TP_TIPFONDO")
 	private String tpTipfondo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
+    private List<Orden> ordenList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<PerfilFondo> perfilFondoList;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdfondo")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<LimFondoEspecie> limFondoEspecieList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
+	private List<LimitesEmisor> limitesEmisorList;
 	
 	public Fondo() {
 	}
@@ -98,6 +101,22 @@ public class Fondo implements java.io.Serializable {
 
 	public void setLimFondoEspecieList(List<LimFondoEspecie> limFondoEspecieList) {
 		this.limFondoEspecieList = limFondoEspecieList;
+	}
+
+	public List<Orden> getOrdenList() {
+		return ordenList;
+	}
+
+	public void setOrdenList(List<Orden> ordenList) {
+		this.ordenList = ordenList;
+	}
+
+	public List<LimitesEmisor> getLimitesEmisorList() {
+		return limitesEmisorList;
+	}
+
+	public void setLimitesEmisorList(List<LimitesEmisor> limitesEmisorList) {
+		this.limitesEmisorList = limitesEmisorList;
 	}
 
 }

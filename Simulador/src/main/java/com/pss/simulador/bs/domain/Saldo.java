@@ -1,9 +1,13 @@
 package com.pss.simulador.bs.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 /**
  *
  * @author Adolfo Espinoza
@@ -88,7 +92,12 @@ public class Saldo implements java.io.Serializable {
 	private Double imCxpPendiente;
 	@Column(name = "IM_SALDO_TMASN")
 	private Double imSaldoTmasn;
-
+	@Column(name = "ST_ESTADO")
+    private String stEstado;
+    @Column(name = "FH_FEC_IMPORTA")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fhFecImporta;
+    
 	public Saldo() {
 	}
 
@@ -382,6 +391,22 @@ public class Saldo implements java.io.Serializable {
 
 	public void setImSaldoTmasn(Double imSaldoTmasn) {
 		this.imSaldoTmasn = imSaldoTmasn;
+	}
+
+	public String getStEstado() {
+		return stEstado;
+	}
+
+	public void setStEstado(String stEstado) {
+		this.stEstado = stEstado;
+	}
+
+	public Date getFhFecImporta() {
+		return fhFecImporta;
+	}
+
+	public void setFhFecImporta(Date fhFecImporta) {
+		this.fhFecImporta = fhFecImporta;
 	}
 
 }

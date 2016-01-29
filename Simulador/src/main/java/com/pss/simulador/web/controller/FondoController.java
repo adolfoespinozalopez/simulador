@@ -105,9 +105,9 @@ public class FondoController extends GenericController {
 	public void onEspecieRowSelect(SelectEvent event) {
         General cdIdEspecie = ((General) event.getObject());
         LimFondoEspecie limFondoEspecieConsulta = new LimFondoEspecie();
-        limFondoEspecieConsulta.setCdIdemisor(selectedEmisor);
-        limFondoEspecieConsulta.setCdIdgeneral(cdIdEspecie);
-        limFondoEspecieConsulta.setCdIdfondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
+        limFondoEspecieConsulta.setEmisor(selectedEmisor);
+        limFondoEspecieConsulta.setGeneral(cdIdEspecie);
+        limFondoEspecieConsulta.setFondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
         selectedLimFondoEspecie = fondoManager.findLimFondoEspecieByFondoAndEmisorAndEspecie(limFondoEspecieConsulta);
         selectedLimFondoEspecie = (selectedLimFondoEspecie ==null)?new LimFondoEspecie():selectedLimFondoEspecie;
     }
@@ -120,9 +120,9 @@ public class FondoController extends GenericController {
 		try {
 			if(selectedLimFondoEspecie!=null){
 				selectedLimFondoEspecie.setStEstado(Constante.ESTADO_ACTIVO);
-				selectedLimFondoEspecie.setCdIdemisor(selectedEmisor);
-				selectedLimFondoEspecie.setCdIdgeneral(selectedEspecie);
-				selectedLimFondoEspecie.setCdIdfondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
+				selectedLimFondoEspecie.setEmisor(selectedEmisor);
+				selectedLimFondoEspecie.setGeneral(selectedEspecie);
+				selectedLimFondoEspecie.setFondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
 				
 				if (selectedLimFondoEspecie.getCdIdconfiguracion()!=null){//Actualizacion
 					selectedLimFondoEspecie.setFhFecModifica(new Date());

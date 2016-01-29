@@ -56,13 +56,13 @@ public class LimFondoEspecie implements java.io.Serializable {
 	private String cdUsuElimina;
 	@JoinColumn(name = "CD_IDEMISOR", referencedColumnName = "CD_IDEMISOR", nullable = false)
 	@ManyToOne(optional = false)
-	private Emisor cdIdemisor;
+	private Emisor emisor;
 	@JoinColumn(name = "CD_IDFONDO", referencedColumnName = "CD_IDFONDO", nullable = false)
 	@ManyToOne(optional = false)
-	private Fondo cdIdfondo;
+	private Fondo fondo;
 	@JoinColumn(name = "CD_IDGENERAL", referencedColumnName = "CD_IDGENERAL", nullable = false)
 	@ManyToOne(optional = false)
-	private General cdIdgeneral;
+	private General general;
 
 	public LimFondoEspecie() {
 	}
@@ -167,28 +167,28 @@ public class LimFondoEspecie implements java.io.Serializable {
 		this.cdUsuElimina = cdUsuElimina;
 	}
 
-	public Emisor getCdIdemisor() {
-		return cdIdemisor;
+	public Emisor getEmisor() {
+		return emisor;
 	}
 
-	public void setCdIdemisor(Emisor cdIdemisor) {
-		this.cdIdemisor = cdIdemisor;
+	public void setEmisor(Emisor cdIdemisor) {
+		this.emisor = cdIdemisor;
 	}
 
-	public Fondo getCdIdfondo() {
-		return cdIdfondo;
+	public Fondo getFondo() {
+		return fondo;
 	}
 
-	public void setCdIdfondo(Fondo cdIdfondo) {
-		this.cdIdfondo = cdIdfondo;
+	public void setFondo(Fondo fondo) {
+		this.fondo = fondo;
 	}
 
-	public General getCdIdgeneral() {
-		return cdIdgeneral;
+	public General getGeneral() {
+		return general;
 	}
 
-	public void setCdIdgeneral(General cdIdgeneral) {
-		this.cdIdgeneral = cdIdgeneral;
+	public void setGeneral(General general) {
+		this.general = general;
 	}
 
 }

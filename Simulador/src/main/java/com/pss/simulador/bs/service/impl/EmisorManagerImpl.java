@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.LimitesEmisor;
-import com.pss.simulador.bs.domain.LimitesEmisorPK;
 import com.pss.simulador.bs.repository.data.EmisorRepository;
 import com.pss.simulador.bs.repository.data.LimiteEmisorRepository;
 import com.pss.simulador.bs.service.EmisorManager;
@@ -45,8 +44,8 @@ public class EmisorManagerImpl implements EmisorManager {
 		return limiteEmisorRepository.save(limitesEmisor);
 	}
 	
-	public List<LimitesEmisor> findLimiteEmisorByPK(LimitesEmisorPK limitesEmisor) {
-		return limiteEmisorRepository.findByPK(limitesEmisor.getCdIdlimite(), limitesEmisor.getCdIdemisor(), Constante.ESTADO_ACTIVO);
+	public List<LimitesEmisor> findLimiteEmisorByPK(Integer cdIdlimite) {
+		return limiteEmisorRepository.findByPK(cdIdlimite, Constante.ESTADO_ACTIVO);
 	}
 
 	public List<Emisor> findByFund(String strNomFondo) {

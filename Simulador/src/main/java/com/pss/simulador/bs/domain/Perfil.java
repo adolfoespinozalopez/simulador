@@ -40,6 +40,8 @@ public class Perfil implements java.io.Serializable {
 	private Date fhFecFin;
 	@Column(name = "TP_TIPPERFIL")
 	private Integer tpTipperfil;
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
 	@Column(name = "FH_FEC_CREACION")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecCreacion;
@@ -55,9 +57,8 @@ public class Perfil implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
-	@Column(name = "ST_ESTADO")
-	private String stEstado;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdperfil")
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "perfil")
 	private List<Usuario> usuarioList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "perfil")
 	private List<PerfilFondo> perfilFondoList;

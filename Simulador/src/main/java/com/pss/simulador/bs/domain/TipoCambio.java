@@ -33,6 +33,8 @@ public class TipoCambio implements java.io.Serializable {
 	private Date fhFecIngreso;
 	@Column(name = "NU_VALOR")
 	private Double nuValor;
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
 	@Column(name = "FH_FEC_CREACION")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecCreacion;
@@ -48,8 +50,7 @@ public class TipoCambio implements java.io.Serializable {
 	private Date fhFecElimina;
 	@Column(name = "CD_USU_ELIMINA", length = 10)
 	private String cdUsuElimina;
-	@Column(name = "ST_ESTADO")
-	private String stEstado;
+	
 
 	public TipoCambio() {
 	}
