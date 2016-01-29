@@ -4,26 +4,27 @@
     		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     		xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
     						    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-
 	<persistence-unit name="simuladorData" transaction-type="JTA">
 		<!-- WAS8  
 		<jta-data-source>jdbc/simbbva</jta-data-source>
 		-->
 		<jta-data-source>java:/comp/env/jdbc/simbbva</jta-data-source>
+		<class>com.pss.simulador.bs.domain.Saldo</class>
+		<class>com.pss.simulador.bs.domain.Infoport</class>
 		<class>com.pss.simulador.bs.domain.CobranzaPago</class>
-		<class>com.pss.simulador.bs.domain.Emisor</class>
+		<class>com.pss.simulador.bs.domain.TipoCambio</class>
+		<class>com.pss.simulador.bs.domain.Perfil</class>
+		<class>com.pss.simulador.bs.domain.Usuario</class>
 		<class>com.pss.simulador.bs.domain.Fondo</class>
 		<class>com.pss.simulador.bs.domain.General</class>
-		<class>com.pss.simulador.bs.domain.Infoport</class>
-		<class>com.pss.simulador.bs.domain.LimFondoEspecie</class>
-		<class>com.pss.simulador.bs.domain.LimitesEmisor</class>
-		<class>com.pss.simulador.bs.domain.LimitesEmisorPK</class>
-		<class>com.pss.simulador.bs.domain.Perfil</class>
 		<class>com.pss.simulador.bs.domain.PerfilFondo</class>
-		<class>com.pss.simulador.bs.domain.PerfilFondoPK</class>
-		<class>com.pss.simulador.bs.domain.Saldo</class>
-		<class>com.pss.simulador.bs.domain.TipoCambio</class>
-		<class>com.pss.simulador.bs.domain.Usuario</class>
+		<class>com.pss.simulador.bs.domain.PerfilfondoPK</class>
+		<class>com.pss.simulador.bs.domain.Emisor</class>
+		<class>com.pss.simulador.bs.domain.LimitesEmisor</class>
+		<class>com.pss.simulador.bs.domain.LimFondoEspecie</class>
+		<class>com.pss.simulador.bs.domain.Orden</class>
+		<class>com.pss.simulador.bs.domain.OrdenEstado</class>
+		<class>com.pss.simulador.bs.domain.DetalleOrden</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 
 	</persistence-unit>	
