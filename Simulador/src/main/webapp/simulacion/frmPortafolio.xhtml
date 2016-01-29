@@ -56,12 +56,11 @@
                         </p:selectOneMenu>
                         <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
-                                         value="#{portafolioController.selectedOperacion}" 
+                                         value="#{portafolioController.selectedTipoOperacion}" 
                                          valueChangeListener="#{portafolioController.realizarFiltroDeOperacion}">
-                            <f:selectItem itemLabel="Todos" itemValue="-1" />
-                            <f:selectItem itemLabel="Money Market" itemValue="M" />
-                            <f:selectItem itemLabel="Renta Fija" itemValue="F" />
-                            <f:selectItem itemLabel="Renta Variable" itemValue="V" />
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />                            
+                            <f:selectItems value="#{portafolioController.listaTipoOperacion}" var="tipo" 
+										   itemValue="#{tipo.nbValorGeneral}" itemLabel="#{tipo.nbDescGeneral}" />
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" 
@@ -348,7 +347,7 @@
                             update=" :frmAbonoCargo" />
                 </p:dialog>
                 
-                <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija" 
+                <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija - Pre Asignación" 
                 		  widgetVar="manteRentaFija" resizable="false" width="540" height="400">
                     <ui:include src="frmRentaFija.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 

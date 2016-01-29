@@ -4,8 +4,12 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:pe="http://primefaces.org/ui/extensions">
+    <p:blockUI block=":frmDetalleEmisorLimite:panelLimite" widgetVar="blkPanelLimite">
+    	Espere mientras se cargan los datos<br />
+        <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
+    </p:blockUI>
     <h:form id="frmDetalleEmisorLimite">
-        <p:panel id="panelEmisorLimiteDetalle" header="Detalle Límite Por Emisor" 
+        <p:panel id="panelEmisorLimiteDetalle" header="Detalle Límite Por Fondo y Emisor" 
                  rendered="#{(emisorController.selectedEmisor != null)?true:false}">
             <table style="width: 100%;">
                 <tbody>
@@ -16,57 +20,84 @@
                                          value="#{emisorController.selectedEmisor.nbNomEmisor}" />
                         </td>
                     </tr>
-                    <tr>
-                    	<td colspan="2"><BR/></td>
-                    </tr>
                 </tbody>
             </table>
-            <p:fieldset legend="Límites" id="fldLimite">
-                <table style="width: 100%;">
-	                <tbody>
-	                    <tr>
-	                        <td><p:outputLabel value="Inicial:" for="valPorInicio" /></td>
-	                        <td>
-                                <p:spinner id="valPorInicio" required="true" prefix="%"
-                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcIni}" 
-                                		   min="0" max="100" stepFactor="0.25" />
-	                        </td>
-	                        <td><p:message for="valPorInicio" display="icon" /></td>
-	                        <td><p:outputLabel value="Final:" for="valPorFin" /></td>
-	                        <td>
-	                        	<p:spinner id="valPorFin" required="true" prefix="%"
-                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcFin}" 
-                                		   min="0" max="100" stepFactor="0.25"/>
-	                        </td>
-	                        <td><p:message for="valPorFin" display="icon" /></td>
-	                    </tr>
-	                    <tr>
-	                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
-	                        <td>
-		                       	<p:inputText id="valInicio" value="#{emisorController.selectedlimiteEmisor.nuMontoIni}" 
-		                        			 required="true" maxlength="30" style="width: 130px;">
-		                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-	                			</p:inputText>
-	                        </td>
-	                        <td><p:message for="valInicio" display="icon" /></td>
-	                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
-	                        <td>
-	                        	<p:inputText id="valFin" value="#{emisorController.selectedlimiteEmisor.nuMontoFin}" 
-		                        			 required="true" maxlength="30" style="width: 130px;">
-		                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-	                			</p:inputText>
-	                        </td>
-	                        <td><p:message for="valFin" display="icon" /></td>
-	                    </tr>
-	                </tbody>
-	            </table>
-            </p:fieldset>
+            <table style="width: 100%;height: 200px;">
+            	<tbody>
+                    <tr>
+                        <td style="width: 40%;">
+                        	<h:panelGrid id="pnlFondos">
+	                        	<p:dataTable id="grdFondos" value="#{emisorController.listaFondo}" var="item"  
+	                                     selection="#{emisorController.selectedFondo}" reflow="false"
+	                                     selectionMode="single" scrollable="true" scrollHeight="150" 
+	                                     rowIndexVar="index" rowKey="#{item.cdIdfondo}"
+	                                     emptyMessage="No se encontraron registros." >
+	                                <p:ajax event="rowSelect" listener="#{emisorController.onFondoRowSelect}"
+	                                		update=":frmDetalleEmisorLimite:fldLimite" 
+	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()"/>
+	                            	<p:column headerText="Fondo" style="text-align: left;" >
+	                                	<h:outputText value="#{item.nbNomFondo}" />
+	                            	</p:column>
+	                        	</p:dataTable>
+                        	</h:panelGrid>
+                        </td>
+                        <td style="width: 60%;">
+                        	<h:panelGrid id="panelLimite" style="width: 100%;">
+	                        	<p:fieldset legend="Límites" id="fldLimite">
+					                <table style="width: 100%;">
+						                <tbody>
+						                    <tr>
+						                        <td><p:outputLabel value="Inicial:" for="valPorInicio" /></td>
+						                        <td>
+					                                <p:spinner id="valPorInicio" required="true" prefix="%"
+					                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcIni}" 
+					                                		   min="0" max="100" stepFactor="0.25" />
+						                        </td>
+						                        <td style="width: 50px;"><p:message for="valPorInicio" display="icon" /></td>
+						                    </tr>
+						                    <tr>    
+						                        <td><p:outputLabel value="Final:" for="valPorFin" /></td>
+						                        <td>
+						                        	<p:spinner id="valPorFin" required="true" prefix="%"
+					                                		   value="#{emisorController.selectedlimiteEmisor.pcPorcFin}" 
+					                                		   min="0" max="100" stepFactor="0.25"/>
+						                        </td>
+						                        <td><p:message for="valPorFin" display="icon" /></td>
+						                    </tr>
+						                    <tr>
+						                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
+						                        <td>
+							                       	<p:inputText id="valInicio" value="#{emisorController.selectedlimiteEmisor.nuMontoIni}" 
+							                        			 required="true" maxlength="30" style="width: 130px;">
+							                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						                			</p:inputText>
+						                        </td>
+						                        <td><p:message for="valInicio" display="icon" /></td>
+						                    </tr>
+						                    <tr> 
+						                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
+						                        <td>
+						                        	<p:inputText id="valFin" value="#{emisorController.selectedlimiteEmisor.nuMontoFin}" 
+							                        			 required="true" maxlength="30" style="width: 130px;">
+							                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						                			</p:inputText>
+						                        </td>
+						                        <td><p:message for="valFin" display="icon" /></td>
+						                    </tr>
+						                </tbody>
+						            </table>
+					            </p:fieldset>
+				            </h:panelGrid>
+            			</td>
+                    </tr>
+                </tbody>            
+            </table>
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelEmisorLimiteDetalle, growl" validateClient="true" 
-                					actionListener="#{emisorController.guardarEmisorLimite}" ajax="true" 
-                					style="margin-right:10px" action="to_administracion_emisor" />
+                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="fldLimite, growl"  
+                				 actionListener="#{emisorController.guardarEmisorLimite}" ajax="true" 
+                				 style="margin-right:10px" action="to_administracion_emisor" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteEmisorLimite').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

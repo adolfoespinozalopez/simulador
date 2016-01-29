@@ -28,11 +28,8 @@
                             <p:selectOneMenu id="lstFondoAper" required="true" style="width: 325px;" 
                                          	value="#{portafolioController.selectedFondoAper}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
-	                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
-	                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
-	                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
-	                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+	                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
+										   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
@@ -42,12 +39,8 @@
                             <p:selectOneMenu id="lstContraAper" required="true" style="width: 325px;" 
                                          	value="#{portafolioController.selectedContraAper}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
-	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
-	                            <f:selectItem itemLabel="BANCO GNB" itemValue="BANCO GNB" />
-	                            <f:selectItem itemLabel="BANCO RIPLEY" itemValue="BANCO RIPLEY" />
-	                            <f:selectItem itemLabel="BIF" itemValue="BIF" />
-	                            <f:selectItem itemLabel="BANCO SANTANDER" itemValue="BANCO SANTANDER" />
+	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
@@ -57,8 +50,8 @@
 	                        <p:selectOneMenu id="lstMonedaAper" required="true" style="width: 110px;" 
                                          	value="#{portafolioController.selectedMonedaAper}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="PEN" itemValue="PEN" />
-	                            <f:selectItem itemLabel="USD" itemValue="USD" />
+	                            <f:selectItems value="#{portafolioController.listaMoneda}" var="moneda" 
+										   	   itemValue="#{moneda.nbValorGeneral}" itemLabel="#{moneda.nbDescGeneral}" />
 	                        </p:selectOneMenu>
                         </td>
                         <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>

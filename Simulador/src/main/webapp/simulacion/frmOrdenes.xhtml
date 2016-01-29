@@ -54,46 +54,37 @@
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
-                            <p:column headerText="Fondo" style="text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
+                            <p:column headerText="Fondo" style="width: 8%;text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
                                 <h:outputText value="#{item.fondo.nbNomFondo}"/>
                             </p:column>
-                            <p:column headerText="Operación" style="text-align: left;" sortBy="#{item.cdIdgeneral.nbDescGeneral}">
-                                <h:outputText value="#{item.cdIdgeneral.nbDescGeneral}"/>
+                            <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.cdIdgeneral.nbDescGeneral}">
+                                <h:outputText value="#{item.cdIdTipoOperacion.nbDescGeneral}"/>
                             </p:column>
-                            <p:column headerText="Moneda" style="text-align: left;">
+                            <p:column headerText="Moneda" style="width: 8%;text-align: left;">
                                 <h:outputText value="#{item.tpTipmoneda}"/>
                             </p:column>
-                            <p:column headerText="Contraparte" style="text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
+                            <p:column headerText="Contraparte" style="width: 15%;text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
                                 <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
                             </p:column>
-                            <p:column headerText="Especie" style="text-align: left;">
-                                <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
+                            <p:column headerText="Especie" style="width: 10%;text-align: left;" sortBy="#{item.especie.nbDescGeneral}">
+                                <h:outputText value="#{item.especie.nbDescGeneral}"/>
                             </p:column>
-                            <p:column headerText="Mnemonico" style="text-align: left;">
+                            <p:column headerText="Mnemonico" style="width: 10%;text-align: left;">
                                 <h:outputText value="#{item.nbMnemonico}"/>
                             </p:column>
-                            <p:column headerText="Monto / Cantidad" style="text-align: left;">
+                            <p:column headerText="Monto / Cantidad" style="width: 12%;text-align: left;">
                                 <h:outputText value="#{item.imMontoFinal}"/>
                             </p:column>
-                            <p:column headerText="Usuario" style="text-align: left;" sortBy="#{item.cdUsuCreacion}">
+                            <p:column headerText="Usuario" style="width: 12%;text-align: left;" sortBy="#{item.cdUsuCreacion}">
                                 <h:outputText value="#{item.cdUsuCreacion}"/>
                             </p:column>
-                            <p:column headerText="Estado" style="text-align: center;">
+                            <p:column headerText="Estado" style="width: 8%;text-align: center;">
                                 <h:outputText value="#{item.stEstado}"/>
                             </p:column>
-                            <p:column headerText="Efectividad" style="text-align: center;" sortBy="#{item.fhFecEfectividad}">
+                            <p:column headerText="Efectividad" style="width: 10%;text-align: center;" sortBy="#{item.fhFecEfectividad}">
                                 <h:outputText value="#{item.fhFecEfectividad}">
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column headerText="Opciones" style="text-align: center;">
-                                <p:commandButton icon="ui-icon-pencil" 
-                                                 style="width: 20px; height: 20px;" title="Ver detalles">
-                                </p:commandButton>
-                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionEnvio').show()" icon="ui-icon-trash" 
-                                                 style="width: 20px; height: 20px;" >
-                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
-                                </p:commandButton>
                             </p:column>
                         </p:dataTable>
                     </p:panel>
