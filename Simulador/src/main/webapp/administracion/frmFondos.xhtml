@@ -23,42 +23,42 @@
                         <h:outputText value="Nombre :" style="padding-right: 5px;"/>
                         <p:inputText id="nombreFondo" style="width: 45%;" maxlength="100" value="#{fondoController.fondoNombreBus}"/>
                         <p:toolbar style="padding: 4px;margin: 4px 0px;">
-                            <p:toolbarGroup align="left">  
+                            <p:toolbarGroup align="left">
                                 <p:commandButton id="btnBuscar" process="@this, nombreFondo" value="Buscar" icon="ui-icon-search" 
                                                  update=":frmGestionarFondos:grdFondos, :growl" actionListener="#{fondoController.buscar}"/>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        <p:dataTable id="grdFondos" value="#{fondoController.listaFondos}" var="item"  
-                                     selection="#{fondoController.selectedFondo}" reflow="false"
+                        <p:dataTable id="grdFondos" value="#{fondoController.listaSaldos}" var="item"  
+                                     selection="#{fondoController.selectedSaldo}" reflow="false"
                                      selectionMode="single" scrollable="true" scrollHeight="390" 
-                                     rowIndexVar="index" rowKey="#{item.id}"
+                                     rowIndexVar="index" rowKey="#{item.cdIdsaldo}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
                                      paginator="true" rows="10"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="Codigo" style="width: 5%;text-align: center;">
-                                <h:outputText value="#{item.codigo}"/>
+                                <h:outputText value="#{item.cdIdsaldo}"/>
                             </p:column>
                             <p:column headerText="Nombre" style="text-align: left;">
-                                <h:outputText value="#{item.nombre}"/>
+                                <h:outputText value="#{item.nbNomFondo}"/>
                             </p:column>
                             <p:column headerText="Moneda" style="text-align: center;">
-                                <h:outputText value="#{item.tipoMoneda}"/>
+                                <h:outputText value="#{item.tpTipmoneda}"/>
                             </p:column>
                             <p:column headerText="Num. Cuenta" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.nuNumCuenta}"/>
+                                <h:outputText value="#{item.nuNumCuenta}"/>
                             </p:column>
                             <p:column headerText="Inicial" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.toSaldoInicial}">
+                                <h:outputText value="#{item.toSaldoInicial}">
                                 	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Liquidez" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.imPorcLiquidez}">
+                                <h:outputText value="#{item.imPorcLiquidez}">
                                 	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Disponible" style="text-align: center;">
-                                <h:outputText value="#{item.saldo.imLiquidezInmedi}">
+                                <h:outputText value="#{item.imLiquidezInmedi}">
                                 	<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                                 </h:outputText>
                             </p:column>

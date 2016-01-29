@@ -4,21 +4,21 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="frmDetalleFondo">
-        <p:panel id="panelFondoDetalle" header="Detalle Fondo : #{fondoController.selectedFondo.codigo} - #{fondoController.selectedFondo.nombre}" 
-                 rendered="#{(fondoController.selectedFondo != null)?true:false}">
+        <p:panel id="panelFondoDetalle" header="Detalle Fondo : #{fondoController.selectedSaldo.cdIdsaldo} - #{fondoController.selectedSaldo.nbNomFondo}" 
+                 rendered="#{(fondoController.selectedSaldo != null)?true:false}">
             <table style="width: 100%;" cellspacing="5" >
                 <tbody>
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Saldo Inicial :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.toSaldoInicial}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.toSaldoInicial}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Dif. Rescates :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imDifRescate}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imDifRescate}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -26,14 +26,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Suscripción :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imSuscripcion}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imSuscripcion}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Rescate :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imRescate}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imRescate}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -41,14 +41,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Vencimientos :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imVencimiento}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imVencimiento}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Compras T + N :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imComprasTmasn}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imComprasTmasn}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -56,14 +56,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Compras :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imCompra}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imCompra}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Ventas :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imVenta}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imVenta}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -71,14 +71,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Comisiones :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imComision}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imComision}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Saldo Final :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.toSaldoFinal}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.toSaldoFinal}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -86,14 +86,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Cartera T-1 :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imCarteTmenosuno}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imCarteTmenosuno}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Liquidez :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imPorcLiquidez}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imPorcLiquidez}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -101,14 +101,14 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Saldo a Invertir:" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.toSaldoInvertir}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.toSaldoInvertir}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Liquidez Inmediata :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.imLiquidezInmedi}" styleClass="nonegrita">
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.imLiquidezInmedi}" styleClass="nonegrita">
                         		<f:convertNumber groupingUsed="true" pattern="#,###,###.##" maxFractionDigits="2"/>
                         	</h:outputLabel> 
                        	</td>
@@ -120,12 +120,12 @@
                     <tr>
                         <td style="width: 95px;"><h:outputLabel value="Num. cuenta:" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.saldo.nuNumCuenta}" styleClass="nonegrita"/>
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.nuNumCuenta}" styleClass="nonegrita"/>
                         </td>
                         <td style="width: 20px;"></td>
                         <td style="width: 95px;font-weight: bold;"><h:outputLabel value="Moneda :" styleClass="negrita"/></td>
                         <td style="width: 95px;">
-                        	<h:outputLabel value="#{fondoController.selectedFondo.tipoMoneda}" styleClass="nonegrita"/>
+                        	<h:outputLabel value="#{fondoController.selectedSaldo.tpTipmoneda}" styleClass="nonegrita"/>
                        	</td>
                     </tr>
                 </tbody>

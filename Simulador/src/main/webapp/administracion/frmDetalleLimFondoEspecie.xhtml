@@ -14,14 +14,14 @@
     </p:blockUI>
     <h:form id="frmDetalleLimFondoEspecie">
         <p:panel id="panelLimFondoEspecieDetalle" header="Detalle Límite Por Emisor y Especie" 
-                 rendered="#{(fondoController.selectedFondo != null)?true:false}">
+                 rendered="#{(fondoController.selectedSaldo != null)?true:false}">
             <table style="width: 100%;margin-bottom: 5px;">
                 <tbody>
                     <tr>
                         <td style="width: 60px;"><h:outputLabel value="Fondo:" /></td>
                         <td>
                             <p:inputText style="width: 465px;" readonly="true"
-                                         value="#{fondoController.selectedFondo.nombre}" />
+                                         value="#{fondoController.selectedSaldo.nbNomFondo}" />
                         </td>
                     </tr>
                 </tbody>
@@ -36,14 +36,16 @@
 	                                     selectionMode="single" scrollable="true" scrollHeight="200" 
 	                                     rowIndexVar="index" rowKey="#{item.cdIdemisor}"
 	                                     emptyMessage="No se encontraron registros." >
-	                                <p:ajax event="rowSelect" listener="#{fondoController.onEmisorRowSelect}" 
-	                                		update=":frmDetalleLimFondoEspecie:grdEspecie" 
+	                                <p:ajax event="rowSelect" listener="#{fondoController.onEmisorRowSelect}"
+	                                		update=":frmDetalleLimFondoEspecie:grdEspecie, :frmDetalleLimFondoEspecie:txtEmisor" 
 	                                		onstart="PF('blkPanelEspecie').show()" oncomplete="PF('blkPanelEspecie').hide()"/>
-	                            	<p:column headerText="Emisor" style="text-align: left;">
-	                                	<h:outputText value="#{item.nbNomEmisor}"/>
+	                            	<p:column headerText="Emisor" style="text-align: left;" >
+	                                	<h:outputText value="#{item.nbNomEmisor}" />
 	                            	</p:column>
 	                        	</p:dataTable>
                         	</h:panelGrid>
+                        	<p:inputText id="txtEmisor" required="true" value="#{fondoController.selectedEmisor.cdIdemisor}" label="Emisor" style="display:none;" ></p:inputText>
+                        	<p:message for="txtEmisor" display="icon" />
                         </td>
                         <td>
                         	<h:panelGrid id="pnlEspecie">
@@ -53,13 +55,15 @@
 	                                     rowIndexVar="index" rowKey="#{item.cdIdgeneral}"
 	                                     emptyMessage="No se encontraron registros.">
 	                                <p:ajax event="rowSelect" listener="#{fondoController.onEspecieRowSelect}" 
-	                                		update=":frmDetalleLimFondoEspecie:fldLimite" 
+	                                		update=":frmDetalleLimFondoEspecie:fldLimite, :frmDetalleLimFondoEspecie:txtEspecie" 
 	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()"/>
 	                            	<p:column headerText="Especie" style="text-align: left;">
 	                                	<h:outputText value="#{item.nbDescGeneral}"/>
 	                            	</p:column>
 	                        	</p:dataTable>
                         	</h:panelGrid>
+                        	<p:inputText id="txtEspecie" required="true" value="#{fondoController.selectedEspecie.cdIdgeneral}" label="Especie" style="display:none;" ></p:inputText>
+                        	<p:message for="txtEspecie" display="icon" />
                         </td>
                     </tr>
                 </tbody>
@@ -106,8 +110,9 @@
 		                    	<td colspan="6">
 		                    		<p:toolbar>
 							            <p:toolbarGroup align="right">
-							                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="fldLimite, growl" validateClient="true" 
-							                				 actionListener="#{fondoController.guardarEmisorEspecieLimite}" ajax="true" />
+							                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="fldLimite, growl" 
+							                				 actionListener="#{fondoController.guardarEmisorEspecieLimite}"
+							                                 ajax="true" style="margin-right:10px" action="to_administracion_fondo" />
 							            </p:toolbarGroup>
 							        </p:toolbar>
 		                    	</td>
@@ -119,7 +124,7 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteLimFondoEspecie').hide()" />
+            	<p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteLimFondoEspecie').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>

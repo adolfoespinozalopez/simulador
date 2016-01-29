@@ -10,8 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.domain.LimFondoEspecie;
+import com.pss.simulador.bs.domain.Saldo;
 import com.pss.simulador.bs.repository.data.FondoRepository;
+import com.pss.simulador.bs.repository.data.LimFondoEspecieRepository;
+import com.pss.simulador.bs.repository.data.SaldoRepository;
 import com.pss.simulador.bs.service.FondoManager;
+import com.pss.simulador.util.Constante;
 
 /**
  * @author pierre.obregon
@@ -24,8 +29,40 @@ public class FondoManagerImpl implements FondoManager {
 	@Autowired
 	FondoRepository fondoRepository;
 	
+	@Autowired
+	SaldoRepository saldoRepository;
+	
+	@Autowired
+	LimFondoEspecieRepository limFondoEspecieRepository;
+	
 	public List<Fondo> findFondoAll() {
 		return (List<Fondo>) fondoRepository.findAll();
 	}
+
+	@Transactional
+	public LimFondoEspecie saveLimFondoEspecie(LimFondoEspecie limFondoEspecie) {
+		return limFondoEspecieRepository.save(limFondoEspecie);
+	}
+	
+	public List<Saldo> findSaldoAll(){
+		return (List<Saldo>) saldoRepository.findAll();
+	}
+	
+	public List<Saldo> findSaldoByName(String strNombre){
+		return (List<Saldo>) saldoRepository.findByName(strNombre);
+	}
+	
+	public Fondo findFondoByName(String strNombName){
+		return fondoRepository.findByName(strNombName);
+	}
+	
+	public LimFondoEspecie findLimFondoEspecieByFondoAndEmisorAndEspecie(LimFondoEspecie limFondoEspecie){
+		return limFondoEspecieRepository.findByFondoAndEmisorAndEspecie(
+				limFondoEspecie.getCdIdfondo().getCdIdfondo(), 
+				limFondoEspecie.getCdIdemisor().getCdIdemisor(),
+				limFondoEspecie.getCdIdgeneral().getCdIdgeneral(), 
+				Constante.ESTADO_ACTIVO);
+	}
+	
 
 }

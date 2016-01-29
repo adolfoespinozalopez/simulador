@@ -56,6 +56,14 @@
 			</to-view-id>
 		</navigation-case>
 	</navigation-rule>
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>to_administracion_fondo</from-outcome>
+			<to-view-id>administracion/frmFondos.jsf
+			</to-view-id>
+		</navigation-case>
+	</navigation-rule>
 	
 	<!-- END Admistracion -->
 	
