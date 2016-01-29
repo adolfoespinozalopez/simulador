@@ -20,7 +20,6 @@ public class Constante {
     /**
      * Fecha Inicial
      */
-    public final static Date FECHA_INICIO = new Date(-1898, 0, 0, 0, 0, 0);
     public final static Date FECHA_ACTUAL = new Date();
     /**
      * Dominio
@@ -31,12 +30,20 @@ public class Constante {
     public static final String TIPO_OPERACION_FWD = "TIPOOPERACIONFWD";
     public static final String TIPO_OPERACION_CUENTA = "TIPOOPERACIONCUENTA";
     
+    public static class OrdenEstado{
+    	public static final String GENERADO = "1";
+    	public static final String APROBADO = "2";
+    	public static final String RECHAZADO = "3";
+    	public static final String ENVIADO = "4";
+    }
+    
     public static class Dominio{
     	public static final String TIPO_EMISOR = "TIPOEMISOR";
     	public static final String TIPO_OPERACION = "TIPOOPERACION";
     	public static final String MONEDA = "MONEDA";
     	public static final String CONTRAPARTE = "CONTRAPARTE";
     	public static final String ESTADO_ORDEN = "ESTADOORDEN";
+    	public static final String ESPECIE = "ESPECIE";
     }
     
     /**

@@ -2,7 +2,6 @@ package com.pss.simulador.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,15 +61,6 @@ public class Utilitarios {
         return false;
     }
     
-    public static Integer diferenciaEnDias(Date fecMayor, Date fecMenor) {
-    	try {
-    		long dias = (fecMayor.getTime() - fecMenor.getTime()) / (1000 * 60 * 60 * 24);
-        	return (int) dias;
-		} catch (Exception e) {
-			return 0;
-		}
-    }
-    
     public static boolean isDouble(String cadena) {
 		try {
 			Double.parseDouble(cadena);
@@ -100,6 +90,15 @@ public class Utilitarios {
     public static General buscaGeneralEnLista(List<General> lista, String item){
     	for (General g : lista) {
 			if(g.getNbDescGeneral().toUpperCase().equals(item.toUpperCase())){
+				return g;
+			}
+		}
+    	return null;
+    }
+    
+    public static General buscaGeneralPorValorEnLista(List<General> lista, String valor){
+    	for (General g : lista) {
+			if(g.getNbValorGeneral().toUpperCase().equals(valor.toUpperCase())){
 				return g;
 			}
 		}

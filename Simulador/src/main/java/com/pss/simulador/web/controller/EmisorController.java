@@ -7,14 +7,17 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.Emisor;
+import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.LimitesEmisor;
 import com.pss.simulador.bs.service.EmisorManager;
+import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
@@ -34,11 +37,17 @@ public class EmisorController extends GenericController {
 	private Emisor selectedEmisor;
 	private List<Emisor> listaEmisor = new ArrayList<Emisor>();
 	
+	private List<Fondo> listaFondo = new ArrayList<Fondo>();
+	private Fondo selectedFondo;
+	
 	@Autowired
     private GeneralManager generalManager;
 	
 	@Autowired
     private EmisorManager emisorManager;
+	
+	@Autowired
+    private FondoManager fondoManager;
 	
 	//Limites
 	private LimitesEmisor selectedlimiteEmisor = new LimitesEmisor();
@@ -54,6 +63,7 @@ public class EmisorController extends GenericController {
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
 		
+		listaFondo = fondoManager.findAll();
 		lstGeneralDominio = generalManager.findByDomainAndState(Constante.Dominio.TIPO_EMISOR, Constante.ESTADO_ACTIVO);
 	}
 	
@@ -91,6 +101,10 @@ public class EmisorController extends GenericController {
 		selectedEmisor.setNbNomEmisor("");
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
+	}
+	
+	public void onFondoRowSelect(SelectEvent event) {
+		
 	}
 	
 	public void guardarEmisorLimite() {
@@ -203,6 +217,38 @@ public class EmisorController extends GenericController {
 
 	public void setSelectedlimiteEmisor(LimitesEmisor selectedlimiteEmisor) {
 		this.selectedlimiteEmisor = selectedlimiteEmisor;
+	}
+
+	public List<Fondo> getListaFondo() {
+		return listaFondo;
+	}
+
+	public void setListaFondo(List<Fondo> listaFondo) {
+		this.listaFondo = listaFondo;
+	}
+
+	public Fondo getSelectedFondo() {
+		return selectedFondo;
+	}
+
+	public void setSelectedFondo(Fondo selectedFondo) {
+		this.selectedFondo = selectedFondo;
+	}
+
+	public EmisorManager getEmisorManager() {
+		return emisorManager;
+	}
+
+	public void setEmisorManager(EmisorManager emisorManager) {
+		this.emisorManager = emisorManager;
+	}
+
+	public FondoManager getFondoManager() {
+		return fondoManager;
+	}
+
+	public void setFondoManager(FondoManager fondoManager) {
+		this.fondoManager = fondoManager;
 	}
 	
 	

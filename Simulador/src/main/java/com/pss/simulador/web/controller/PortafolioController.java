@@ -23,12 +23,14 @@ import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.Orden;
+import com.pss.simulador.bs.domain.OrdenEstado;
 import com.pss.simulador.bs.service.EmisorManager;
 import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.InfoportManager;
 import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
+import com.pss.simulador.util.FechasUtil;
 import com.pss.simulador.util.Utilitarios;
 import com.pss.simulador.web.bean.Ordenes;
 import com.pss.simulador.web.controller.generic.GenericController;
@@ -54,7 +56,9 @@ public class PortafolioController extends GenericController{
 	private String selectedEmisor = Constante.NO_OPTION_SELECTED;
 	
 	private String selectedCondicion = Constante.NO_OPTION_SELECTED;
-	private String selectedOperacion = Constante.NO_OPTION_SELECTED;
+	
+	private List<General> listaTipoOperacion = new ArrayList<General>();
+	private String selectedTipoOperacion = Constante.NO_OPTION_SELECTED;
 	
 	private List<Infoport> listaPortafolio = new ArrayList<Infoport>();
 	private Infoport selectedInfo;
@@ -62,6 +66,8 @@ public class PortafolioController extends GenericController{
 	private String mensajeValida;
 	private String fechaActual;
 	private String valorTipoCambio;
+	
+	private List<General> listaOrdenEstado = new ArrayList<General>();
 	
 	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
@@ -87,6 +93,7 @@ public class PortafolioController extends GenericController{
 	 */
 	List<General> listaContraparte = new ArrayList<General>();
 	List<General> listaMoneda = new ArrayList<General>();
+	List<General> listaEspecie = new ArrayList<General>();
 	
 	private String tasaPreCancelacion;
 	private String montoPreCancelacion;
@@ -148,17 +155,19 @@ public class PortafolioController extends GenericController{
 		listaOrdenes.add(orden1);
 		listaOrdenes.add(orden2);
 		
-		listaEmisor = emisorManager.findAllActive();
-		
-		if(this.isInversionista()){
+		if(this.isAdmin()){
 			listaFondo = fondoManager.findAll();
 		}else{
 			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
 		}
+		listaEmisor = emisorManager.findAllActive();
+		listaTipoOperacion = generalManager.findByDomainAndState(Constante.Dominio.TIPO_OPERACION, Constante.ESTADO_ACTIVO);
+		listaOrdenEstado = generalManager.findByDomainAndState(Constante.Dominio.ESTADO_ORDEN, Constante.ESTADO_ACTIVO);
 		
 		//Modal
 		listaContraparte = generalManager.findByDomainAndState(Constante.Dominio.CONTRAPARTE, Constante.ESTADO_ACTIVO);
 		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
+		listaEspecie =  generalManager.findByDomainAndState(Constante.Dominio.ESPECIE, Constante.ESTADO_ACTIVO);
 		
 	}
 
@@ -189,13 +198,13 @@ public class PortafolioController extends GenericController{
 	public void realizarFiltroDeOperacion(ValueChangeEvent event) {
         Object objNew = event.getNewValue();
         if (objNew != null) {
-        	setSelectedOperacion(objNew.toString());
+        	setSelectedTipoOperacion(objNew.toString());
         }
         ejecutarbusqueda();
     }
 	
 	public void ejecutarbusqueda(){
-		listaPortafolio = infoportManager.findByFilter(selectedFondo, selectedEmisor, selectedCondicion, selectedOperacion);
+		listaPortafolio = infoportManager.findByFilter(selectedFondo, selectedEmisor, selectedCondicion, selectedTipoOperacion);
 	}
 	
 	public List<Infoport> getListaPortafolio() {
@@ -253,13 +262,13 @@ public class PortafolioController extends GenericController{
 	public void setSelectedCondicion(String selectedCondicion) {
 		this.selectedCondicion = selectedCondicion;
 	}
-	
-	public String getSelectedOperacion() {
-		return selectedOperacion;
+
+	public String getSelectedTipoOperacion() {
+		return selectedTipoOperacion;
 	}
 
-	public void setSelectedOperacion(String selectedOperacion) {
-		this.selectedOperacion = selectedOperacion;
+	public void setSelectedTipoOperacion(String selectedTipoOperacion) {
+		this.selectedTipoOperacion = selectedTipoOperacion;
 	}
 
 	public String getMensajeValida() {
@@ -421,8 +430,6 @@ public class PortafolioController extends GenericController{
 	public void setMontoTotal(String montoTotal) {
 		this.montoTotal = montoTotal;
 	}
-	
-	
 
 	public String getSelectedTipoFwd() {
 		return selectedTipoFwd;
@@ -552,6 +559,86 @@ public class PortafolioController extends GenericController{
 		this.selectedOrden = selectedOrden;
 	}
 
+	public List<General> getListaTipoOperacion() {
+		return listaTipoOperacion;
+	}
+
+	public void setListaTipoOperacion(List<General> listaTipoOperacion) {
+		this.listaTipoOperacion = listaTipoOperacion;
+	}
+
+	public List<General> getListaOrdenEstado() {
+		return listaOrdenEstado;
+	}
+
+	public void setListaOrdenEstado(List<General> listaOrdenEstado) {
+		this.listaOrdenEstado = listaOrdenEstado;
+	}
+
+	public FondoManager getFondoManager() {
+		return fondoManager;
+	}
+
+	public void setFondoManager(FondoManager fondoManager) {
+		this.fondoManager = fondoManager;
+	}
+
+	public GeneralManager getGeneralManager() {
+		return generalManager;
+	}
+
+	public void setGeneralManager(GeneralManager generalManager) {
+		this.generalManager = generalManager;
+	}
+
+	public InfoportManager getInfoportManager() {
+		return infoportManager;
+	}
+
+	public void setInfoportManager(InfoportManager infoportManager) {
+		this.infoportManager = infoportManager;
+	}
+
+	public EmisorManager getEmisorManager() {
+		return emisorManager;
+	}
+
+	public void setEmisorManager(EmisorManager emisorManager) {
+		this.emisorManager = emisorManager;
+	}
+
+	public OrdenManager getOrdenManager() {
+		return ordenManager;
+	}
+
+	public void setOrdenManager(OrdenManager ordenManager) {
+		this.ordenManager = ordenManager;
+	}
+
+	public List<General> getListaContraparte() {
+		return listaContraparte;
+	}
+
+	public void setListaContraparte(List<General> listaContraparte) {
+		this.listaContraparte = listaContraparte;
+	}
+
+	public List<General> getListaMoneda() {
+		return listaMoneda;
+	}
+
+	public void setListaMoneda(List<General> listaMoneda) {
+		this.listaMoneda = listaMoneda;
+	}
+
+	public List<General> getListaEspecie() {
+		return listaEspecie;
+	}
+
+	public void setListaEspecie(List<General> listaEspecie) {
+		this.listaEspecie = listaEspecie;
+	}
+
 	public void cancelar() {
 		selectedInfo = null;
 	}
@@ -573,7 +660,7 @@ public class PortafolioController extends GenericController{
 	
 	public void verDetallesDeCancelarDeposito(){
 		try {
-			selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
+			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
 	    	Double valorDepositoMo = Utilitarios.round(selectedInfo.getImValorSinInter() * Math.pow((1 + selectedInfo.getImCupon() / 100), (selectedInfo.getPlazo().doubleValue() / 360)), 2);
 	    	Double intereses = (valorDepositoMo - selectedInfo.getImValorSinInter());
 	    	selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
@@ -600,7 +687,7 @@ public class PortafolioController extends GenericController{
 		try {
 			selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
 			selectedInfo.setMontoIntereses(formatoTasa.format(selectedInfo.getImCupon()));
-			selectedInfo.setPlazo(Utilitarios.diferenciaEnDias(new Date(), selectedInfo.getFhFecEmision()));
+			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(new Date(), selectedInfo.getFhFecEmision()));
 			tasaPreCancelacion = formatoTasa.format(selectedInfo.getImCupon());
 			calcularMontoPreCancelacion();
 		} catch (Exception e) {
@@ -732,10 +819,13 @@ public class PortafolioController extends GenericController{
 			orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
 			orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
 			orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
+			orden.setCdIdTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()));
 			General tipoMoneda = Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda());
 			if(tipoMoneda != null){
 				orden.setTpTipmoneda(tipoMoneda.getCdIdgeneral());
 			}
+			orden.setStEstado(Constante.OrdenEstado.GENERADO);
+			orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
 			orden.setImTasa(selectedInfo.getImCupon());
 			orden.setNuPlazoDia(selectedInfo.getPlazo());
 			orden.setFhFecInicio(selectedInfo.getFhFecEmision());
@@ -752,6 +842,14 @@ public class PortafolioController extends GenericController{
 			orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 			
 			ordenManager.save(orden);
+			
+			OrdenEstado ordenEstado = new OrdenEstado();
+			ordenEstado.setOrden(orden);
+			ordenEstado.setFhFecCreacion(new Date());
+			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
+			ordenManager.saveEstado(ordenEstado);
+			
 			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);
 		} catch (Exception e) {
 			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());

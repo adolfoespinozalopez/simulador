@@ -107,7 +107,6 @@ public class Orden implements Serializable {
     @JoinColumn(name = "CD_IDESPECIE", referencedColumnName = "CD_IDGENERAL")
     @ManyToOne(optional = false)
     private General especie;
-    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
     private List<OrdenEstado> ordenEstadoList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
@@ -305,6 +304,12 @@ public class Orden implements Serializable {
 	}
 	public void setCdIdTipoOperacion(General cdIdTipoOperacion) {
 		this.cdIdTipoOperacion = cdIdTipoOperacion;
+	}
+	public General getEspecie() {
+		return especie;
+	}
+	public void setEspecie(General especie) {
+		this.especie = especie;
 	}
 	public List<OrdenEstado> getOrdenEstadoList() {
 		return ordenEstadoList;

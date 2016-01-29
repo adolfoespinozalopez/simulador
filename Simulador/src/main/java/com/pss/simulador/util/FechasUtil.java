@@ -30,6 +30,7 @@ public class FechasUtil {
 
 		return result;
 	}
+	
 	public static Date parseFecha(Date fecha, String formato) {
 		String strfecha = FechasUtil.formatFecha(fecha, formato);
 		Date result = null;
@@ -56,4 +57,13 @@ public class FechasUtil {
 
 		return result;
 	}
+	
+	public static Integer diferenciaEnDias(Date fecMayor, Date fecMenor) {
+    	try {
+    		long dias = (fecMayor.getTime() - fecMenor.getTime()) / (1000 * 60 * 60 * 24);
+        	return (int) dias;
+		} catch (Exception e) {
+			return 0;
+		}
+    }
 }

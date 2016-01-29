@@ -77,7 +77,7 @@ public class OrdenController extends GenericController{
     }
 	
 	public void ejecutarbusqueda(){
-		if(this.isInversionista()){
+		if(this.isAdmin()){
 			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
 		}else{
 			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
