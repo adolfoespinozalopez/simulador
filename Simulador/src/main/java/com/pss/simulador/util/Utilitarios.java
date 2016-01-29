@@ -3,6 +3,7 @@ package com.pss.simulador.util;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +12,9 @@ import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
 import org.apache.log4j.Logger;
+
+import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.domain.General;
 /**
 *
 * @author Adolfo Espinoza
@@ -84,4 +88,21 @@ public class Utilitarios {
         return bd.doubleValue();
     }
    
+    public static Fondo buscaFondoEnLista(List<Fondo> lista, String item){
+    	for (Fondo f : lista) {
+			if(f.getNbNomFondo().toUpperCase().equals(item.toUpperCase())){
+				return f;
+			}
+		}
+    	return null;
+    }
+    
+    public static General buscaGeneralEnLista(List<General> lista, String item){
+    	for (General g : lista) {
+			if(g.getNbDescGeneral().toUpperCase().equals(item.toUpperCase())){
+				return g;
+			}
+		}
+    	return null;
+    }
 }

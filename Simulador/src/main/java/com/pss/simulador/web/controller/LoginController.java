@@ -1,8 +1,6 @@
 package com.pss.simulador.web.controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.grupobbva.bc.per.tele.ldap.comunes.IILDPeExcepcion;
 import com.grupobbva.bc.per.tele.ldap.directorio.IILDPeUsuario;
 import com.grupobbva.bc.per.tele.seguridad.ServiciosSeguridadBbva;
-import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Usuario;
 import com.pss.simulador.bs.service.AccesoManager;
 import com.pss.simulador.util.Constante;
@@ -33,8 +30,6 @@ public class LoginController extends GenericController implements Serializable  
 	
 	@Autowired
 	private AccesoManager accesoManager;
-   
-    private List<General> listaMoneda = new ArrayList<General>();
     private boolean logueado;
     
     public void login() {
@@ -94,18 +89,14 @@ public class LoginController extends GenericController implements Serializable  
 		UsuarioSession usuarioSession = new UsuarioSession();
 		usuarioSession.setUsuario(usuarioLdap);
 		usuarioSession.setPerfil(usuarioPerf.getPerfil());
-		usuarioSession.setbEsAdmin(true);
-		usuarioSession.setbEsInversion(true);
+		if(usuarioPerf.getPerfil().getTpTipperfil().equals(Constante.Perfil.TIPO_ADMINISTRADOR)){
+			usuarioSession.setbEsAdmin(true);
+			usuarioSession.setbEsInversion(false);
+		}else{
+			usuarioSession.setbEsAdmin(false);
+			usuarioSession.setbEsInversion(true);
+		}
 		this.getSession().setAttribute(Constante.__USUARIO_SESSION__, usuarioSession);
-	}
-
-
-	public List<General> getListaMoneda() {
-		return listaMoneda;
-	}
-
-	public void setListaMoneda(List<General> listaMoneda) {
-		this.listaMoneda = listaMoneda;
 	}
 
 	public boolean isLogueado() {

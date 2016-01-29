@@ -19,4 +19,5 @@ public interface EmisorManager {
 	public LimitesEmisor saveLimiteEmisor(LimitesEmisor limitesEmisor);
 	public List<LimitesEmisor> findLimiteEmisorByPK(Integer cdIdlimite);
 	public List<Emisor> findByFund(String strNomFondo);
+	public List<Emisor> findAllActive();
 }

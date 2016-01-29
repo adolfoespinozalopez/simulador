@@ -18,6 +18,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+*
+* @author Adolfo Espinoza
+* @version 1.0, 28/01/2016
+* @since 1.0
+*/
 @Entity
 @Table(name = "TSI013_ORDEN", schema = "BBVATESOR")
 public class Orden implements Serializable {
@@ -95,9 +101,13 @@ public class Orden implements Serializable {
     @JoinColumn(name = "CD_IDCONTRAPARTE", referencedColumnName = "CD_IDGENERAL")
     @ManyToOne(optional = false)
     private General contraparte;
-    @JoinColumn(name = "CD_IDGENERAL", referencedColumnName = "CD_IDGENERAL")
+    @JoinColumn(name = "CD_IDTIPOOPERACION", referencedColumnName = "CD_IDGENERAL")
     @ManyToOne(optional = false)
-    private General cdIdgeneral;
+    private General cdIdTipoOperacion;
+    @JoinColumn(name = "CD_IDESPECIE", referencedColumnName = "CD_IDGENERAL")
+    @ManyToOne(optional = false)
+    private General especie;
+    
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
     private List<OrdenEstado> ordenEstadoList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
@@ -290,11 +300,11 @@ public class Orden implements Serializable {
 	public void setContraparte(General contraparte) {
 		this.contraparte = contraparte;
 	}
-	public General getCdIdgeneral() {
-		return cdIdgeneral;
+	public General getCdIdTipoOperacion() {
+		return cdIdTipoOperacion;
 	}
-	public void setCdIdgeneral(General cdIdgeneral) {
-		this.cdIdgeneral = cdIdgeneral;
+	public void setCdIdTipoOperacion(General cdIdTipoOperacion) {
+		this.cdIdTipoOperacion = cdIdTipoOperacion;
 	}
 	public List<OrdenEstado> getOrdenEstadoList() {
 		return ordenEstadoList;

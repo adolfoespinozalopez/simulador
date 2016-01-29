@@ -25,13 +25,18 @@ public class Constante {
     /**
      * Dominio
      */
-    public static final String DOMINIO_MONEDA = "MONEDA";
+    
     public static final String TIPO_APERTURA = "TIPOAPERTURA";
     public static final String MONEDA_OPERACION = "MONEDAOPERACION";
     public static final String TIPO_OPERACION_FWD = "TIPOOPERACIONFWD";
     public static final String TIPO_OPERACION_CUENTA = "TIPOOPERACIONCUENTA";
+    
     public static class Dominio{
     	public static final String TIPO_EMISOR = "TIPOEMISOR";
+    	public static final String TIPO_OPERACION = "TIPOOPERACION";
+    	public static final String MONEDA = "MONEDA";
+    	public static final String CONTRAPARTE = "CONTRAPARTE";
+    	public static final String ESTADO_ORDEN = "ESTADOORDEN";
     }
     
     /**
@@ -53,11 +58,10 @@ public class Constante {
     public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
     
     public static final String WSLDAP_ENDPOINT = "http://118.180.14.23:8080/ws-ldap3/wService?wsdl";
+    
     public static class Perfil{
-    	public static final Integer ID_ADMINISTRADOR_SISTEMA = 1;
-    	public static final Integer ID_ADMINISTRADOR_INVERSORES = 2;
-    	public static final Integer ID_INVERSINISTA_EUR = 3;
-    	public static final Integer ID_INVERSIONISTA_BBVA = 4;
+    	public static final Integer TIPO_ADMINISTRADOR = 1;
+    	public static final Integer TIPO_INVERSIONISTA = 2;
     }
     
     public static class Mensajes{

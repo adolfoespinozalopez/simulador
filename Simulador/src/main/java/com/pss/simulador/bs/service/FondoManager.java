@@ -20,4 +20,6 @@ public interface FondoManager {
 	public List<Saldo> findSaldoByName(String strNombre);
 	public Fondo findFondoByName(String strNombName);
 	public LimFondoEspecie findLimFondoEspecieByFondoAndEmisorAndEspecie(LimFondoEspecie limFondoEspecie);
+	public List<Fondo> findAll();
+	public List<Fondo> findByIdPerfil(Integer idPerfil);
 }

@@ -58,8 +58,10 @@ public class General implements java.io.Serializable {
 	private String fgEditable;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contraparte")
     private List<Orden> ordenContraparteList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
-    private List<Orden> ordenList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdTipoOperacion")
+    private List<Orden> ordenTipoOperacionList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "especie")
+    private List<Orden> ordenEspecieList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
     private List<OrdenEstado> ordenEstadoList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "general")
@@ -184,12 +186,12 @@ public class General implements java.io.Serializable {
 		this.ordenContraparteList = ordenContraparteList;
 	}
 
-	public List<Orden> getOrdenList() {
-		return ordenList;
+	public List<Orden> getOrdenTipoOperacionList() {
+		return ordenTipoOperacionList;
 	}
 
-	public void setOrdenList(List<Orden> ordenList) {
-		this.ordenList = ordenList;
+	public void setOrdenTipoOperacionList(List<Orden> ordenTipoOperacionList) {
+		this.ordenTipoOperacionList = ordenTipoOperacionList;
 	}
 
 	public List<OrdenEstado> getOrdenEstadoList() {
@@ -198,6 +200,14 @@ public class General implements java.io.Serializable {
 
 	public void setOrdenEstadoList(List<OrdenEstado> ordenEstadoList) {
 		this.ordenEstadoList = ordenEstadoList;
+	}
+
+	public List<Orden> getOrdenEspecieList() {
+		return ordenEspecieList;
+	}
+
+	public void setOrdenEspecieList(List<Orden> ordenEspecieList) {
+		this.ordenEspecieList = ordenEspecieList;
 	}
 
 }

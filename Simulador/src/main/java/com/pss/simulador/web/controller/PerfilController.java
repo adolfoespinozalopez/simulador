@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.Perfil;
 import com.pss.simulador.bs.domain.PerfilFondo;
-import com.pss.simulador.bs.repository.data.PerfilFondoRepository;
 import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.PerfilManager;
 import com.pss.simulador.util.Constante;
@@ -70,7 +69,7 @@ public class PerfilController extends GenericController {
 
 	public void crear() {
 		selectedPerfil = new Perfil();
-		selectedPerfil.setTpTipperfil(Constante.Perfil.ID_ADMINISTRADOR_INVERSORES);
+		selectedPerfil.setTpTipperfil(Constante.Perfil.TIPO_INVERSIONISTA);
 		this.resetFormulario();
 	}
 	

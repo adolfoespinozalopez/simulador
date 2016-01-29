@@ -25,4 +25,7 @@ public interface EmisorRepository extends CrudRepository<Emisor, Integer> {
 			+ "WHERE f.nbNomFondo LIKE :nomFondo "
 			+ "AND e.nbNomEmisor = f.nbNomEmisor AND e.stEstado = 1")
 	public abstract List<Emisor> findByFund(@Param("nomFondo") String strNomFondo);
+	
+	@Query(value = "SELECT e FROM Emisor e WHERE e.stEstado = 1 ORDER BY e.nbNomEmisor")
+	public abstract List<Emisor> findAllActive();
 }

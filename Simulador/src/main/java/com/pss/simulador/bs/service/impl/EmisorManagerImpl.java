@@ -52,4 +52,8 @@ public class EmisorManagerImpl implements EmisorManager {
 		return emisorRepository.findByFund(strNomFondo);
 	}
 
+	public List<Emisor> findAllActive() {
+		return emisorRepository.findAllActive();
+	}
+
 }

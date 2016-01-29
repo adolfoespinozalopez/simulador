@@ -126,6 +126,8 @@ public class Infoport implements java.io.Serializable {
 	private String montoIntereses;
 	@Transient
 	private String montoTotal;
+	@Transient
+	private Date fhFecEfectividad;
 	
 	public Infoport() {
 	}
@@ -524,6 +526,14 @@ public class Infoport implements java.io.Serializable {
 
 	public void setMontoTotal(String montoTotal) {
 		this.montoTotal = montoTotal;
+	}
+
+	public Date getFhFecEfectividad() {
+		return fhFecEfectividad;
+	}
+
+	public void setFhFecEfectividad(Date fhFecEfectividad) {
+		this.fhFecEfectividad = fhFecEfectividad;
 	}
 	
 }

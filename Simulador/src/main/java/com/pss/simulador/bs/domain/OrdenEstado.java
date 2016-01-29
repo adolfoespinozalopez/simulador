@@ -15,6 +15,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+*
+* @author Adolfo Espinoza
+* @version 1.0, 28/01/2016
+* @since 1.0
+*/
 @Entity
 @Table(name = "TSI014_ORDENESTADO", schema = "BBVATESOR")
 public class OrdenEstado implements Serializable{

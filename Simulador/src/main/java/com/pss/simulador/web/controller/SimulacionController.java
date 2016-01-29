@@ -5,15 +5,15 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.web.bean.FlujoCaja;
 import com.pss.simulador.web.bean.Fondo;
 import com.pss.simulador.web.bean.Simulacion;
+import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
  *
@@ -22,10 +22,10 @@ import com.pss.simulador.web.bean.Simulacion;
  * @since 1.0
  */
 @Component
-@ManagedBean(name = "simulacionController")
-@RequestScoped
-public class SimulacionController {
+@Scope("session")
+public class SimulacionController extends GenericController{
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(SimulacionController.class);
 	private List<Simulacion> lista = new ArrayList<Simulacion>();
 	

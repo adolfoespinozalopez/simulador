@@ -28,6 +28,7 @@ import com.pss.simulador.web.controller.generic.GenericController;
 @Scope("session")
 public class TipoCambioController extends GenericController {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(TipoCambioController.class);
 	private TipoCambio selectedTipoCambio;
 	private List<TipoCambio> listaTipoCambio = new ArrayList<TipoCambio>();

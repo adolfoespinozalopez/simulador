@@ -10,22 +10,28 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.Emisor;
+import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
+import com.pss.simulador.bs.domain.Orden;
+import com.pss.simulador.bs.service.EmisorManager;
+import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.InfoportManager;
+import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
-import com.pss.simulador.web.bean.Fondo;
 import com.pss.simulador.web.bean.Ordenes;
+import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
 *
@@ -34,9 +40,10 @@ import com.pss.simulador.web.bean.Ordenes;
 * @since 1.0
 */
 @Component
-@ManagedBean(name = "portafolioController")
-@RequestScoped
-public class PortafolioController {
+@Scope("session")
+public class PortafolioController extends GenericController{
+
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOG = Logger.getLogger(PortafolioController.class);
 	
@@ -61,14 +68,26 @@ public class PortafolioController {
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
 	
 	@Autowired
+	private FondoManager fondoManager;
+	
+	@Autowired
     private GeneralManager generalManager;
 	
 	@Autowired
     private InfoportManager infoportManager;
 	
+	@Autowired
+    private EmisorManager emisorManager;
+	
+	@Autowired
+	private OrdenManager ordenManager;
+	
 	/*
 	 * Modal
 	 */
+	List<General> listaContraparte = new ArrayList<General>();
+	List<General> listaMoneda = new ArrayList<General>();
+	
 	private String tasaPreCancelacion;
 	private String montoPreCancelacion;
 	
@@ -128,6 +147,19 @@ public class PortafolioController {
 		listaOrdenes = new ArrayList<Ordenes>();
 		listaOrdenes.add(orden1);
 		listaOrdenes.add(orden2);
+		
+		listaEmisor = emisorManager.findAllActive();
+		
+		if(this.isInversionista()){
+			listaFondo = fondoManager.findAll();
+		}else{
+			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
+		}
+		
+		//Modal
+		listaContraparte = generalManager.findByDomainAndState(Constante.Dominio.CONTRAPARTE, Constante.ESTADO_ACTIVO);
+		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
+		
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {
@@ -693,5 +725,38 @@ public class PortafolioController {
         	context.execute("PF('manteRentaFija').show()");
         }
 	}
+	
+	public void guardaOpCancelarDeposito(){
+		try {
+			Orden orden = new Orden();
+			orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
+			orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+			orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
+			General tipoMoneda = Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda());
+			if(tipoMoneda != null){
+				orden.setTpTipmoneda(tipoMoneda.getCdIdgeneral());
+			}
+			orden.setImTasa(selectedInfo.getImCupon());
+			orden.setNuPlazoDia(selectedInfo.getPlazo());
+			orden.setFhFecInicio(selectedInfo.getFhFecEmision());
+			orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
+			orden.setNbMnemonico(selectedInfo.getNbMnemonico());
+			String monto = selectedInfo.getMontoCapital().replace(".", "").replace(",", ".");
+			orden.setImCapital(Double.parseDouble(monto));
+			monto = selectedInfo.getMontoIntereses().replace(".", "").replace(",", ".");
+			orden.setImInteres(Double.parseDouble(monto));
+			monto = selectedInfo.getMontoTotal().replace(".", "").replace(",", ".");
+			orden.setImMontoFinal(Double.parseDouble(monto));
+			
+			orden.setFhFecCreacion(new Date());
+			orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			
+			ordenManager.save(orden);
+			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
 	
 }

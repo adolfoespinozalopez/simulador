@@ -63,6 +63,14 @@ public class FondoManagerImpl implements FondoManager {
 				limFondoEspecie.getGeneral().getCdIdgeneral(), 
 				Constante.ESTADO_ACTIVO);
 	}
+
+	public List<Fondo> findAll() {
+		return fondoRepository.findAll();
+	}
+
+	public List<Fondo> findByIdPerfil(Integer idPerfil) {
+		return fondoRepository.findByIdPerfil(idPerfil);
+	}
 	
 
 }
