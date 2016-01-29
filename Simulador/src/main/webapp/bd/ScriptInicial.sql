@@ -369,9 +369,20 @@ ALTER TABLE bbvatesor.TSI012_LimFondoEspecie
  *USUARIO APP
  *******************************************
  */
-CREATE USER simultes IDENTIFIED BY simultes default tablespace users temporary tablespace temp quota unlimited on users account unlock;
+CREATE USER simultes IDENTIFIED BY simultes 
+default tablespace users 
+temporary tablespace temp 
+quota unlimited on users 
+account unlock;
 
+/*
+ *******************************************
+ *PERMISOS APP
+ *******************************************
+ */
 grant create session to simultes;
+grant create SYNONYM to simultes;
+
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI001_Saldo 			TO simultes;
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI002_Infoport 		TO simultes;
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI003_CobranzaPago 	TO simultes;
@@ -384,7 +395,10 @@ GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI009_PerfilFondo 	TO simultes;
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI010_Emisor 		TO simultes;
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI011_LimitesEmisor 	TO simultes;
 GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI012_LimFondoEspecie TO simultes;
-grant create SYNONYM to simultes;
+GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI013_Orden			TO simultes;
+GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI014_OrdenEstado	TO simultes;
+GRANT SELECT, INSERT, UPDATE ON bbvatesor.TSI015_DetalleOrden	TO simultes;
+
 
 --GRANT USAGE ON SEQUENCE sequenceName TO grantees  
 
@@ -601,4 +615,48 @@ insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_P
 values (16, 'EMPRESA FINANCIERA EDYFICAR', 'I', 0, 3, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 insert into BBVATESOR.TSI010_EMISOR (CD_IDEMISOR, NB_NOM_EMISOR, TP_RATING, IM_PASIVO, TP_TIPEMISOR, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, ST_ESTADO)
 values (17, 'BANCO CENTRAL DE RESERVA', 'I', 0, 6, to_date('26-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
+
+
+/*
+ *******************************************
+ * INSERTS TSI008_FONDO
+ *******************************************
+ */
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (1, '00', 'BBVA AGRE.SOLES', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (2, '00', 'BBVA AGRES. USD', 2, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (3, '00', 'BBVA ANDINO', 2, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (4, '00', 'BBVA BALA.SOLES', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (5, '00', 'BBVA BALANCEADO', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (6, '00', 'BBVA CREC.SOLES', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (7, '00', 'BBVA CRECIMIENT', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (8, '00', 'BBVA D.MONETAR.', 2, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (9, '00', 'BBVA DOLARES', 2, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (10, '00', 'BBVA LEER', 2, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (11, '00', 'BBVA MODE.SOLES', 1, 'M');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (12, '00', 'BBVA MODERADO', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (13, '00', 'BBVA PERU SOLES', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (14, '00', 'BBVA S.MONETAR.', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (15, '00', 'BBVA SEL.ESTRAT', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (16, '11', 'BBVA SOLES', 1, 'F');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (17, '00', 'CASH DOLARES', 2, 'D');
+insert into BBVATESOR.TSI008_FONDO (CD_IDFONDO, CD_COD_FONDO, NB_NOM_FONDO, TP_TIPMONEDA, TP_TIPFONDO)
+values (18, '00', 'CASH SOLES', 1, 'D');
+
 

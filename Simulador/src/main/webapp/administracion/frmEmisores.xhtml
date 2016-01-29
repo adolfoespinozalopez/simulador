@@ -14,7 +14,7 @@
             <ui:define name="content" >
             	<p:blockUI block=":frmGestionarEmisores:panEmisores" trigger=":frmGestionarEmisores:btnBuscar" widgetVar="blkPanel">
                     Espere mientras se cargan los datos<br /> 
-                    <p:graphicImage value="/img/loading.gif" style="width: 65px; height: 50px;"/>
+                    <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
                 </p:blockUI>
                 <h1 class="title-sh">Emisores</h1>
                 <p:separator />
@@ -54,7 +54,7 @@
                             <p:column headerText="Rating" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{item.tpRating}"/>
                             </p:column>
-                            <p:column headerText="Pasivo" style="text-align: left;">
+                            <p:column headerText="Pasivo (PEN)" style="text-align: left;">
                                 <h:outputText value="#{item.imPasivo}"/>
                             </p:column>
                             <p:column headerText="Tipo" style="text-align: center;">
@@ -99,7 +99,7 @@
                                         <td>
                                             <p:commandButton process="@this" value="Sí" action="#{emisorController.eliminar()}" 
                                                              oncomplete="PF('dlgConfirmacion').hide()" update="growl" />
-                                            <p:commandButton value="No" onclick="PF('dlgConfirmacion').hide()"/>   
+                                            <p:commandButton process="@this" value="No" onclick="PF('dlgConfirmacion').hide()"/>   
                                         </td>
                                     </tr>
                                 </tfoot>

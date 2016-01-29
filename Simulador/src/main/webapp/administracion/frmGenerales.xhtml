@@ -14,7 +14,7 @@
             <ui:define name="content">
             	<p:blockUI block=":frmGestionarGenerales:panGenerales" trigger=":frmGestionarGenerales:btnBuscar" widgetVar="blkPanel">
                     Espere mientras se cargan los datos<br /> 
-                    <p:graphicImage value="/img/loading.gif" style="width: 65px; height: 50px;"/>
+                    <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
                 </p:blockUI>
                 <h1 class="title-sh">Generales</h1>
                 <p:separator />
@@ -38,10 +38,10 @@
                         </p:toolbar>
                         <p:dataTable id="grdGenerales" value="#{generalController.listaGeneral}" var="item"  
                                      selection="#{generalController.selectedGeneral}" reflow="false"
-                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     selectionMode="single" scrollable="true" scrollHeight="395" 
                                      rowIndexVar="index" rowKey="#{item.cdIdgeneral}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="15"
+                                     paginator="true" rows="17"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>

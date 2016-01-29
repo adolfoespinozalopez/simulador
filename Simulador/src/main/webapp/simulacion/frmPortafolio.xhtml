@@ -5,7 +5,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:pe="http://primefaces.org/ui/extensions">
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
     <h:body>
         <ui:composition
             template="/WEB-INF/facelets/templates/mainLayout.xhtml">
@@ -36,7 +37,7 @@
                             <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
                             <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.id}" itemLabel="#{fondo.nombre}" />
-                            <p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
+                            <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <h:outputText value="Emisor :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstEmisor" style="width: 180px;" 
@@ -47,15 +48,16 @@
 							<f:selectItem itemLabel="MEF" itemValue="MEF" />
 							<f:selectItems value="#{portafolioController.listaEmisor}" var="emisor" 
 										   itemValue="#{emisor.cdIdemisor}" itemLabel="#{emisor.nbNomEmisor}" />
-							<p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
+							<p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
 						</p:selectOneMenu>
 						<h:outputText value="Vence Hoy :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstCondicion" style="width: 100px;" 
-                                         value="#{portafolioController.selectedCondicion}" >
+                                         value="#{portafolioController.selectedCondicion}" 
+                                         valueChangeListener="#{portafolioController.realizarFiltroDeCondicion}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItem itemLabel="SI" itemValue="VENCE HOY" />
                             <f:selectItem itemLabel="NO" itemValue="ACTIVO" />
-                            <p:ajax event="change" update="grdFondo"/>
+                            <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstOperacion" style="width: 150px;" 
@@ -65,7 +67,7 @@
                             <f:selectItem itemLabel="Money Market" itemValue="M" />
                             <f:selectItem itemLabel="Renta Fija" itemValue="F" />
                             <f:selectItem itemLabel="Renta Variable" itemValue="V" />
-                            <p:ajax event="change" update=":frmPortafolio:grdFondo, :frmPortafolio:menuOpciones"/>
+                            <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" 
                         				 styleClass="ordenes ui-state-active" onclick="PF('manteOrdenes').show()"/>
@@ -114,7 +116,7 @@
                         		</p:column>
                         	</p:submenu>
                         </p:megaMenu>
-                        <p:outputPanel deferred="true" deferredMode="load" >
+                        <p:outputPanel id="panelGrilla" deferred="true" deferredMode="load" >
 							<p:dataTable id="grdFondo" value="#{portafolioController.listaPortafolio}"
 								var="item" scrollable="true" scrollHeight="520" scrollWidth="600" resizableColumns="true" reflow="false"
 								emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
@@ -269,10 +271,13 @@
 								<p:column headerText="Observación" style="width:150px;text-align: left;">
 									<h:outputText value="#{item.nbObservacion}" />
 								</p:column>
+								<f:facet name="footer">
+							        Se encontraron #{fn:length(portafolioController.listaPortafolio)} registro(s).
+							    </f:facet>
 							</p:dataTable>
 							<p:blockUI block=":frmPortafolio:grdFondo" trigger=":frmPortafolio:grdFondo" widgetVar="blkPanel" >
 					        	Espere mientras se cargan los datos<br /> 
-					            <p:graphicImage value="/img/loading.gif" style="width: 65px; height: 50px;"/>
+					            <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
 					        </p:blockUI>
 						</p:outputPanel>
 					</p:panel>
@@ -291,7 +296,7 @@
                             <tr>
                             	<td style="text-align: center">
                                     <p:commandButton value="Cerrar" icon="ui-icon-close" onclick="PF('msjVal').hide()" 
-                                                     update=":frmPortafolio:grdFondo"/>
+                                                     update=":frmPortafolio:panelGrilla"/>
                                 </td>
                             </tr>
                         </tfoot>

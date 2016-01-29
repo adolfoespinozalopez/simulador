@@ -582,4 +582,7 @@ h1.title-sh {
 
 .ordenes .fa{
 	font-size: 14px !important;
-}	
+}
+.ui-datatable-footer{
+	width: 98% !important;
+}
