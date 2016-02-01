@@ -64,13 +64,14 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" 
-                        				 styleClass="ordenes ui-state-active" onclick="PF('manteOrdenes').show()"/>
+                        				 styleClass="ordenes ui-state-active" onclick="PF('manteOrdenes').show(); PF('notiBar').show();"/>
                         <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px" >
                         	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
 	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"
+	                        						></p:menuitem>
 	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" actionListener="#{portafolioController.validarPreCancelarDeposito}"
 	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"></p:menuitem>
 	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" actionListener="#{portafolioController.validarAperturaDeposito}"
@@ -348,7 +349,7 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija - Pre Asignación" 
-                		  widgetVar="manteRentaFija" resizable="false" width="540" height="400">
+                		  widgetVar="manteRentaFija" resizable="false" width="560" height="500">
                     <ui:include src="frmRentaFija.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmRentaFija" />

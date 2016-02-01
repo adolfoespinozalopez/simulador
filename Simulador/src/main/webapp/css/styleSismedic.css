@@ -51,9 +51,28 @@ ul#navigation li.special{float:right}.banner_wrapper{clear:both;display:block;he
 
 .ui-widget-content{background:none repeat scroll 0 0 #FFFFFF;color:#4F4F4F}
 
-.cita-anul-grid{color:#FF0000;text-decoration:line-through}.cita-ate-grid{color:#22A32A}.cita-cer-grid{color:#F3A444}
-.segPendiente{color:#FF0000}.segEntregado{color:#1D7523}.segSolicitado{color:#123FA0}.hisEnMiPoder{color:#169694}#dlgHistoricoOcupacionalEPP div{overflow:hidden}.inputOpa input{opacity:1!important}
-.divpnlVisual div{padding:0!important;min-height:420px!important}.divpnlExa div{padding:0!important;min-height:504px!important}.divpnlExaCola div{padding:0!important}.dvLayout{height:540px!important;overflow-y:hidden}.dvLayout .ui-selectonemenu{width:180px}.dvLayout select{width:180px}.textoColaLlamandoPaciente{color:red}.textoColaAtendiendoPaciente{color:green}.textoColaLibrePaciente{color:inherit}.ui-datatable tr.ui-state-hover{cursor:pointer}.habDatatable{opacity:0.35;filter:alpha(opacity=35)}.habDatatableFalse{opacity:1;filter:alpha(opacity=100)}.downLayout{z-index:0!important}.charAtencion table{width:20%}.atendidos{border-color:#1D7523;background-color:#1D7523}.atendidos .fc-event-skin{border-color:#1D7523;background-color:#1D7523;cursor:pointer}.pendientes{border-color:#333333;background-color:#333333}.cuadro{width:0;height:0;border-top-width:5px;border-bottom-width:5px;border-left-width:6px;border-right-width:6px;border-top-style:solid;border-bottom-style:solid;border-left-style:solid;border-right-style:solid}.labelCuadro{font-size:8pt;padding-right:5px}.pendientes .fc-event-skin{border-color:#333333;background-color:#333333;cursor:pointer}.anulados{border-color:red;background-color:red}.anulados .fc-event-skin{border-color:red;background-color:red;cursor:pointer}.cerradas{border-color:#F3A444;background-color:#F3A444}.cerradas .fc-event-skin{border-color:#F3A444;background-color:#F3A444;cursor:pointer}.calendario{cursor:pointer}.fc-mon:hover{background-color:#CCFFFF}.fc-tue:hover{background-color:#CCFFFF}.fc-wed:hover{background-color:#CCFFFF}.fc-thu:hover{background-color:#CCFFFF}.fc-fri:hover{background-color:#CCFFFF}.fc-sat:hover{background-color:#CCFFFF}.fc-sun:hover{background-color:#CCFFFF}.cajaTextoDiente{border:1px solid #a8a8a8;width:43px;height:34px;cursor:pointer!important;font-size:11px!important;float:left;text-transform:uppercase;word-break:break-all;background:#ffffff;text-align:center}.cajaTextoDiente label{cursor:pointer!important}.labelDiente{font-size:9px!important;overflow:hidden}.txtDiente{width:35px;cursor:pointer}.imgDiente{width:45px;height:110px;border:0}.lblDiente{padding-left:14px;padding-right:14px;padding-top:7px;padding-bottom:7px;font-weight:bold;font-size:12px!important;font-family:Arial,sans-serif;z-index:1;position:absolute}.dvImgDiente{float:left;width:45px;height:30px}.dvImgBothDiente{width:11px;height:110px;float:left}.espacioDiente{width:11px;height:34px;float:left}.dvLblDiente{height:25px;width:46px;float:left;padding-right:10px}.rotate{-ms-transform-origin:0 0;-o-transform-origin:0 0;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);-o-transform:rotate(180deg)}
+.anul-grid{color:#FF0000;text-decoration:line-through}
+.ate-grid{color:#22A32A}
+.cer-grid{color:#F3A444}
+
+.segPendiente{color:#FF0000}.segEntregado{color:#1D7523}.segSolicitado{color:#123FA0}
+.hisEnMiPoder{color:#169694}#dlgHistoricoOcupacionalEPP div{overflow:hidden}
+.inputOpa input{opacity:1!important}
+.divpnlVisual div{padding:0!important;min-height:420px!important}
+.divpnlExa div{padding:0!important;min-height:504px!important}
+.divpnlExaCola div{padding:0!important}.dvLayout{height:540px!important;overflow-y:hidden}.dvLayout .ui-selectonemenu{width:180px}.dvLayout select{width:180px}.textoColaLlamandoPaciente{color:red}.textoColaAtendiendoPaciente{color:green}.textoColaLibrePaciente{color:inherit}.ui-datatable tr.ui-state-hover{cursor:pointer}.habDatatable{opacity:0.35;filter:alpha(opacity=35)}.habDatatableFalse{opacity:1;filter:alpha(opacity=100)}.downLayout{z-index:0!important}
+.charAtencion table{width:20%}
+.atendidos{border-color:#1D7523;background-color:#1D7523}
+.atendidos .fc-event-skin{border-color:#1D7523;background-color:#1D7523;cursor:pointer}
+.pendientes{border-color:#333333;background-color:#333333}
+.cuadro{width:0;height:0;border-top-width:5px;border-bottom-width:5px;border-left-width:6px;border-right-width:6px;border-top-style:solid;border-bottom-style:solid;border-left-style:solid;border-right-style:solid}
+.labelCuadro{font-size:8pt;padding-right:5px}
+.pendientes .fc-event-skin{border-color:#333333;background-color:#333333;cursor:pointer}
+.anulados{border-color:red;background-color:red}.anulados .fc-event-skin{border-color:red;background-color:red;cursor:pointer}
+.cerradas{border-color:#F3A444;background-color:#F3A444}.cerradas .fc-event-skin{border-color:#F3A444;background-color:#F3A444;cursor:pointer}
+.calendario{cursor:pointer}
+.fc-mon:hover{background-color:#CCFFFF}.fc-tue:hover{background-color:#CCFFFF}.fc-wed:hover{background-color:#CCFFFF}.fc-thu:hover{background-color:#CCFFFF}.fc-fri:hover{background-color:#CCFFFF}.fc-sat:hover{background-color:#CCFFFF}.fc-sun:hover{background-color:#CCFFFF}
+.rotate{-ms-transform-origin:0 0;-o-transform-origin:0 0;-webkit-transform:rotate(180deg);-moz-transform:rotate(180deg);-ms-transform:rotate(180deg);-o-transform:rotate(180deg)}
 .ui-helper-hidden-accessible{left:0!important}
 
 .tablaPie table{width:auto!important}

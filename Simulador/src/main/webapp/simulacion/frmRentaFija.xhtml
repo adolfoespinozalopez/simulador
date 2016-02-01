@@ -10,8 +10,23 @@
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
-                    	<td><h:outputLabel value="Tipo Operación:"/></td>
-                    	<td colspan="2">
+                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+                        <td style="width: 115px;">
+                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
+                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+                                        showOn="button" readonlyInput="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
+                                        mindate="#{portafolioController.fechaInicial}">
+                            </p:calendar>
+                        </td>
+                        <td style="width: 50px;"><p:message for="txtEfectividad" display="icon" /></td>
+                    	<td style="width: 80px;"></td>
+                    	<td></td>
+                        <td style="width: 50px;"></td>
+                    </tr>
+                    <tr>
+                    	<td style="width: 70px;"><h:outputLabel value="Tipo Operación:"/></td>
+                    	<td>
 	                        <p:selectOneMenu id="lstTipoOperacionSpot" required="true" style="width: 110px;" 
                                          	value="#{portafolioController.selectedTipoSpot}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
@@ -19,33 +34,74 @@
 	                            <f:selectItem itemLabel="VENTA" itemValue="VENTA" />
 	                        </p:selectOneMenu>
                         </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Especie:"/></td>
-                        <td colspan="2">
-                            <p:selectOneMenu id="lstContraparteSpot" required="true" style="width: 230px;" 
+                        <td style="width: 50px;"><p:message for="lstTipoOperacionSpot" display="icon" /></td>
+                        <td style="width: 80px;"><h:outputLabel value="Especie:"/></td>
+                        <td>
+                            <p:selectOneMenu id="lstEspecieFija" required="true" style="width: 130px;" 
                                          	value="#{portafolioController.selectedContraSpot}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="Bonos corporativos" itemValue="Bonos corporativos" />
-	                            <f:selectItem itemLabel="Bonos de arrendami" itemValue="Bonos de arrendami" />
-	                            <f:selectItem itemLabel="Instrumentos de go" itemValue="Instrumentos de go" />
+	                            <f:selectItem itemLabel="Bonos de arrendamiento" itemValue="Bonos de arrendami" />
 	                            <f:selectItem itemLabel="Bonos subordinados" itemValue="Bonos subordinados" />
-	                            <f:selectItem itemLabel="Acciones" itemValue="Acciones" />
-	                            <f:selectItem itemLabel="Depositos de ahorr" itemValue="Depositos de ahorr" />
-	                            <f:selectItem itemLabel="Depositos a plazo" itemValue="Depositos a plazo" />
+	                            <f:selectItem itemLabel="Instrumentos de gobierno" itemValue="Instrumentos de go" />
+	                            <f:selectItem itemLabel="Certificados" itemValue="Certificados" />
+	                            <f:selectItem itemLabel="Instrumentos coberturados" itemValue="Instrum.Coberturad" />
+	                            <f:selectItem itemLabel="Letras del Tesoro" itemValue="Letras del Tesoro" />
 	                        </p:selectOneMenu>
                         </td>
+                        <td style="width: 50px;"><p:message for="lstEspecieFija" display="icon" /></td>
                     </tr>
                     <tr>
-                        <td><p:outputLabel value="Monto:" for="txtMontoFija"/></td>
+                        <td><h:outputLabel value="Emisor:"/></td>
+                        <td colspan="4">
+                            <p:selectOneMenu id="lstEmisorFija" required="true" style="width: 385px;" 
+                                         	value="#{portafolioController.selectedEmisor}" >
+	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+	                            <f:selectItems value="#{portafolioController.listaEmisor}" var="emisor" 
+										   		itemValue="#{emisor.nbNomEmisor}" itemLabel="#{emisor.nbNomEmisor}" />
+	                        </p:selectOneMenu>
+                        </td>
+                        <td><p:message for="lstEmisorFija" display="icon" /></td>
+                    </tr>
+                    <tr>
+                        <td><p:outputLabel value="Cantidad:" for="txtMontoFija"/></td>
                         <td>
 	                        <p:inputText id="txtMontoFija" style="width: 100px;" maxlength="30" required="true"
                                          value="#{portafolioController.tipoCambioSpot}" />
                         </td>
-                        <td style="width: 50px;"><p:message for="txtMontoFija" display="icon" /></td>
+                        <td><p:message for="txtMontoFija" display="icon" /></td>
+                        <td><p:outputLabel value="Mnemonico:" for="txtMnemonico"/></td>
+                        <td>
+	                        <p:inputText id="txtMnemonico" style="width: 120px;" maxlength="30" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}" />
+                        </td>
+                        <td><p:message for="txtMnemonico" display="icon" /></td>
                     </tr>
                     <tr>
-                    	<td colspan="3"><BR/></td>
+                        <td><h:outputLabel value="Precio Limpio:"/></td>
+                        <td colspan="2">
+	                        <p:inputText id="txtPreLimpioFija" style="width: 100px;" maxlength="30" 
+                                         value="#{portafolioController.tipoCambioSpot}" />
+                        </td>
+                        <td><p:outputLabel value="Precio Sucio:" for="txtPreSucioFija"/></td>
+                        <td>
+	                        <p:inputText id="txtPreSucioFija" style="width: 120px;" maxlength="30" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}" />
+                        </td>
+                        <td><p:message for="txtPreSucioFija" display="icon" /></td>
+                    </tr>
+                    
+                    <tr>
+                        <td><p:outputLabel value="Precio Referencial:" for="txtPreReferFija"/></td>
+                        <td>
+	                        <p:inputText id="txtPreReferFija" style="width: 100px;" maxlength="30" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}" />
+                        </td>
+                        <td><p:message for="txtPreReferFija" display="icon" /></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr>
+                    	<td colspan="6"><BR/></td>
                     </tr>
                 </tbody>
             </table>
@@ -55,7 +111,7 @@
             			<tr>
             			    <td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: center;font-weight: bold;">Fondos</td>
-            			    <td style="width: 80px;text-align: center;font-weight: bold;">Monto en USD</td>
+            			    <td style="width: 80px;text-align: center;font-weight: bold;">Cantidad</td>
             			    <td style="width: 40px;"></td>
             			</tr>
             			<tr>
@@ -145,7 +201,7 @@
             			</tr>
                     	<tr>
             			    <td style="width: 90px;"></td>
-            			    <td style="width: 200px;text-align: right;font-weight: bold;">Total Operar USD :</td>
+            			    <td style="width: 200px;text-align: right;font-weight: bold;">Total :</td>
             			    <td style="width: 80px;text-align: center;">
             			    	<p:inputText id="txtTotalFija" style="width: 80px;" maxlength="10"  
                              				 value="#{portafolioController.montoTotal}" />

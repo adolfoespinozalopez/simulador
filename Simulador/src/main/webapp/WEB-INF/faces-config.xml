@@ -78,4 +78,15 @@
 	</navigation-rule>
 	<!-- END Seguridad -->
 
+
+<!-- INIT Simulacion -->
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-outcome>to_ordenes</from-outcome>
+			<to-view-id>simulacion/frmOrdenes.jsf</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<!-- END Simulacion -->
+	
 </faces-config>
