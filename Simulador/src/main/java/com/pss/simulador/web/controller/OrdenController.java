@@ -1,7 +1,9 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
@@ -37,6 +39,10 @@ public class OrdenController extends GenericController{
 	
 	private List<Orden> listaOrdenes = new ArrayList<Orden>();
 	private Orden selectedOrden;
+	private List<Orden> selectedOrdenes;
+	
+	private Map<Integer, String> mapaMoneda = new HashMap<Integer, String>();
+	private Map<String, String> mapaEstado = new HashMap<String, String>();
 	
 	@Autowired
     private GeneralManager generalManager;
@@ -55,7 +61,14 @@ public class OrdenController extends GenericController{
 		
 		selectedEstado = Constante.NO_OPTION_SELECTED;
 		listaOrdenEstado = generalManager.findByDomainAndState(Constante.Dominio.ESTADO_ORDEN, Constante.ESTADO_ACTIVO);
+		for (General estadoOrden : listaOrdenEstado) {
+			mapaEstado.put(estadoOrden.getNbValorGeneral(), estadoOrden.getNbDescGeneral());
+		}
 		
+		List<General> listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
+		for (General moneda : listaMoneda) {
+			mapaMoneda.put(moneda.getCdIdgeneral(), moneda.getNbDescGeneral());
+		}
 		selectedOrden = null;
 		ejecutarbusqueda();
 	}
@@ -82,6 +95,18 @@ public class OrdenController extends GenericController{
 		}else{
 			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
 		}
+	}
+	
+	public void aprobarOrden(){
+		
+	}
+
+	public void rechazarOrden(){
+		
+	}
+
+	public void enviarOrdenes(){
+		
 	}
 	
 	public String getSelectedTipoOperacion() {
@@ -146,6 +171,30 @@ public class OrdenController extends GenericController{
 
 	public void setListaOrdenEstado(List<General> listaOrdenEstado) {
 		this.listaOrdenEstado = listaOrdenEstado;
+	}
+
+	public List<Orden> getSelectedOrdenes() {
+		return selectedOrdenes;
+	}
+
+	public void setSelectedOrdenes(List<Orden> selectedOrdenes) {
+		this.selectedOrdenes = selectedOrdenes;
+	}
+
+	public Map<Integer, String> getMapaMoneda() {
+		return mapaMoneda;
+	}
+
+	public void setMapaMoneda(Map<Integer, String> mapaMoneda) {
+		this.mapaMoneda = mapaMoneda;
+	}
+
+	public Map<String, String> getMapaEstado() {
+		return mapaEstado;
+	}
+
+	public void setMapaEstado(Map<String, String> mapaEstado) {
+		this.mapaEstado = mapaEstado;
 	}
 	
 }

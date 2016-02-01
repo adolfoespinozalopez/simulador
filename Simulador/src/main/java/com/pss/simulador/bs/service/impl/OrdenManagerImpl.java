@@ -37,6 +37,9 @@ public class OrdenManagerImpl implements OrdenManager{
 	OrdenDetalleRepository ordenDetalleRepository;
 	
 	public List<Orden> findByFilter(String idOperacion, String strEstado, String strUserName) {
+		Calendar calendar = GregorianCalendar.getInstance();
+		calendar.setTime(Constante.FECHA_ACTUAL);
+		calendar.set(Calendar.DAY_OF_YEAR, -1);
 		Integer idGeneral = null;
 		if(!idOperacion.equals(Constante.NO_OPTION_SELECTED)){
 			idGeneral = Integer.parseInt(idOperacion);
@@ -44,7 +47,7 @@ public class OrdenManagerImpl implements OrdenManager{
 		if(strEstado.equals(Constante.NO_OPTION_SELECTED)){
 			strEstado = null;
 		}
-		return ordenRepository.findByFilter(Constante.FECHA_ACTUAL, idGeneral, strEstado, strUserName);
+		return ordenRepository.findByFilter(calendar.getTime(), idGeneral, strEstado, strUserName);
 	}
 
 	@Transactional
