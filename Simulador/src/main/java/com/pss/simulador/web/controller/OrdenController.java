@@ -1,6 +1,7 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Orden;
+import com.pss.simulador.bs.domain.OrdenEstado;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
+import com.pss.simulador.util.Utilitarios;
 import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
@@ -39,10 +42,13 @@ public class OrdenController extends GenericController{
 	
 	private List<Orden> listaOrdenes = new ArrayList<Orden>();
 	private Orden selectedOrden;
-	private List<Orden> selectedOrdenes;
+	private List<Orden> selectedOrdenes = new ArrayList<Orden>();
 	
 	private Map<Integer, String> mapaMoneda = new HashMap<Integer, String>();
 	private Map<String, String> mapaEstado = new HashMap<String, String>();
+	
+	private List<OrdenEstado> listaEstadoDeOrden = new ArrayList<OrdenEstado>();
+	private OrdenEstado selectedOrdenEstado;
 	
 	@Autowired
     private GeneralManager generalManager;
@@ -98,14 +104,44 @@ public class OrdenController extends GenericController{
 	}
 	
 	public void aprobarOrden(){
-		
+		if(selectedOrden != null){
+			OrdenEstado ordenEstado = new OrdenEstado();
+			ordenEstado.setOrden(selectedOrden);
+			ordenEstado.setFhFecCreacion(new Date());
+			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.APROBADO));
+			selectedOrden.setStEstado(Constante.OrdenEstado.APROBADO);
+			ordenManager.save(selectedOrden);
+			ordenManager.saveEstado(ordenEstado);
+		}
 	}
 
 	public void rechazarOrden(){
-		
+		if(selectedOrden != null){
+			OrdenEstado ordenEstado = new OrdenEstado();
+			ordenEstado.setOrden(selectedOrden);
+			ordenEstado.setFhFecCreacion(new Date());
+			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.RECHAZADO));
+			selectedOrden.setStEstado(Constante.OrdenEstado.RECHAZADO);
+			ordenManager.save(selectedOrden);
+			ordenManager.saveEstado(ordenEstado);
+		}
 	}
 
 	public void enviarOrdenes(){
+		
+	}
+	
+	public void verDetallesDeEstado(Orden orden){
+		if(orden != null){
+			listaEstadoDeOrden = ordenManager.findEstadoByOrden(orden.getCdIdorden());
+			selectedOrdenEstado = null;
+		}
+	}
+	
+	public boolean isRowSelected(){
+		return (!selectedOrdenes.isEmpty());
 		
 	}
 	
@@ -195,6 +231,22 @@ public class OrdenController extends GenericController{
 
 	public void setMapaEstado(Map<String, String> mapaEstado) {
 		this.mapaEstado = mapaEstado;
+	}
+
+	public List<OrdenEstado> getListaEstadoDeOrden() {
+		return listaEstadoDeOrden;
+	}
+
+	public void setListaEstadoDeOrden(List<OrdenEstado> listaEstadoDeOrden) {
+		this.listaEstadoDeOrden = listaEstadoDeOrden;
+	}
+
+	public OrdenEstado getSelectedOrdenEstado() {
+		return selectedOrdenEstado;
+	}
+
+	public void setSelectedOrdenEstado(OrdenEstado selectedOrdenEstado) {
+		this.selectedOrdenEstado = selectedOrdenEstado;
 	}
 	
 }

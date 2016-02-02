@@ -64,7 +64,7 @@ public class Constante {
      */
     public static final String ORDENES_PAGE = "frmOrdenes.jsf";
     public static final int HORA_MONEY_MARKET = 12;
-    public static final int HORA_RENTA_FIJA = 15;
+    public static final int HORA_RENTA_FIJA = 13;
     public static final int HORA_RENTA_VARIABLE = 16;
     public static final int MINUTO_ALERTA = 30;
     
