@@ -64,7 +64,7 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" 
-                        				 styleClass="ordenes ui-state-active" onclick="PF('manteOrdenes').show(); PF('notiBar').show();"/>
+                        				 styleClass="ordenes ui-state-active" onclick="PF('verOrdenes').show(); PF('notiBar').show();"/>
                         <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px" >
                         	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
                         		<p:column>
@@ -355,11 +355,11 @@
                             update=" :frmRentaFija" />
                 </p:dialog>
                 
-                <p:dialog id="dlgOrdenes" modal="true" header="Ordenes" 
-                		  widgetVar="manteOrdenes" resizable="false" width="820" height="400">
+                <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 
+                		  widgetVar="verOrdenes" resizable="false" width="820" height="400">
                     <ui:include src="frmVerOrdenes.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmOrdenes" />
+                            update=" :frmVerOrdenes" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

@@ -3,8 +3,8 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
     xmlns:h="http://java.sun.com/jsf/html">
-    <h:form id="frmOrdenes">
-		<p:panel id="panelOrdenes" header="Detalle de Ordenes">
+    <h:form id="frmVerOrdenes">
+		<p:panel id="panelVerOrdenes" header="Detalle de Ordenes">
 			<p:dataTable id="grdOrdenes"
 				value="#{portafolioController.listaOrdenes}" var="item"
 				scrollable="true" scrollHeight="250"
@@ -31,15 +31,11 @@
 				<p:column headerText="Especie" style="text-align: left;">
 					<h:outputText value="#{item.especie}" />
 				</p:column>
-				<p:column headerText="Isin" style="text-align: left;">
-					<h:outputText value="#{item.isim}" />
-				</p:column>
 				<p:column headerText="Mnemonico" style="text-align: left;">
 					<h:outputText value="#{item.mnemoniaco}" />
 				</p:column>
 				<p:column headerText="Activo" style="width: 8%;text-align: center;">
-					<p:selectBooleanCheckbox value="#{(item.estado=='1')?true:false}"
-						disabled="true" />
+					
 				</p:column>
 				<p:column headerText="Efectividad" style="text-align: center;">
 					<h:outputText value="#{item.fechaEfectividad}">
@@ -50,7 +46,7 @@
 		</p:panel>
 		<p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteOrdenes').hide()" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('verOrdenes').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
     </h:form>

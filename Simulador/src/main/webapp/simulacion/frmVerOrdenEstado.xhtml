@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id="frmVerOrdenEstado">
+		<p:panel id="panelfrmVerOrdenEstado" header="Detalle de Estados">
+			<p:dataTable id="grdOrdenes"
+				value="#{ordenController.listaEstadoDeOrden}" var="item"
+				scrollable="true" scrollHeight="150"
+				rowIndexVar="index" rowKey="#{item.cdIdestorden}"
+				selectionMode="single" selection="#{ordenController.selectedOrdenEstado}"
+				emptyMessage="No se encontraron registros de estado"
+				paginator="false" >
+				<p:column headerText="N°" style="width: 8%;text-align: center;">
+					<h:outputText value="#{index+1}" />
+				</p:column>
+				<p:column headerText="Estado" style="text-align: center;">
+                	<h:outputText value="#{item.cdIdgeneral.nbDescGeneral}" />
+                </p:column>
+				<p:column headerText="Usuario" style="text-align: center;">
+					<h:outputText value="#{item.cdUsuCreacion}" />
+				</p:column>
+				<p:column headerText="Fecha Creación" style="text-align: center;">
+					<h:outputText value="#{item.fhFecCreacion}">
+						<f:convertDateTime pattern="dd/MM/yyy HH:mm" locale="es_PE" type="date" timeZone="EST" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+		<p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('verOrdenEstado').hide()" />
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

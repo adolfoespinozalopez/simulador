@@ -27,7 +27,8 @@
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{ordenController.listaOrdenEstado}" var="estado" 
 										   itemValue="#{estado.nbValorGeneral}" itemLabel="#{estado.nbDescGeneral}" />
-                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"/>
+                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes" 
+                            		onstart="PF('blkPanel').show()" oncomplete="PF('blkPanel').hide()"/>
                         </p:selectOneMenu>
                         <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
@@ -36,15 +37,56 @@
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{ordenController.listaTipoOperacion}" var="tipo" 
 										   itemValue="#{tipo.cdIdgeneral}" itemLabel="#{tipo.nbDescGeneral}" />
-                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"/>
+                            <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"
+                            		onstart="PF('blkPanel').show()" oncomplete="PF('blkPanel').hide()"/>
                         </p:selectOneMenu>
-                        <p:toolbar style="padding: 4px;margin: 4px 0px;" >
+                        <p:toolbar style="padding: 4px;margin: 4px 0px;" id="menuOpciones" >
                             <p:toolbarGroup align="left">  
-                                <p:commandButton process="@this" value="Enviar" icon="fa fa-send" rendered="#{loginController.isAdmin()}" style="width: 90px;">
+                                <p:commandButton process="@this" value="Enviar" icon="fa fa-send" 
+                                				 rendered="#{loginController.isAdmin()}" style="width: 90px;"
+                                				 disabled="#{ordenController.isRowSelected()}">
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
-                        
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div style="border: 1px solid #cccccc;padding: 1px;">
+                                            <div class="pendientes cuadro"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label class="labelCuadro">Generado</label>
+                                    </td>
+                                    <td>
+                                        <div style="border: 1px solid #cccccc;padding: 1px;">
+                                            <div class="atendidos cuadro"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label class="labelCuadro" style="color:#1D7523;">Aprobado</label>
+                                    </td>
+                                    <td>
+                                        <div style="border: 1px solid #cccccc;padding: 1px;">
+                                            <div class="anulados cuadro"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label class="labelCuadro" style="color:red;">Rechazado</label>
+                                    </td>
+
+                                    <td>
+                                        <div style="border: 1px solid #cccccc;padding: 1px;">
+                                            <div class="cerradas cuadro"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label class="labelCuadro" style="color:#F3A444;">Enviado</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <p:dataTable id="grdOrdenes" value="#{ordenController.listaOrdenes}" var="item"  
                                      selection="#{loginController.isAdmin()?ordenController.selectedOrdenes:ordenController.selectedOrden}" 
                                      reflow="false" scrollable="true" scrollHeight="390" 
@@ -54,7 +96,8 @@
                                      paginator="true" rows="17" 
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                      rowStyleClass="#{(item.stEstado == '3')?'anul-grid':(item.stEstado == '1')?null:(item.stEstado == '2')?'ate-grid':'cer-grid'}">
-                            <p:column selectionMode="#{loginController.isAdmin()?'multiple':'single'}" style="width:16px;text-align:center" 
+                            <p:ajax event="rowSelect" update=":frmGestionarOrdenes:menuOpciones" />
+                            <p:column selectionMode="#{loginController.isAdmin()?'multiple':'single'}" style="width:15px;text-align:center" 
                             		rendered="#{loginController.isAdmin()}" />
                             <p:column headerText="N°" style="width: 4%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
@@ -91,7 +134,7 @@
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Opciones" style="width: 8%;text-align: center;" >
+                            <p:column headerText="Opciones" style="width: 9%;text-align: center;" >
                                 <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionAprueba').show()" icon="ui-icon-check" 
                                                  style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar"
                                                  rendered="#{loginController.isAdmin()}">
@@ -103,51 +146,13 @@
                                     <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdOrdenes"  icon="ui-icon-zoomin" 
-                                                 style="width: 20px; height: 20px;" title="Ver seguimiento"
-                                                 rendered="#{!loginController.isAdmin()}">
-                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
+                                				 actionListener="#{ordenController.verDetallesDeEstado(item)}"
+                                				 oncomplete="PF('verOrdenEstado').show()" update=":dlgVerOrdenEstado"
+                                                 style="width: 20px; height: 20px;" title="Ver seguimiento">
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <div style="border: 1px solid #cccccc;padding: 1px;">
-                                            <div class="pendientes cuadro"/>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label class="labelCuadro">1 = Generado</label>
-                                    </td>
-                                    <td>
-                                        <div style="border: 1px solid #cccccc;padding: 1px;">
-                                            <div class="atendidos cuadro"/>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label class="labelCuadro" style="color:#1D7523;">2 = Aprobado</label>
-                                    </td>
-                                    <td>
-                                        <div style="border: 1px solid #cccccc;padding: 1px;">
-                                            <div class="anulados cuadro"/>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label class="labelCuadro" style="color:red;">3 = Rechazado</label>
-                                    </td>
-
-                                    <td>
-                                        <div style="border: 1px solid #cccccc;padding: 1px;">
-                                            <div class="cerradas cuadro"/>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <label class="labelCuadro" style="color:#F3A444;">4 = Enviado</label>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        
                     </p:panel>
                 </h:form>
                 <p:dialog modal="true" header="Confirmación de Envío" widgetVar="dlgConfirmacionEnvio" 
@@ -229,6 +234,12 @@
                         </p:panel>
                     </h:form>
                     <p:ajax event="close" update="frmGestionarOrdenes:grdOrdenes"/> 
+                </p:dialog>
+                
+                <p:dialog id="dlgVerOrdenEstado" modal="true" header="Estados de la Orden" 
+                		  widgetVar="verOrdenEstado" resizable="false" width="600" height="260">
+                    <ui:include src="frmVerOrdenEstado.xhtml" />
+                    <p:ajax event="close" update=":frmVerOrdenEstado" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />
