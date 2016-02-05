@@ -5,6 +5,7 @@ package com.pss.simulador.bs.service;
 
 import java.util.List;
 
+import com.pss.simulador.bs.domain.ExpoFondo;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.LimFondoEspecie;
 import com.pss.simulador.bs.domain.Saldo;
@@ -22,4 +23,6 @@ public interface FondoManager {
 	public LimFondoEspecie findLimFondoEspecieByFondoAndEmisorAndEspecie(LimFondoEspecie limFondoEspecie);
 	public List<Fondo> findAll();
 	public List<Fondo> findByIdPerfil(Integer idPerfil);
+	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo);
+	
 }

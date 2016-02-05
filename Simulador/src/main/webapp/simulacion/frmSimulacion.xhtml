@@ -16,16 +16,15 @@
                 <h:form id="frmSimulacion">
                     <p:panel id="panSimulacion">
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
-                        <p:selectOneMenu id="lstFondo" required="true" style="width: 180px;" 
-                                         value="#{simulacionController.selectedFondo.nombre}" >
-                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
-                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
-                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
-                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
-                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
-                            <p:ajax event="change" update="grdFondo"/>
+                        <p:selectOneMenu id="lstFondo" style="width: 180px;" 
+                                         value="#{simulacionController.selectedNombreFondo}" 
+                                         valueChangeListener="#{simulacionController.realizarFiltroDeFondo}">
+                            <f:selectItem itemLabel="Todos" itemValue="-1" />
+                            <f:selectItems value="#{simulacionController.listaFondo}" var="fondo" 
+										   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
+                            <p:ajax event="change" update=":frmSimulacion:grdFondo"/>
                         </p:selectOneMenu>
+                        
                         <p:separator />
                         
                         <p:layout style="min-width:400px;max-height:550px;height:550px;" fullPage="false">

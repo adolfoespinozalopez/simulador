@@ -5,13 +5,20 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.pss.simulador.bs.domain.ExpoFondo;
+import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.service.ExpoFondoManager;
+import com.pss.simulador.bs.service.FondoManager;
+import com.pss.simulador.util.Constante;
+import com.pss.simulador.util.Utilitarios;
 import com.pss.simulador.web.bean.FlujoCaja;
-import com.pss.simulador.web.bean.Fondo;
 import com.pss.simulador.web.bean.Simulacion;
 import com.pss.simulador.web.controller.generic.GenericController;
 
@@ -32,13 +39,30 @@ public class SimulacionController extends GenericController{
 	private List<FlujoCaja> listaCaja = new ArrayList<FlujoCaja>();
 	
 	private Fondo selectedFondo;
-
+	private List<Fondo> listaFondo = new ArrayList<Fondo>();
+	private String selectedNombreFondo = Constante.NO_OPTION_SELECTED;
+	
+	private List<ExpoFondo> listaExpoFondo = new ArrayList<ExpoFondo>();
+	
+	@Autowired
+	private ExpoFondoManager expoFondoManager;
+	
+	@Autowired
+    private FondoManager fondoManager;
+	
 	public SimulacionController() {
 
 	}
 
 	@PostConstruct
 	public void init() {
+		
+		if(this.isAdmin()){
+			listaFondo = fondoManager.findAll();
+		}else{
+			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
+		}
+		
 		lista = new ArrayList<Simulacion>();
 		lista.add(new Simulacion("Acciones", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
 		lista.add(new Simulacion("Bonos Soberanos", 102737621.00, 30.4, 102737621.00, 30.4, 0.0, 0.0, 5.14, 5.31));
@@ -106,6 +130,23 @@ public class SimulacionController extends GenericController{
 		cal.add(Calendar.DATE, 1);
 	}
 
+	public void realizarFiltroDeFondo(ValueChangeEvent event) {
+        Object objNew = event.getNewValue();
+        if (objNew != null) {
+        	setSelectedNombreFondo(objNew.toString());
+        	selectedFondo = Utilitarios.buscaFondoEnLista(listaFondo, selectedNombreFondo);
+        }
+        ejecutarbusqueda();
+    }
+	
+	public void ejecutarbusqueda(){
+		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo);
+		if(selectedFondo != null){
+			listaExpoFondo = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo());
+		}
+		System.out.println("listaExpoFondo="+listaExpoFondo.size());
+	}
+	
 	public List<Simulacion> getLista() {
 		return lista;
 	}
@@ -128,6 +169,38 @@ public class SimulacionController extends GenericController{
 
 	public void setListaCaja(List<FlujoCaja> listaCaja) {
 		this.listaCaja = listaCaja;
+	}
+
+	public List<Fondo> getListaFondo() {
+		return listaFondo;
+	}
+
+	public void setListaFondo(List<Fondo> listaFondo) {
+		this.listaFondo = listaFondo;
+	}
+
+	public String getSelectedNombreFondo() {
+		return selectedNombreFondo;
+	}
+
+	public void setSelectedNombreFondo(String selectedNombreFondo) {
+		this.selectedNombreFondo = selectedNombreFondo;
+	}
+
+	public ExpoFondoManager getExpoFondoManager() {
+		return expoFondoManager;
+	}
+
+	public void setExpoFondoManager(ExpoFondoManager expoFondoManager) {
+		this.expoFondoManager = expoFondoManager;
+	}
+
+	public FondoManager getFondoManager() {
+		return fondoManager;
+	}
+
+	public void setFondoManager(FondoManager fondoManager) {
+		this.fondoManager = fondoManager;
 	}
 	
 }

@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.pss.simulador.bs.domain.ExpoFondo;
 import com.pss.simulador.bs.domain.Fondo;
 
 /**
@@ -27,4 +28,9 @@ public interface FondoRepository extends CrudRepository<Fondo, Integer> {
 	
 	@Query(value = "SELECT DISTINCT g.fondo FROM PerfilFondo g WHERE g.stEstado = 1 AND g.perfil.cdIdperfil = :idPerfil ORDER BY g.fondo.nbNomFondo ")
 	public abstract List<Fondo> findByIdPerfil(@Param("idPerfil") Integer idPerfil);
+	
+	
+	//Exposicion del Fondo
+	@Query(value = "SELECT e FROM ExpoFondo e WHERE e.cdIdfondo = :idFondo ORDER BY e.cidExpo ")
+	public abstract List<ExpoFondo> obtenerExposicionDelFondo(@Param("idFondo") Integer idFondo);
 }

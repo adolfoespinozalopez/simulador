@@ -25,6 +25,7 @@
 		<class>com.pss.simulador.bs.domain.Orden</class>
 		<class>com.pss.simulador.bs.domain.OrdenEstado</class>
 		<class>com.pss.simulador.bs.domain.DetalleOrden</class>
+		<class>com.pss.simulador.bs.domain.ExpoFondo</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 
 	</persistence-unit>	

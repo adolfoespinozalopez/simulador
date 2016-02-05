@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pss.simulador.bs.domain.ExpoFondo;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.LimFondoEspecie;
 import com.pss.simulador.bs.domain.Saldo;
@@ -72,5 +73,8 @@ public class FondoManagerImpl implements FondoManager {
 		return fondoRepository.findByIdPerfil(idPerfil);
 	}
 	
-
+	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo) {
+		return fondoRepository.obtenerExposicionDelFondo(idFondo);
+	}
+	
 }
