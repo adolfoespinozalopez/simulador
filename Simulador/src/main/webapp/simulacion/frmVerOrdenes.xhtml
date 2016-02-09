@@ -5,40 +5,75 @@
     xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="frmVerOrdenes">
 		<p:panel id="panelVerOrdenes" header="Detalle de Ordenes">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<div style="border: 1px solid #cccccc; padding: 1px;">
+								<div class="pendientes cuadro" />
+							</div>
+						</td>
+						<td><label class="labelCuadro">Generado</label></td>
+						<td>
+							<div style="border: 1px solid #cccccc; padding: 1px;">
+								<div class="atendidos cuadro" />
+							</div>
+						</td>
+						<td><label class="labelCuadro" style="color: #1D7523;">Aprobado</label>
+						</td>
+						<td>
+							<div style="border: 1px solid #cccccc; padding: 1px;">
+								<div class="anulados cuadro" />
+							</div>
+						</td>
+						<td><label class="labelCuadro" style="color: red;">Rechazado</label>
+						</td>
+
+						<td>
+							<div style="border: 1px solid #cccccc; padding: 1px;">
+								<div class="cerradas cuadro" />
+							</div>
+						</td>
+						<td><label class="labelCuadro" style="color: #F3A444;">Enviado</label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<p:dataTable id="grdOrdenes"
 				value="#{portafolioController.listaOrdenes}" var="item"
 				scrollable="true" scrollHeight="250"
-				rowIndexVar="index" rowKey="#{item.id}"
+				rowIndexVar="index" rowKey="#{item.cdIdorden}"
 				selectionMode="single" selection="#{portafolioController.selectedOrden}"
-				emptyMessage="No se encontraron registros"
-				paginator="true" rows="10"
-				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
-				<p:column headerText="N°" style="width: 5%;text-align: center;">
+				emptyMessage="No se encontraron ordenes"
+				paginator="true" rows="8"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+				rowStyleClass="#{(item.stEstado == '3')?'anul-grid':(item.stEstado == '1')?null:(item.stEstado == '2')?'ate-grid':'cer-grid'}">
+				<p:column headerText="N°" style="width: 4%;text-align: center;">
 					<h:outputText value="#{index+1}" />
 				</p:column>
 				<p:column headerText="Fondo" style="width: 8%;text-align: left;">
-					<h:outputText value="#{item.nombreFondo}" />
+					<h:outputText value="#{item.fondo.nbNomFondo}" />
 				</p:column>
 				<p:column headerText="Operación" style="width: 10%;text-align: left;">
-					<h:outputText value="#{item.nombreOperacion}" />
+					<h:outputText value="#{item.cdIdTipoOperacion.nbDescGeneral}" />
 				</p:column>
-				<p:column headerText="Moneda" style="width: 8%;text-align: left;">
-					<h:outputText value="#{item.moneda}" />
+				<p:column headerText="Moneda" style="width: 6%;text-align: left;">
+					<h:outputText value="#{item.tpTipmoneda}" />
 				</p:column>
-				<p:column headerText="Contraparte" style="text-align: left;">
-					<h:outputText value="#{item.contraparte}" />
+				<p:column headerText="Contraparte" style="width: 15%;text-align: left;">
+					<h:outputText value="#{item.contraparte.nbDescGeneral}" />
 				</p:column>
-				<p:column headerText="Especie" style="text-align: left;">
-					<h:outputText value="#{item.especie}" />
+				<p:column headerText="Especie" style="width: 12%;text-align: left;">
+					<h:outputText value="#{item.especie.nbDescGeneral}" />
 				</p:column>
-				<p:column headerText="Mnemonico" style="text-align: left;">
-					<h:outputText value="#{item.mnemoniaco}" />
+				<p:column headerText="Mnemonico" style="width: 10%;text-align: left;">
+					<h:outputText value="#{item.nbMnemonico}" />
 				</p:column>
-				<p:column headerText="Activo" style="width: 8%;text-align: center;">
-					
-				</p:column>
-				<p:column headerText="Efectividad" style="text-align: center;">
-					<h:outputText value="#{item.fechaEfectividad}">
+				<p:column headerText="Monto / Cantidad" style="width: 12%;text-align: left;">
+                	<h:outputText value="#{item.imMontoFinal}"/>
+                </p:column>
+				<p:column headerText="Efectividad" style="width: 10%;text-align: center;">
+					<h:outputText value="#{item.fhFecEfectividad}">
 						<f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST" />
 					</h:outputText>
 				</p:column>

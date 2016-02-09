@@ -115,6 +115,7 @@ public class EmisorController extends GenericController {
 		limiteEmisorConsulta.setEmisor(selectedEmisor);
 		limiteEmisorConsulta.setFondo(selectedFondo);
 		selectedlimiteEmisor = emisorManager.findByFondoAndEmisor(limiteEmisorConsulta);
+		selectedlimiteEmisor = (selectedlimiteEmisor == null)?new LimitesEmisor():selectedlimiteEmisor;
 	}
 
 	public void guardarEmisorLimite() {
@@ -170,9 +171,11 @@ public class EmisorController extends GenericController {
 	public void verLimites(Emisor emisor) {
 		selectedEmisor = emisor;
 		selectedFondo = new Fondo();
+		selectedlimiteEmisor = new LimitesEmisor();
 	}
 
 	public void cancelar() {
+		selectedEmisor = null;
 	}
 
 	public String getEmisorNombreBus() {

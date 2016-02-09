@@ -39,7 +39,7 @@ public class OrdenManagerImpl implements OrdenManager{
 	public List<Orden> findByFilter(String idOperacion, String strEstado, String strUserName) {
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(Constante.FECHA_ACTUAL);
-		calendar.set(Calendar.DAY_OF_YEAR, -1);
+		calendar.set(Calendar.DATE, -1);
 		Integer idGeneral = null;
 		if(!idOperacion.equals(Constante.NO_OPTION_SELECTED)){
 			idGeneral = Integer.parseInt(idOperacion);

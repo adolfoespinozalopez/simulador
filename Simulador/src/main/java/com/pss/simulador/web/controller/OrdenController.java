@@ -29,7 +29,7 @@ import com.pss.simulador.web.controller.generic.GenericController;
 * @since 1.0
 */
 @Component
-@Scope("session")
+@Scope("request")
 public class OrdenController extends GenericController{
 
 	private static final long serialVersionUID = 1L;

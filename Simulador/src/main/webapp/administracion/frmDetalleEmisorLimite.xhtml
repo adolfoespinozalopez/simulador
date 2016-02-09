@@ -34,7 +34,8 @@
 	                                     emptyMessage="No se encontraron registros." >
 	                                <p:ajax event="rowSelect" listener="#{emisorController.onFondoRowSelect}"
 	                                		update=":frmDetalleEmisorLimite:fldLimite, :frmDetalleEmisorLimite:txtFondo" 
-	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()"/>
+	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()" 
+	                                		resetValues="true"/>
 	                            	<p:column headerText="Fondo" style="text-align: left;" >
 	                                	<h:outputText value="#{item.nbNomFondo}" />
 	                            	</p:column>

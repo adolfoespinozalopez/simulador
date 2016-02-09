@@ -139,6 +139,14 @@ public class SimulacionController extends GenericController{
 		cal.add(Calendar.DATE, 1);
 	}
 	
+	public String validaValorNegativo(String porcentaje){
+		if(porcentaje.contains("-")){
+			return "negativo";
+		}else{
+			return "";
+		}
+	}
+	
 	public Fondo getSelectedFondo() {
 		return selectedFondo;
 	}

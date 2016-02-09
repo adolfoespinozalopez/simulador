@@ -64,16 +64,17 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" style="position: absolute;"
-                        				 styleClass="ordenes ui-state-active" onclick="PF('verOrdenes').show();"/>
+                        				 styleClass="ordenes ui-state-active" actionListener="#{portafolioController.verOrdenes}" 
+                        				 update=":dlgVerOrdenes, :frmVerOrdenes:panelVerOrdenes" 
+                        				 oncomplete="PF('verOrdenes').show()"/>
                         <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px" >
-                        	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
+                        	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2" rendered="#{(portafolioController.selectedTipoOperacion=='-1')?true:(portafolioController.selectedTipoOperacion=='M')?true:false}">
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
 	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"
-	                        						></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"/>
 	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" actionListener="#{portafolioController.validarPreCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"/>
 	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" actionListener="#{portafolioController.validarAperturaDeposito}"
 	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito"></p:menuitem>
 	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" actionListener="#{portafolioController.validarRenovarDeposito}"
@@ -95,7 +96,7 @@
                         			</p:submenu>                        		
                         		</p:column>
                         	</p:submenu>
-                        	<p:submenu label="Renta fija" icon="fa fa-files-o" >
+                        	<p:submenu label="Renta fija" icon="fa fa-files-o" rendered="#{(portafolioController.selectedTipoOperacion=='-1')?true:(portafolioController.selectedTipoOperacion=='F')?true:false}">
                         		<p:column>
 	                        		<p:submenu label="Operación" >
 	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaFija}"
@@ -103,7 +104,7 @@
 	                        		</p:submenu>
                         		</p:column>
                         	</p:submenu>
-                        	<p:submenu label="Renta Variable" icon="fa fa-flag" >
+                        	<p:submenu label="Renta Variable" icon="fa fa-flag" rendered="#{(portafolioController.selectedTipoOperacion=='-1')?true:(portafolioController.selectedTipoOperacion=='V')?true:false}">
                         		<p:column>
 	                        		<p:submenu label="Operación" >
 	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaVariable}"
@@ -167,9 +168,7 @@
 									<h:outputText value="#{item.tpModalidad}" />
 								</p:column>
 								<p:column headerText="Precio Limpio" style="width:70px;text-align: center;">
-									<h:outputText value="#{item.imPrecioLimpio}">
-										
-									</h:outputText>
+									<h:outputText value="#{item.imPrecioLimpio}"/>
 								</p:column>
 								<p:column headerText="Precio Sucio" style="width:60px;text-align: center;">
 									<h:outputText value="#{item.imPrecioSucio}">
@@ -214,17 +213,17 @@
 								</p:column>
 								<p:column headerText="Ytm" style="width:40px;text-align: center;">
 									<h:outputText value="#{item.imYtm}">
-										<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+										<f:convertNumber groupingUsed="true" locale="es" maxFractionDigits="4" />
 									</h:outputText>
 								</p:column>
 								<p:column headerText="Durac. Norm" style="width:80px;text-align: center;">
 									<h:outputText value="#{item.imDuracNorm}">
-										<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="4" />
+										<f:convertNumber groupingUsed="true" locale="es" maxFractionDigits="4" />
 									</h:outputText>
 								</p:column>
 								<p:column headerText="Durac. Modif" style="width:80px;text-align: center;">
 									<h:outputText value="#{item.imDuracModif}">
-										<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="7" />
+										<f:convertNumber groupingUsed="true" locale="es" maxFractionDigits="7" />
 									</h:outputText>
 								</p:column>
 								<p:column headerText="Clasifica" style="width:60px;text-align: center;">
@@ -280,8 +279,8 @@
                 </h:form>
                 
                 <p:dialog id="dlgMensajeVal" modal="true" header="Mensaje" widgetVar="msjVal" resizable="false"
-                    width="200" height="110" dynamic="true">
-                    <p:panel style="border: 0px">
+                    width="200" height="110"  >
+                    <p:panel id="pnlMensajeVal" style="border: 0px">
                     <table>
                         <tbody>
                             <tr>
@@ -291,8 +290,7 @@
                         <tfoot>                           
                             <tr>
                             	<td style="text-align: center">
-                                    <p:commandButton value="Cerrar" icon="ui-icon-close" onclick="PF('msjVal').hide()" 
-                                                     update=":frmPortafolio:panelGrilla"/>
+                                    <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('msjVal').hide()"/>
                                 </td>
                             </tr>
                         </tfoot>
@@ -364,10 +362,9 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 
-                		  widgetVar="verOrdenes" resizable="false" width="820" height="400">
+                		  widgetVar="verOrdenes" resizable="false" width="850" height="440">
                     <ui:include src="frmVerOrdenes.xhtml" />
-                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmVerOrdenes" />
+                    <p:ajax event="close"  update=":frmVerOrdenes" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

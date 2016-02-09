@@ -648,3 +648,7 @@ h1.title-sh {
 	background:#E3F1FA;
 	text-transform: capitalize;
 }
+.negativo{
+	color: #FF0000;
+	background: #FFDCDC;
+}

@@ -11,7 +11,6 @@ import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.LimFondoEspecie;
@@ -21,7 +20,6 @@ import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
-import com.pss.simulador.web.bean.Fondo;
 import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
@@ -39,7 +37,6 @@ public class FondoController extends GenericController {
 	private String fondoNombreBus = "";
 	
 	private Saldo selectedSaldo;
-	private List<Fondo> listaFondos = new ArrayList<Fondo>();
 	private List<Saldo> listaSaldos = new ArrayList<Saldo>();
 	
 	//Limites por Emisor y Especie
@@ -69,7 +66,6 @@ public class FondoController extends GenericController {
 		selectedSaldo = null;
 		this.listarSaldos();
 	}
-
 
 	private void listarSaldos() {
 		listaSaldos = fondoManager.findSaldoByName(fondoNombreBus);
@@ -148,14 +144,6 @@ public class FondoController extends GenericController {
 
 	public void setFondoNombreBus(String fondoNombreBus) {
 		this.fondoNombreBus = fondoNombreBus;
-	}
-
-	public List<Fondo> getListaFondos() {
-		return listaFondos;
-	}
-
-	public void setListaFondos(List<Fondo> listaFondos) {
-		this.listaFondos = listaFondos;
 	}
 
 	public LimFondoEspecie getSelectedLimFondoEspecie() {

@@ -9,7 +9,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
@@ -32,7 +31,6 @@ import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.FechasUtil;
 import com.pss.simulador.util.Utilitarios;
-import com.pss.simulador.web.bean.Ordenes;
 import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
@@ -134,8 +132,8 @@ public class PortafolioController extends GenericController{
 	private Date fechaInicial;
 	private Date fechaFinal;
 	
-	private List<Ordenes> listaOrdenes = new ArrayList<Ordenes>();
-	private Ordenes selectedOrden;
+	private List<Orden> listaOrdenes = new ArrayList<Orden>();
+	private Orden selectedOrden;
 	
 	@PostConstruct
 	public void init() {
@@ -145,21 +143,20 @@ public class PortafolioController extends GenericController{
 		fechaActual = formatoFecha.format(fechaInicial);
 		//Cambiar por obtenerTipoDeCambio
 		valorTipoCambio = "3.40";
+		
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(fechaInicial);
 		cal.add(Calendar.DATE, 3);
 		fechaFinal = cal.getTime();
-		Ordenes orden1 = new Ordenes(1, "BBVA SOLES", "Renta Fija", "PEN", "LUZ DEL SUR", "Bonos corporativos", "PEP70252M226", "PEP70252M226", Constante.FECHA_ACTUAL, "1");
-		Ordenes orden2 = new Ordenes(2, "BBVA SOLES", "Renta Fija", "PEN", "CINEPLEX S.A.", "Bonos corporativos", "PEP72840M010", "PEP72840M010", Constante.FECHA_ACTUAL, "1");
-		listaOrdenes = new ArrayList<Ordenes>();
-		listaOrdenes.add(orden1);
-		listaOrdenes.add(orden2);
 		
+		
+		
+		listaFondo = fondoManager.findAll();
+		/*
 		if(this.isAdmin()){
-			listaFondo = fondoManager.findAll();
 		}else{
 			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
-		}
+		}*/
 		listaEmisor = emisorManager.findAllActive();
 		listaTipoOperacion = generalManager.findByDomainAndState(Constante.Dominio.TIPO_OPERACION, Constante.ESTADO_ACTIVO);
 		listaOrdenEstado = generalManager.findByDomainAndState(Constante.Dominio.ESTADO_ORDEN, Constante.ESTADO_ACTIVO);
@@ -168,7 +165,6 @@ public class PortafolioController extends GenericController{
 		listaContraparte = generalManager.findByDomainAndState(Constante.Dominio.CONTRAPARTE, Constante.ESTADO_ACTIVO);
 		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
 		listaEspecie =  generalManager.findByDomainAndState(Constante.Dominio.ESPECIE, Constante.ESTADO_ACTIVO);
-		
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {
@@ -543,19 +539,19 @@ public class PortafolioController extends GenericController{
 		this.fechaFinal = fechaFinal;
 	}
 	
-	public List<Ordenes> getListaOrdenes() {
+	public List<Orden> getListaOrdenes() {
 		return listaOrdenes;
 	}
 
-	public void setListaOrdenes(List<Ordenes> listaOrdenes) {
+	public void setListaOrdenes(List<Orden> listaOrdenes) {
 		this.listaOrdenes = listaOrdenes;
 	}
 	
-	public Ordenes getSelectedOrden() {
+	public Orden getSelectedOrden() {
 		return selectedOrden;
 	}
 
-	public void setSelectedOrden(Ordenes selectedOrden) {
+	public void setSelectedOrden(Orden selectedOrden) {
 		this.selectedOrden = selectedOrden;
 	}
 
@@ -643,18 +639,27 @@ public class PortafolioController extends GenericController{
 		selectedInfo = null;
 	}
 	
+	public void verOrdenes(){
+		listaOrdenes = ordenManager.findByFilter(Constante.NO_OPTION_SELECTED, Constante.NO_OPTION_SELECTED, this.getUsuarioSession().getUsuario().getUID().toString());
+	}
+	
 	public void validarCancelarDeposito(){
 		RequestContext context = RequestContext.getCurrentInstance();
 		if (selectedInfo == null) {
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
-        	if(selectedInfo.getNbIsin().trim().endsWith("C")){
-        		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
+        	if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL)==0){
+        		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
+            	if(selectedInfo.getNbIsin().trim().endsWith("C")){
+            		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
+            	}
+            	verDetallesDeCancelarDeposito();
+            	context.execute("PF('manteCancelarDeposito').show()");
+        	}else{
+        		mensajeValida = "La fecha de vencimiento no es igual a la actual.";
+        		context.execute("PF('msjVal').show()");
         	}
-        	verDetallesDeCancelarDeposito();
-        	context.execute("PF('manteCancelarDeposito').show()");
         }
 	}
 	

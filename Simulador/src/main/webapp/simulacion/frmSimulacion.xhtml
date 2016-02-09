@@ -125,6 +125,17 @@
                                     <p:column headerText="Exposición" style="width: 13%;">
                                         <h:outputText value="#{item.pcExposicion} #{(item.pcExposicion==null)?'':'%'}" />
                                     </p:column>
+                                    <p:column headerText="Límite" style="width: 11%;">
+                                        <h:outputText value="#{item.pcLimite} #{(item.pcLimite==null)?'':'%'}" />
+                                    </p:column>
+                                    <p:column headerText="Espacio" style="width: 11%;" styleClass="#{simulacionController.validaValorNegativo(item.pcEspacio)}">
+                                        <h:outputText value="#{item.pcEspacio} #{(item.pcEspacio==null)?'':'%'}" />
+                                    </p:column>
+                                    <p:column headerText="Espacio (MM)" style="width: 13%;">
+                                    	<h:outputText value="#{item.imEspacio}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
                                 </p:dataTable>     		 
                             </p:layoutUnit>
                             <p:layoutUnit position="east" resizable="true" collapsible="true" effect="drop" 
