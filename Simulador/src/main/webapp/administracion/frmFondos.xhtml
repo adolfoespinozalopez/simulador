@@ -30,10 +30,10 @@
                         </p:toolbar>
                         <p:dataTable id="grdFondos" value="#{fondoController.listaSaldos}" var="item"  
                                      selection="#{fondoController.selectedSaldo}" reflow="false"
-                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     selectionMode="single" scrollable="true" scrollHeight="395" 
                                      rowIndexVar="index" rowKey="#{item.cdIdsaldo}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="17"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="Codigo" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{item.cdIdsaldo}"/>

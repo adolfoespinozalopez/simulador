@@ -2,7 +2,9 @@ package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
@@ -29,44 +31,48 @@ public class EmisorController extends GenericController {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(EmisorController.class);
-	
+
 	private String emisorNombreBus = "";
 	private Integer selectedTipoEmisor = Constante.NO_OPTION_SELECTED_INT;
 	private List<General> lstGeneralDominio = new ArrayList<General>();
+	private Map<Integer, String> mapaTipoEmisor = new HashMap<Integer, String>();
 	
 	private Emisor selectedEmisor;
 	private List<Emisor> listaEmisor = new ArrayList<Emisor>();
-	
+
 	private List<Fondo> listaFondo = new ArrayList<Fondo>();
 	private Fondo selectedFondo;
-	
+
 	@Autowired
-    private GeneralManager generalManager;
-	
+	private GeneralManager generalManager;
+
 	@Autowired
-    private EmisorManager emisorManager;
-	
+	private EmisorManager emisorManager;
+
 	@Autowired
-    private FondoManager fondoManager;
-	
-	//Limites
+	private FondoManager fondoManager;
+
+	// Limites
 	private LimitesEmisor selectedlimiteEmisor = new LimitesEmisor();
-	
-	public EmisorController(){
-		
+
+	public EmisorController() {
+
 	}
-	
+
 	@PostConstruct
 	public void init() {
 		listaEmisor = new ArrayList<Emisor>();
 		selectedEmisor = new Emisor();
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
-		
+
 		listaFondo = fondoManager.findAll();
 		lstGeneralDominio = generalManager.findByDomainAndState(Constante.Dominio.TIPO_EMISOR, Constante.ESTADO_ACTIVO);
+		for (General tipoEmisor : lstGeneralDominio) {
+			mapaTipoEmisor.put(tipoEmisor.getCdIdgeneral(), tipoEmisor.getNbDescGeneral());
+		}
 	}
-	
+
 	public void buscar() {
 		selectedEmisor = new Emisor();
 		selectedEmisor.setNbNomEmisor(this.emisorNombreBus);
@@ -77,63 +83,69 @@ public class EmisorController extends GenericController {
 	public void crear() {
 		selectedEmisor = new Emisor();
 	}
-	
+
 	public void guardarEmisor() {
 		try {
-			if(selectedEmisor!=null){
-				if (selectedEmisor!=null)
-				selectedEmisor.setStEstado(Constante.ESTADO_ACTIVO);
-				if (selectedEmisor.getCdIdemisor()!=null){//Actualizacion
+			if (selectedEmisor != null) {
+				if (selectedEmisor != null)
+					selectedEmisor.setStEstado(Constante.ESTADO_ACTIVO);
+				if (selectedEmisor.getCdIdemisor() != null) {// Actualizacion
 					selectedEmisor.setFhFecModifica(new Date());
 					selectedEmisor.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
-				}else{// Registro
+				} else {// Registro
 					selectedEmisor.setFhFecCreacion(new Date());
 					selectedEmisor.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				}
-				selectedEmisor=emisorManager.save(selectedEmisor);
+				selectedEmisor = emisorManager.save(selectedEmisor);
 			}
-			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);	
+			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);
 		} catch (Exception e) {
-			logger.error(e,e);
+			logger.error(e, e);
 			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
 		}
-		selectedEmisor=new Emisor();
+		selectedEmisor = new Emisor();
 		selectedEmisor.setNbNomEmisor("");
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
 	}
-	
+
 	public void onFondoRowSelect(SelectEvent event) {
-		
+		selectedFondo = (Fondo) event.getObject();
+		LimitesEmisor limiteEmisorConsulta = new LimitesEmisor();
+		limiteEmisorConsulta.setEmisor(selectedEmisor);
+		limiteEmisorConsulta.setFondo(selectedFondo);
+		selectedlimiteEmisor = emisorManager.findByFondoAndEmisor(limiteEmisorConsulta);
 	}
-	
+
 	public void guardarEmisorLimite() {
 		try {
-			if(selectedlimiteEmisor!=null){
+			if (selectedlimiteEmisor != null) {
 				selectedlimiteEmisor.setStEstado(Constante.ESTADO_ACTIVO);
-				if (selectedlimiteEmisor.getCdIdlimite()!=null){//Actualizacion
+				if (selectedlimiteEmisor.getCdIdlimite() != null) {// Actualizacion
 					selectedlimiteEmisor.setFhFecModifica(new Date());
 					selectedlimiteEmisor.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
-				}else{// Registro
-					//selectedlimiteEmisor.setLimitesEmisorPK(new LimitesEmisorPK(null, selectedEmisor.getCdIdemisor()));
+				} else {// Registro
+					selectedlimiteEmisor.setFondo(selectedFondo);
+					selectedlimiteEmisor.setEmisor(selectedEmisor);
 					selectedlimiteEmisor.setCdIdlimite(null);
 					selectedlimiteEmisor.setFhFecCreacion(new Date());
 					selectedlimiteEmisor.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				}
-				selectedlimiteEmisor=emisorManager.saveLimiteEmisor(selectedlimiteEmisor);
+				selectedlimiteEmisor = emisorManager.saveLimiteEmisor(selectedlimiteEmisor);
 			}
-			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);	
+			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);
 		} catch (Exception e) {
-			logger.error(e,e);
+			logger.error(e, e);
 			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
 		}
-		selectedEmisor=new Emisor();
+		selectedlimiteEmisor = null;
+		selectedEmisor = new Emisor();
 		selectedEmisor.setNbNomEmisor("");
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
 	}
-	
-	public void listarEmisor(Emisor emisor){
+
+	public void listarEmisor(Emisor emisor) {
 		listaEmisor = emisorManager.findEmisorByNameAndType(emisor);
 	}
 
@@ -148,7 +160,7 @@ public class EmisorController extends GenericController {
 			selectedEmisor.setCdUsuElimina(this.getUsuarioSession().getUsuario().getUID());
 		}
 		selectedEmisor = emisorManager.save(selectedEmisor);
-		selectedEmisor=new Emisor();
+		selectedEmisor = new Emisor();
 		selectedEmisor.setNbNomEmisor("");
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
 		this.listarEmisor(selectedEmisor);
@@ -157,12 +169,12 @@ public class EmisorController extends GenericController {
 
 	public void verLimites(Emisor emisor) {
 		selectedEmisor = emisor;
-		selectedlimiteEmisor = (emisor.getLimitesEmisorList()!=null && emisor.getLimitesEmisorList().size()>0)?emisor.getLimitesEmisorList().get(0):new LimitesEmisor();
+		selectedFondo = new Fondo();
 	}
-	
+
 	public void cancelar() {
 	}
-	
+
 	public String getEmisorNombreBus() {
 		return emisorNombreBus;
 	}
@@ -250,6 +262,13 @@ public class EmisorController extends GenericController {
 	public void setFondoManager(FondoManager fondoManager) {
 		this.fondoManager = fondoManager;
 	}
-	
-	
+
+	public Map<Integer, String> getMapaTipoEmisor() {
+		return mapaTipoEmisor;
+	}
+
+	public void setMapaTipoEmisor(Map<Integer, String> mapaTipoEmisor) {
+		this.mapaTipoEmisor = mapaTipoEmisor;
+	}
+
 }

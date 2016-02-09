@@ -33,13 +33,15 @@
 	                                     rowIndexVar="index" rowKey="#{item.cdIdfondo}"
 	                                     emptyMessage="No se encontraron registros." >
 	                                <p:ajax event="rowSelect" listener="#{emisorController.onFondoRowSelect}"
-	                                		update=":frmDetalleEmisorLimite:fldLimite" 
+	                                		update=":frmDetalleEmisorLimite:fldLimite, :frmDetalleEmisorLimite:txtFondo" 
 	                                		onstart="PF('blkPanelLimite').show()" oncomplete="PF('blkPanelLimite').hide()"/>
 	                            	<p:column headerText="Fondo" style="text-align: left;" >
 	                                	<h:outputText value="#{item.nbNomFondo}" />
 	                            	</p:column>
 	                        	</p:dataTable>
                         	</h:panelGrid>
+                        	<p:inputText id="txtFondo" required="true" value="#{emisorController.selectedFondo.cdIdfondo}" label="Fondo" style="display:none;"></p:inputText>
+                        	<p:message for="txtFondo" display="icon" />
                         </td>
                         <td style="width: 60%;">
                         	<h:panelGrid id="panelLimite" style="width: 100%;">

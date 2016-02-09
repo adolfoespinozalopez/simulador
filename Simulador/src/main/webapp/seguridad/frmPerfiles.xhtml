@@ -33,10 +33,10 @@
                         </p:toolbar>
                         <p:dataTable id="grdPerfiles" value="#{perfilController.listaPerfiles}" var="item"  
                                      selection="#{perfilController.selectedPerfil}" reflow="false"
-                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     selectionMode="single" scrollable="true" scrollHeight="395" 
                                      rowIndexVar="index" rowKey="#{item.cdIdperfil}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="17"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>

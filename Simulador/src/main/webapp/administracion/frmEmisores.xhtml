@@ -40,10 +40,10 @@
                         </p:toolbar>
                         <p:dataTable id="grdEmisores" value="#{emisorController.listaEmisor}" var="item"  
                                      selection="#{emisorController.selectedEmisor}" reflow="false"
-                                     selectionMode="single" scrollable="true" scrollHeight="390" 
+                                     selectionMode="single" scrollable="true" scrollHeight="395" 
                                      rowIndexVar="index" rowKey="#{item.cdIdemisor}"
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="10"
+                                     paginator="true" rows="17"
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                             <p:column headerText="N°" style="width: 5%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
@@ -58,7 +58,7 @@
                                 <h:outputText value="#{item.imPasivo}"/>
                             </p:column>
                             <p:column headerText="Tipo" style="text-align: center;">
-                                <h:outputText value="#{item.tpTipemisor}"/>
+                                <h:outputText value="#{emisorController.mapaTipoEmisor[item.tpTipemisor]}"/>
                             </p:column>
                             <p:column headerText="Activo" style="text-align: center;">
                                 <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>

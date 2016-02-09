@@ -26,7 +26,7 @@
                         <td style="width: 100px;"><h:outputLabel value="Fondo:"/></td>
                         <td colspan="2">
                             <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 210px;" 
-                                         	value="#{portafolioController.selectedFondoAbono}" >
+                                         	value="#{portafolioController.selectedFondoAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
 	                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
@@ -51,7 +51,7 @@
                         <td><h:outputLabel value="Contraparte:"/></td>
                         <td colspan="2">
                             <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 210px;" 
-                                         	value="#{portafolioController.selectedContraAbono}" >
+                                         	value="#{portafolioController.selectedContraAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
 	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />

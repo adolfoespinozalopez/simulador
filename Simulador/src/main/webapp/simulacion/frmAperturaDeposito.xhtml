@@ -37,7 +37,7 @@
                         <td><h:outputLabel value="Contraparte:"/></td>
                         <td colspan="5">
                             <p:selectOneMenu id="lstContraAper" required="true" style="width: 325px;" 
-                                         	value="#{portafolioController.selectedContraAper}" >
+                                         	value="#{portafolioController.selectedContraAper}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
 										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />

@@ -44,8 +44,11 @@ public class EmisorManagerImpl implements EmisorManager {
 		return limiteEmisorRepository.save(limitesEmisor);
 	}
 	
-	public List<LimitesEmisor> findLimiteEmisorByPK(Integer cdIdlimite) {
-		return limiteEmisorRepository.findByPK(cdIdlimite, Constante.ESTADO_ACTIVO);
+	public LimitesEmisor findByFondoAndEmisor(LimitesEmisor limitesEmisor) {
+		return limiteEmisorRepository.findByFondoAndEmisor(
+				limitesEmisor.getFondo().getCdIdfondo(), 
+				limitesEmisor.getEmisor().getCdIdemisor(), 
+				Constante.ESTADO_ACTIVO);
 	}
 
 	public List<Emisor> findByFund(String strNomFondo) {

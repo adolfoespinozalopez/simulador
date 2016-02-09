@@ -5,8 +5,7 @@
     xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="frmRentaFija">
     	<p:focus context="panelRentaFija"/>
-        <p:panel id="panelRentaFija" header="Detalle Renta Fija" 
-                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+        <p:panel id="panelRentaFija" header="Detalle Renta Fija" >
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
@@ -38,7 +37,7 @@
                         <td style="width: 80px;"><h:outputLabel value="Especie:"/></td>
                         <td>
                             <p:selectOneMenu id="lstEspecieFija" required="true" style="width: 130px;" 
-                                         	value="#{portafolioController.selectedContraSpot}" >
+                                         	value="#{portafolioController.selectedContraSpot}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="Bonos corporativos" itemValue="Bonos corporativos" />
 	                            <f:selectItem itemLabel="Bonos de arrendamiento" itemValue="Bonos de arrendami" />
@@ -55,7 +54,7 @@
                         <td><h:outputLabel value="Emisor:"/></td>
                         <td colspan="4">
                             <p:selectOneMenu id="lstEmisorFija" required="true" style="width: 385px;" 
-                                         	value="#{portafolioController.selectedEmisor}" >
+                                         	value="#{portafolioController.selectedEmisor}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItems value="#{portafolioController.listaEmisor}" var="emisor" 
 										   		itemValue="#{emisor.nbNomEmisor}" itemLabel="#{emisor.nbNomEmisor}" />
@@ -64,7 +63,7 @@
                         <td><p:message for="lstEmisorFija" display="icon" /></td>
                     </tr>
                     <tr>
-                        <td><p:outputLabel value="Cantidad:" for="txtMontoFija"/></td>
+                        <td><p:outputLabel value="Monto:" for="txtMontoFija"/></td>
                         <td>
 	                        <p:inputText id="txtMontoFija" style="width: 100px;" maxlength="30" required="true"
                                          value="#{portafolioController.tipoCambioSpot}" />
@@ -90,16 +89,6 @@
                         </td>
                         <td><p:message for="txtPreSucioFija" display="icon" /></td>
                     </tr>
-                    
-                    <tr>
-                        <td><p:outputLabel value="Precio Referencial:" for="txtPreReferFija"/></td>
-                        <td>
-	                        <p:inputText id="txtPreReferFija" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}" />
-                        </td>
-                        <td><p:message for="txtPreReferFija" display="icon" /></td>
-                        <td colspan="3"></td>
-                    </tr>
                     <tr>
                     	<td colspan="6"><BR/></td>
                     </tr>
@@ -111,7 +100,7 @@
             			<tr>
             			    <td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: center;font-weight: bold;">Fondos</td>
-            			    <td style="width: 80px;text-align: center;font-weight: bold;">Cantidad</td>
+            			    <td style="width: 80px;text-align: center;font-weight: bold;">Montos</td>
             			    <td style="width: 40px;"></td>
             			</tr>
             			<tr>
@@ -199,6 +188,92 @@
                              				 value="#{portafolioController.montoUno}" /></td>
                             <td><p:message for="txtMontoCincoFija" display="icon" /></td>
             			</tr>
+            			<tr>
+            				<td><h:outputLabel value="Operación 6:" style="font-weight: bold;"/></td>
+            				<td>
+            					<p:selectOneMenu id="lstFondoSeisFija" required="true" style="width: 210px;" 
+	                                         	 value="#{portafolioController.selectedFondoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+		                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+		                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+		                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+		                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+		                        </p:selectOneMenu>
+                            </td>
+                            <td><p:inputText id="txtMontoSeisFija" style="width: 80px;" maxlength="10" required="true" 
+                             				 value="#{portafolioController.montoUno}" /></td>
+                            <td><p:message for="txtMontoSeisFija" display="icon" /></td>
+            			</tr>
+            			<tr>
+            				<td><h:outputLabel value="Operación 7:" style="font-weight: bold;"/></td>
+            				<td>
+            					<p:selectOneMenu id="lstFondoSieteFija" required="true" style="width: 210px;" 
+	                                         	 value="#{portafolioController.selectedFondoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+		                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+		                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+		                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+		                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+		                        </p:selectOneMenu>
+                            </td>
+                            <td><p:inputText id="txtMontoSieteFija" style="width: 80px;" maxlength="10" required="true" 
+                             				 value="#{portafolioController.montoUno}" /></td>
+                            <td><p:message for="txtMontoSieteFija" display="icon" /></td>
+            			</tr>
+            			<tr>
+            				<td><h:outputLabel value="Operación 8:" style="font-weight: bold;"/></td>
+            				<td>
+            					<p:selectOneMenu id="lstFondoOchoFija" required="true" style="width: 210px;" 
+	                                         	 value="#{portafolioController.selectedFondoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+		                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+		                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+		                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+		                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+		                        </p:selectOneMenu>
+                            </td>
+                            <td><p:inputText id="txtMontoOchoFija" style="width: 80px;" maxlength="10" required="true" 
+                             				 value="#{portafolioController.montoUno}" /></td>
+                            <td><p:message for="txtMontoOchoFija" display="icon" /></td>
+            			</tr>
+            			<tr>
+            				<td><h:outputLabel value="Operación 9:" style="font-weight: bold;"/></td>
+            				<td>
+            					<p:selectOneMenu id="lstFondoNueveFija" required="true" style="width: 210px;" 
+	                                         	 value="#{portafolioController.selectedFondoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+		                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+		                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+		                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+		                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+		                        </p:selectOneMenu>
+                            </td>
+                            <td><p:inputText id="txtMontoNueveFija" style="width: 80px;" maxlength="10" required="true" 
+                             				 value="#{portafolioController.montoUno}" /></td>
+                            <td><p:message for="txtMontoNueveFija" display="icon" /></td>
+            			</tr>
+            			<tr>
+            				<td><h:outputLabel value="Operación 10:" style="font-weight: bold;"/></td>
+            				<td>
+            					<p:selectOneMenu id="lstFondoDiesFija" required="true" style="width: 210px;" 
+	                                         	 value="#{portafolioController.selectedFondoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
+		                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
+		                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
+		                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
+		                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+		                        </p:selectOneMenu>
+                            </td>
+                            <td><p:inputText id="txtMontoDiesFija" style="width: 80px;" maxlength="10" required="true" 
+                             				 value="#{portafolioController.montoUno}" /></td>
+                            <td><p:message for="txtMontoDiesFija" display="icon" /></td>
+            			</tr>
+            			
                     	<tr>
             			    <td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total :</td>

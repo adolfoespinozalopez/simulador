@@ -63,8 +63,8 @@
 										   itemValue="#{tipo.nbValorGeneral}" itemLabel="#{tipo.nbDescGeneral}" />
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
-                        <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" 
-                        				 styleClass="ordenes ui-state-active" onclick="PF('verOrdenes').show(); PF('notiBar').show();"/>
+                        <p:commandButton process="@this" value="Ver mis ordenes" icon="fa fa-search" style="position: absolute;"
+                        				 styleClass="ordenes ui-state-active" onclick="PF('verOrdenes').show();"/>
                         <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px" >
                         	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2">
                         		<p:column>
@@ -106,7 +106,8 @@
                         	<p:submenu label="Renta Variable" icon="fa fa-flag" >
                         		<p:column>
 	                        		<p:submenu label="Operación" >
-	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" ></p:menuitem>
+	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaVariable}"
+	                        						update=":dlgMensajeVal, :dlgRentaVariable, :frmRentaVariable:panelRentaVariable"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         	</p:submenu>
@@ -328,14 +329,14 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
-                		  widgetVar="manteSpot" resizable="false" width="540" height="420">
+                		  widgetVar="manteSpot" resizable="false" width="540" height="560">
                     <ui:include src="frmSpot.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmSpot" />
                 </p:dialog>
                 
                 <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 
-                		  widgetVar="manteFwd" resizable="false" width="540" height="520">
+                		  widgetVar="manteFwd" resizable="false" width="540" height="600">
                     <ui:include src="frmFwd.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmFwd" />
@@ -349,10 +350,17 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija - Pre Asignación" 
-                		  widgetVar="manteRentaFija" resizable="false" width="560" height="500">
+                		  widgetVar="manteRentaFija" resizable="false" width="560" height="600">
                     <ui:include src="frmRentaFija.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=" :frmRentaFija" />
+                </p:dialog>
+                
+                <p:dialog id="dlgRentaVariable" modal="true" header="Renta Variable - Pre Asignación" 
+                		  widgetVar="manteRentaVariable" resizable="false" width="560" height="600">
+                    <ui:include src="frmRentaVariable.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=" :frmRentaVariable" />
                 </p:dialog>
                 
                 <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 

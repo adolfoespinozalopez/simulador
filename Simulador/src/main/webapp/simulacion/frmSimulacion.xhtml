@@ -13,68 +13,125 @@
                 <ui:include src="/seguridad/frmMenu.xhtml"/>
             </ui:define>
             <ui:define name="content" >
+            	<p:blockUI block=":frmSimulacion:lytExpoFondo" trigger=":frmSimulacion:lstFondo" widgetVar="blkPanel">
+                    Espere mientras se cargan los datos<br /> 
+                    <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
+                </p:blockUI>
+                <p:blockUI block=":frmSimulacion:lytFlujoCaja" trigger=":frmSimulacion:lstFondo" widgetVar="blkPanelCaja">
+                    Espere mientras se cargan los datos<br /> 
+                    <p:graphicImage value="/img/loading.gif" style="width: 32px; height: 32px;"/>
+                </p:blockUI>
+                <h1 class="title-sh">Exposición</h1>
+                <p:separator />
                 <h:form id="frmSimulacion">
+                	<style type="text/css">
+                        .content{height: 650px;}
+                    </style>
                     <p:panel id="panSimulacion">
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
-                        <p:selectOneMenu id="lstFondo" style="width: 180px;" 
+                        <p:selectOneMenu id="lstFondo" style="width: 180px;"
                                          value="#{simulacionController.selectedNombreFondo}" 
                                          valueChangeListener="#{simulacionController.realizarFiltroDeFondo}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{simulacionController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
-                            <p:ajax event="change" update=":frmSimulacion:grdFondo"/>
+                            <p:ajax event="change" update=":frmSimulacion:btnActualizar, :frmSimulacion:grdFondo, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"/>
                         </p:selectOneMenu>
-                        
-                        <p:separator />
-                        
+                        <p:commandButton id="btnActualizar" process="@this" icon="fa fa-refresh" actionListener="#{simulacionController.ejecutaBusqueda}"
+                        				 styleClass="actualizar ui-state-active" value="Actualizar" title="Actualizar"
+                        				 onclick="PF('blkPanel').show();PF('blkPanelCaja').show();" oncomplete="PF('blkPanel').hide();PF('blkPanelCaja').hide();"
+                        				 update=":frmSimulacion:grdFondo, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor" 
+                        				 disabled="#{(simulacionController.selectedNombreFondo =='-1')}" />
                         <p:layout style="min-width:400px;max-height:550px;height:550px;" fullPage="false">
                             <p:layoutUnit position="center" resizable="true" size="600" minSize="700"  
-                                          header="Exposición del Fondo">
-                                <p:dataTable id="grdFondo" value="#{simulacionController.lista}" var="item" 
+                                          header="Exposición del Fondo" id="lytExpoFondo">
+                                <p:dataTable id="grdFondo" value="#{simulacionController.listaExpoFondo}" var="item" 
                                              scrollable="true" scrollHeight="390" resizableColumns="true" 
-                                     emptyMessage="No se encontraron registros que coincidan con los criterios ingresados">
+                                     		 emptyMessage="No se encontraron registros del fondo seleccionado"
+                                     		 selectionMode="single" selection="#{simulacionController.selectedExpoFondo}"
+                                     		 rowKey="#{item.cidExpo}"
+                                     		 rowStyleClass="#{(item.tpTotal == '1')?'total-grid':(item.tpMnemonico == '2')?'suscrip-grid':(item.tpMnemonico == '1')?'mnemo-grid':(item.tpMnemonico == '0')?null:'caja-grid'}">
                                     <p:column headerText="" style="width: 20%;">
-                                        <h:outputText value="#{item.especie}"/>
+                                        <h:outputText value="#{item.nbEspecie}" style="#{(item.tpMnemonico == '1')?'padding-left:10px':'padding:0px'}"/>
                                     </p:column>
                                     <p:column headerText="Monto Total" style="width: 12%;text-align: center;">
-                                        <h:outputText value="#{item.montoTotal}" style="text-align: right;display: block;">
+                                        <h:outputText value="#{item.imMonto}" style="text-align: right;display: block;">
                                             <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column headerText="Particip. (%)" style="white-space:normal;width: 8%;text-align: center;">
-                                        <h:outputText value="#{item.porcenPartic} %" style="text-align: right;display: block;"/>
+                                        <h:outputText value="#{item.pcPartic} #{(item.pcPartic==null)?'':'%'}" style="text-align: right;display: block;"/>
                                     </p:column>
                                     <p:column headerText="PEN" style="width: 13%;text-align: center;">
-                                        <h:outputText value="#{item.montoSoles}">
+                                        <h:outputText value="#{item.imMontoPen}">
                                             <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column headerText="Particip. (%)" style="white-space:normal;width: 8%;text-align: center;">
-                                        <h:outputText value="#{item.porcenParticSoles} %" style="text-align: right;display: block;"/>
+                                        <h:outputText value="#{item.pcParticPen} #{(item.pcParticPen==null)?'':'%'}" style="text-align: right;display: block;"/>
                                     </p:column>
                                     <p:column headerText="USD" style="width: 13%;text-align: center;">
-                                        <h:outputText value="#{item.montoDolares}" style="text-align: right;display: block;">
+                                        <h:outputText value="#{item.imMontoUsd}" style="text-align: right;display: block;">
                                             <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column headerText="Particip. (%)" style="white-space:normal;width: 8%;text-align: center;">
-                                        <h:outputText value="#{item.porcenParticDolares} %" style="text-align: right;display: block;"/>
+                                        <h:outputText value="#{item.pcParticUsd} #{(item.pcParticUsd==null)?'':'%'}" style="text-align: right;display: block;"/>
                                     </p:column>
                                     <p:column headerText="Duration" style="width: 10%;text-align: center;">
-                                        <h:outputText value="#{item.montoDuration}" style="text-align: right;display: block;">
+                                        <h:outputText value="#{item.imDuration}" style="text-align: right;display: block;">
                                             <f:convertNumber groupingUsed="true" pattern="##0.00" maxFractionDigits="2"/>
                                         </h:outputText>
                                     </p:column>
                                     <p:column headerText="YTM  (%)" style="width: 8%;text-align: center;">
-                                        <h:outputText value="#{item.porcenYtm} %" style="text-align: right;display: block;"/>
+                                        <h:outputText value="#{item.pcYtm} #{(item.pcYtm==null)?'':'%'}" style="text-align: right;display: block;"/>
                                     </p:column>
                                 </p:dataTable>
+                                
+                                <p:dataTable id="grdEmisor" value="#{simulacionController.listaEmisores}" var="item" 
+                                             resizableColumns="true" 
+                                     		 emptyMessage="No se encontraron registros del fondo seleccionado"
+                                     		 selectionMode="single" selection="#{simulacionController.selectedEmisor}"
+                                     		 rowKey="#{item.cidExpo}"
+                                     		 rowStyleClass="#{(item.tpTotal == '1')?'total-grid':(item.tpSubtitulo == '1')?'subtitle':null}">
+                                    <p:column headerText="Emisores" style="width: 20%;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.nbEspecie}" />
+                                    </p:column>
+                                    <p:column headerText="Ahorros" style="width: 13%;text-align: center;">
+                                        <h:outputText value="#{item.imMonto}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="DPF" style="width: 13%;">
+                                    	<h:outputText value="#{item.imMontoPen}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="CD's / PC's" style="width: 13%;">
+                                    	<h:outputText value="#{item.imMontoUsd}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Bonos" style="width: 13%;">
+                                    	<h:outputText value="#{item.imDuration}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Total" style="width: 13%;" styleClass="columnaCel">
+                                    	<h:outputText value="#{item.toTotalEmi}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Exposición" style="width: 13%;">
+                                        <h:outputText value="#{item.pcExposicion} #{(item.pcExposicion==null)?'':'%'}" />
+                                    </p:column>
+                                </p:dataTable>     		 
                             </p:layoutUnit>
                             <p:layoutUnit position="east" resizable="true" collapsible="true" effect="drop" 
-                            				header="Flujo de Caja" maxSize="500" size="400">
+                            			  header="Flujo de Caja" maxSize="500" size="400" id="lytFlujoCaja">
                             	<p:dataTable id="grdCaja" value="#{simulacionController.listaCaja}" var="item" 
                                              resizableColumns="true" style="width:100%;" 
-                                     		 emptyMessage="No se encontraron registros">
+                                     		 emptyMessage="No se encontraron registros del fondo seleccionado">
                                      <p:columnGroup type="header">
 							            <p:row>
 							                <p:column colspan="1" headerText="11" />

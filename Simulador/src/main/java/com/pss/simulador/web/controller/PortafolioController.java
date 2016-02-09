@@ -805,12 +805,12 @@ public class PortafolioController extends GenericController{
 	
 	public void validarRentaFija(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedInfo == null) {
-            mensajeValida = "Debe seleccionar un registro.";
-            context.execute("PF('msjVal').show()");
-        }else{
-        	context.execute("PF('manteRentaFija').show()");
-        }
+		context.execute("PF('manteRentaFija').show()");
+	}
+	
+	public void validarRentaVariable(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("PF('manteRentaVariable').show()");
 	}
 	
 	public void guardaOpCancelarDeposito(){

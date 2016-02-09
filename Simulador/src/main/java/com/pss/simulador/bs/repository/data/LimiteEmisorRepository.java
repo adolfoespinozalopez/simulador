@@ -1,7 +1,5 @@
 package com.pss.simulador.bs.repository.data;
 
-import java.util.List;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +13,7 @@ import com.pss.simulador.bs.domain.LimitesEmisor;
 @Repository
 public interface LimiteEmisorRepository extends CrudRepository<LimitesEmisor, Integer> {
 
-	@Query(value = "SELECT g FROM LimitesEmisor g WHERE g.cdIdlimite = :cdIdlimite AND g.stEstado = :estado")	
-	public abstract List<LimitesEmisor> findByPK(@Param("cdIdlimite") Integer cdIdlimite, @Param("estado") String strStEstado);
+	@Query(value = "SELECT g FROM LimitesEmisor g WHERE g.fondo.cdIdfondo = :cdIdfondo AND g.emisor.cdIdemisor = :cdIdemisor AND g.stEstado = :estado")	
+	public abstract LimitesEmisor findByFondoAndEmisor(@Param("cdIdfondo") Integer idFondo, @Param("cdIdemisor") Integer idEmisor, @Param("estado") String strStEstado);
 
 }
