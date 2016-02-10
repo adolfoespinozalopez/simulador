@@ -1,9 +1,13 @@
 package com.pss.simulador.bs.domain;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,6 +25,8 @@ public class Infoport implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
+	@SequenceGenerator(name = "secInfoPort", sequenceName = "BBVATESOR.SEQ_INFOPORT", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secInfoPort")
 	@Column(name = "CD_IDINFOPORT", nullable = false)
 	private Integer cdIdinfoport;
 	@Column(name = "NB_NOM_FONDO", length = 40)
@@ -67,7 +73,7 @@ public class Infoport implements java.io.Serializable {
 	@Column(name = "IM_TOT_CTAS_PAGAR")
 	private Double imTotCtasPagar;
 	@Column(name = "NU_PERIODO")
-	private Integer nuPeriodo;
+	private Double nuPeriodo;
 	@Column(name = "IM_YTM")
 	private Double imYtm;
 	@Column(name = "IM_DURAC_NORM")
@@ -85,7 +91,7 @@ public class Infoport implements java.io.Serializable {
 	@Column(name = "NB_MNEMONICO", length = 15)
 	private String nbMnemonico;
 	@Column(name = "NU_NUM_DIAS_VCTO")
-	private Integer nuNumDiasVcto;
+	private Double nuNumDiasVcto;
 	@Column(name = "FH_FECVCTO_SGT_CUP")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecvctoSgtCup;
@@ -103,7 +109,7 @@ public class Infoport implements java.io.Serializable {
 	@Column(name = "IM_VALOR_POR_YTM")
 	private Double imValorPorYtm;
 	@Column(name = "NU_DIA_PARA_VENC")
-	private Integer nuDiaParaVenc;
+	private Double nuDiaParaVenc;
 	@Column(name = "ST_ESTADO_PORT", length = 9)
 	private String stEstadoPort;
 	@Column(name = "ST_CONDICION")
@@ -304,11 +310,11 @@ public class Infoport implements java.io.Serializable {
 		this.imTotCtasPagar = imTotCtasPagar;
 	}
 
-	public Integer getNuPeriodo() {
+	public Double getNuPeriodo() {
 		return nuPeriodo;
 	}
 
-	public void setNuPeriodo(Integer nuPeriodo) {
+	public void setNuPeriodo(Double nuPeriodo) {
 		this.nuPeriodo = nuPeriodo;
 	}
 
@@ -376,11 +382,11 @@ public class Infoport implements java.io.Serializable {
 		this.nbMnemonico = nbMnemonico;
 	}
 
-	public Integer getNuNumDiasVcto() {
+	public Double getNuNumDiasVcto() {
 		return nuNumDiasVcto;
 	}
 
-	public void setNuNumDiasVcto(Integer nuNumDiasVcto) {
+	public void setNuNumDiasVcto(Double nuNumDiasVcto) {
 		this.nuNumDiasVcto = nuNumDiasVcto;
 	}
 
@@ -440,11 +446,11 @@ public class Infoport implements java.io.Serializable {
 		this.imValorPorYtm = imValorPorYtm;
 	}
 
-	public Integer getNuDiaParaVenc() {
+	public Double getNuDiaParaVenc() {
 		return nuDiaParaVenc;
 	}
 
-	public void setNuDiaParaVenc(Integer nuDiaParaVenc) {
+	public void setNuDiaParaVenc(Double nuDiaParaVenc) {
 		this.nuDiaParaVenc = nuDiaParaVenc;
 	}
 

@@ -35,7 +35,10 @@ public class GeneralManagerImpl implements GeneralManager {
 	public List<General> findByDomain(String domain) {
 		return generalRepository.findByDomain(domain,Constante.ESTADO_ACTIVO);
 	}
-
+	public List<General> findByDomain(String domain, String stEstado) {
+		return generalRepository.findByDomain(domain,stEstado);
+	}
+	
 	public List<String> findAllDomainsActive() {
 		return generalRepository.findAllDomainsActive();
 	}

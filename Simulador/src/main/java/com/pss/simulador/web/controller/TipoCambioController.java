@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.faces.event.ComponentSystemEvent;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class TipoCambioController extends GenericController {
 	public TipoCambioController() {
 	}
 
-	@PostConstruct
-	public void inicializar() {
+	
+	public void inicializar(ComponentSystemEvent event) {
 		this.listarTipoCambio();
 	}
 	

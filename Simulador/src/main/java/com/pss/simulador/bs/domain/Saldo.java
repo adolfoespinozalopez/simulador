@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +23,8 @@ public class Saldo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
+	@SequenceGenerator(name = "secSaldo", sequenceName = "BBVATESOR.SEQ_SALDO", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secSaldo")
 	@Column(name = "CD_IDSALDO", nullable = false)
 	private Integer cdIdsaldo;
 	@Column(name = "CD_COD_FONDO", length = 4)

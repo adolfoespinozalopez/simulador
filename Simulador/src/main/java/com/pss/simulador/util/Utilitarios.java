@@ -2,6 +2,7 @@ package com.pss.simulador.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -105,4 +106,52 @@ public class Utilitarios {
     	return null;
     }
     
+    
+    public static Double parseToDouble(Object obj){
+    	try {
+			return obj!=null?(Double)obj:null;
+		} catch (Exception e) {
+			try {
+				return Double.parseDouble(String.valueOf(obj));
+			} catch (Exception e2) {
+				logger.error(e2,e2);
+			}
+		}
+    	return null;
+    }
+    
+    public static Integer parseToInteger(Object obj){
+    	try {
+    		return obj!=null?(Integer)obj:null;
+		} catch (Exception e) {
+			try {
+				return Integer.parseInt(String.valueOf(obj));
+			} catch (Exception e2) {
+				logger.error(e2,e2);
+			}
+		}
+    	return null;
+    }
+    
+    public static String parseToString(Object obj){
+    	return (obj!=null)?String.valueOf(obj).trim():null;
+    }
+    
+    public static String parseDoubleToString(Object obj){
+    	try {
+    		return (obj!=null)?String.format("%.0f", obj):null;
+		} catch (Exception e) {
+			logger.error(e,e);
+		}
+    	return null;
+    }
+    
+    public static Date parseToDate(Object obj){
+    	try {
+    		return (obj!=null)?(Date)obj:null;
+		} catch (Exception e) {
+			logger.error(e,e);
+		}
+    	return null;
+    }
 }

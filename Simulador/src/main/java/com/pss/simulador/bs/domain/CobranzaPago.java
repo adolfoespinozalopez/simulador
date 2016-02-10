@@ -1,9 +1,13 @@
 package com.pss.simulador.bs.domain;
 
 import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,6 +24,8 @@ public class CobranzaPago implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
+	@SequenceGenerator(name = "secCobPag", sequenceName = "BBVATESOR.SEQ_COBRANZAPAGO", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secCobPag")
 	@Column(name = "CD_IDCOBRANZAPAGO", nullable = false)
 	private Integer cdIdcobranzapago;
 	@Column(name = "CD_COD_FONDO", length = 4)
@@ -44,7 +50,7 @@ public class CobranzaPago implements java.io.Serializable {
 	private String cdSigla;
 	@Column(name="ST_ESTADO")
 	private String stEstado;
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="FH_FEC_IMPORTA")
 	private Date fhFecImporta;
 	

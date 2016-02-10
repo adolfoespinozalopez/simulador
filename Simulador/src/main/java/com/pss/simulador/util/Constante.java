@@ -44,6 +44,7 @@ public class Constante {
     	public static final String CONTRAPARTE = "CONTRAPARTE";
     	public static final String ESTADO_ORDEN = "ESTADOORDEN";
     	public static final String ESPECIE = "ESPECIE";
+    	public static final String RUTAPROCESOCARGA = "RUTAPROCESOCARGA";
     }
     
     /**
@@ -88,5 +89,25 @@ public class Constante {
 		public static final String MSJ_REGISTRO_FAIL = "Ocurrió un error al registrar los datos.";
 		public static final String MSJ_ACTUALIZACION_FAIL = "Ocurrió un error al actualizar los datos.";
 		public static final String MSJ_ELIMINACION_FAIL = "Ocurrió un error al eliminar los datos.";
+    }
+    public static class EstadoProceso{
+    	public static final String EN_PROCESO = "P";
+    	public static final String ERRADO = "E";
+    	public static final String TERMINADO = "T";
+    }
+    public static class Especie{
+    	public static final String DESC_INSTRUMENTO_COBERTURA = "Instrum.Coberturad";
+    	public static final String DESC_LETRAS_DEL_TESORO = "Letras del Tesoro";
+    	public static final String DESC_CERTIFICADOS = "Certificados";
+    	public static final String DESC_PAPELES_COMERCIALES = "Papeles Comerciale";
+    	public static final String DESC_DEPOSITOS_PLAZO = "Depositos a plazo";
+    	public static final String DESC_DEPOSITOS_DE_AHORRO = "Depositos de ahorr";
+    	
+    	public static final String DESC_ACCIONES = "Acciones";
+    }
+    public static class InfoPortTipoOperacion{
+    	public static final String CODIGO_M = "M";
+    	public static final String CODIGO_V = "V";
+    	public static final String CODIGO_F = "F";
     }
 }
