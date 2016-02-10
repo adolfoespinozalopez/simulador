@@ -1026,3 +1026,73 @@ ALTER TABLE BBVATESOR.TSI009_EXPOFONDO ADD CONSTRAINT  ISI009P1_EXPOFONDO PRIMAR
 
 DROP SEQUENCE BBVATESOR.SEQ_EXPOFONDO;
 CREATE SEQUENCE BBVATESOR.SEQ_EXPOFONDO INCREMENT BY 1 START WITH 1;
+
+
+/*
+ *******************************************
+ *  TABLAS CARGA ARCHIVO
+ *******************************************
+*/
+
+create table BBVATESOR.TSI016_PROCESOCARGA
+(
+  cd_idproceso      NUMBER not null,
+  fh_fec_ini        DATE,
+  fh_fec_fin        DATE,
+  nr_reg_leido      NUMBER,
+  nr_reg_errado     NUMBER,
+  st_estado_proceso CHAR(1),
+  st_estado         CHAR(1),
+  fh_fec_creacion   DATE,
+  cd_usu_creacion   VARCHAR2(10),
+  fh_fec_modifica   DATE,
+  cd_usu_modifica   VARCHAR2(10),
+  fh_fec_elimina    DATE,
+  cd_usu_elimina    VARCHAR2(10),
+  fh_fec_importa    DATE
+);
+
+-- Add comments to the columns 
+comment on column BBVATESOR.TSI016_PROCESOCARGA.cd_idproceso
+  is 'ID DE PROCESO DE CARGA';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.fh_fec_ini
+  is 'FECHA INCIO PROCESO';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.fh_fec_fin
+  is 'FECHA FIN PROCESO';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.nr_reg_leido
+  is 'NUMERO DE REGISTROS LEIDOS';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.nr_reg_errado
+  is 'NUMERO DE REGISTROS ERRADOS';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.st_estado_proceso
+  is 'P-EN PROCESO T-TERMINADO E-ERRADO';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.st_estado
+  is '1-ACTIVO 0-INACTIVO';
+comment on column BBVATESOR.TSI016_PROCESOCARGA.fh_fec_importa
+  is 'FECHA DE IMPORTACION yyyyMMdd';
+
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table BBVATESOR.TSI016_PROCESOCARGA
+  add constraint PK_PROCESOCARGA primary key (CD_IDPROCESO);
+
+create table BBVATESOR.TSI017_PROCESOLOG
+(
+  cd_idlog       NUMBER not null,
+  cd_idproceso   NUMBER,
+  fh_fecreg      DATE,
+  tp_tipomensaje VARCHAR2(10),
+  ms_mensaje     VARCHAR2(200)
+);
+-- Add comments to the columns 
+comment on column BBVATESOR.TSI017_PROCESOLOG.cd_idlog
+  is 'ID LOG';
+comment on column BBVATESOR.TSI017_PROCESOLOG.cd_idproceso
+  is 'ID PROCESO';
+comment on column BBVATESOR.TSI017_PROCESOLOG.fh_fecreg
+  is 'FECHA DE REGISTRO DE LOG';
+comment on column BBVATESOR.TSI017_PROCESOLOG.tp_tipomensaje
+  is 'TIPO DE MENSAJE LOG';
+comment on column BBVATESOR.TSI017_PROCESOLOG.ms_mensaje
+  is 'CONTENIDO MENSAJE';
+-- Create/Recreate primary, unique and foreign key constraints 
+alter table BBVATESOR.TSI017_PROCESOLOG
+  add constraint PK_PROCESOLOG primary key (CD_IDLOG);
