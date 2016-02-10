@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id="frmCargaArchivo" enctype="multipart/form-data" >
+        <p:panel id="panelCargaArchivo" header="Carga de Archivo" >
+            <table style="width: 100%;">
+                <tbody>
+                    <tr>
+                        <td>
+                        	<p:fileUpload value="#{procesoCargaController.filePlantilla}" mode="simple" skinSimple="true"/>
+                        </td>
+                     </tr>  
+                </tbody>
+            </table>
+        </p:panel>
+        <p:toolbar>
+            <p:toolbarGroup align="right">
+                <p:commandButton value="Ejecutar Proceso de Carga" icon="ui-icon-disk" ajax="false"
+                				 action="#{procesoCargaController.ejecutarProcesoCarga}"
+                                  style="margin-right:10px" />
+                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" >
+                	<p:ajax update="dlgProceso" resetValues="true" />
+                </p:commandButton>
+            </p:toolbarGroup>
+        </p:toolbar>
+    </h:form>
+</ui:composition>

@@ -33,7 +33,8 @@
 	</bean>
 	
 	<!-- definir entityManagerFactory -->
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" >
+		<property name="jtaDataSource" ref="dataSource" />
 		<property name="persistenceUnitName" value="simuladorData"></property>
 		<property name="jpaVendorAdapter" ref="jpaVendorAdapter" />
 	</bean>
@@ -41,6 +42,7 @@
 	<!-- definir transactionManager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
 	<!-- habilitar transactionManager -->

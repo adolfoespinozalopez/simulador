@@ -12,6 +12,7 @@
                 <ui:include src="/seguridad/frmMenu.xhtml"/>
             </ui:define>
             <ui:define name="content" >
+            	<f:event listener="#{tipoCambioController.inicializar}" type="preRenderView"></f:event>
                 <h1 class="title-sh">Tipo de Cambio</h1>
                 <p:separator />
                 <h:form id="frmGestionarTipoCambio" onkeypress="if (event.keyCode == 13) return false;">
