@@ -381,13 +381,17 @@ alter table bbvatesor.TSI012_LIMFONDOESPECIE
 
 CREATE TABLE bbvatesor.TSI013_Orden (
 	cd_idorden  INTEGER  NOT NULL ,
-	cd_idcontraparte  INTEGER  NULL ,
 	cd_idfondo  INTEGER  NULL ,
 	cd_idemisor  INTEGER  NULL ,
-	cd_idTipoOperacion  INTEGER  NULL ,
+	cd_idcontraparte  INTEGER  NULL ,
+	cd_idOperacion  INTEGER  NULL ,
 	cd_idEspecie  INTEGER  NULL ,
+	cd_idintermediario  INTEGER  NULL ,
+	cd_idlugar  INTEGER  NULL ,
+	cd_idpais   INTEGER  NULL ,
+	cd_idtipmoneda  INTEGER  NULL ,
+	tp_tipOperacion CHAR(1) NULL ,
 	fh_fec_efectividad  DATE  NULL ,
-	tp_tipmoneda  INTEGER  NULL ,
 	im_tasa  NUMBER  NULL ,
 	nu_plazo_dia  NUMBER  NULL ,
 	fh_fec_inicio  DATE  NULL ,
@@ -397,15 +401,17 @@ CREATE TABLE bbvatesor.TSI013_Orden (
 	im_tasa_precancel  NUMBER  NULL ,
 	im_monto_final  NUMBER  NULL ,
 	im_tipoCambioSpot  NUMBER  NULL ,
-	tp_tipsettlement  INTEGER  NULL ,
+	tp_moneOperacion CHAR(1) NULL ,
+	tp_forward  CHAR(1)  NULL ,
+	tp_apertura  CHAR(1)  NULL ,
+	tp_operacuenta  CHAR(1)  NULL ,
 	nu_puntofwd  NUMBER  NULL ,
 	im_tipoCambioFwd  NUMBER  NULL ,
-	st_estado  CHAR(1)  NULL ,
-	tp_tipoDeposito  VARCHAR2(20)  NULL ,
 	nb_mnemonico  VARCHAR(15)  NULL ,
 	im_precio_limpio  NUMBER  NULL ,
 	im_precio_sucio  NUMBER  NULL ,
 	im_precio_referencia  NUMBER  NULL ,
+	st_estado  CHAR(1)  NULL ,
 	fh_fec_creacion  DATE  NULL ,
 	cd_usu_creacion  VARCHAR2(10)  NULL ,
 	fh_fec_modifica  DATE  NULL ,
@@ -424,9 +430,17 @@ CREATE INDEX ISI013S2_Orden ON bbvatesor.TSI013_Orden (cd_idfondo  ASC);
 
 CREATE INDEX ISI013S3_Orden ON bbvatesor.TSI013_Orden (cd_idemisor  ASC);
 
-CREATE INDEX ISI013S4_Orden ON bbvatesor.TSI013_Orden (cd_idTipoOperacion  ASC);
+CREATE INDEX ISI013S4_Orden ON bbvatesor.TSI013_Orden (cd_idOperacion  ASC);
 
 CREATE INDEX ISI013S5_Orden ON bbvatesor.TSI013_Orden (cd_idEspecie  ASC);
+
+CREATE INDEX ISI013S6_Orden ON bbvatesor.TSI013_Orden (cd_idintermediario  ASC);
+
+CREATE INDEX ISI013S7_Orden ON bbvatesor.TSI013_Orden (cd_idlugar  ASC);
+
+CREATE INDEX ISI013S8_Orden ON bbvatesor.TSI013_Orden (cd_idpais  ASC);
+
+CREATE INDEX ISI013S9_Orden ON bbvatesor.TSI013_Orden (cd_idtipmoneda  ASC);
 
 CREATE TABLE bbvatesor.TSI014_OrdenEstado (
 	cd_idestOrden  INTEGER  NOT NULL ,
@@ -526,21 +540,33 @@ ALTER TABLE bbvatesor.TSI012_LimFondoEspecie
 
 ALTER TABLE bbvatesor.TSI012_LimFondoEspecie
   ADD (CONSTRAINT  R008012 FOREIGN KEY (cd_idfondo) REFERENCES bbvatesor.TSI008_Fondo(cd_idfondo));
-
+  
 ALTER TABLE bbvatesor.TSI013_Orden
   ADD (CONSTRAINT  R008013 FOREIGN KEY (cd_idfondo) REFERENCES bbvatesor.TSI008_Fondo(cd_idfondo));
+
+ALTER TABLE bbvatesor.TSI013_Orden
+  ADD (CONSTRAINT  R010013 FOREIGN KEY (cd_idemisor) REFERENCES bbvatesor.TSI010_Emisor(cd_idemisor));
   
 ALTER TABLE bbvatesor.TSI013_Orden
   ADD (CONSTRAINT  R0050131 FOREIGN KEY (cd_idcontraparte) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
 
 ALTER TABLE bbvatesor.TSI013_Orden
-  ADD (CONSTRAINT  R0050132 FOREIGN KEY (cd_idTipoOperacion) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
+  ADD (CONSTRAINT  R0050132 FOREIGN KEY (cd_idOperacion) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
 
 ALTER TABLE bbvatesor.TSI013_Orden
   ADD (CONSTRAINT  R0050133 FOREIGN KEY (cd_idEspecie) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
   
 ALTER TABLE bbvatesor.TSI013_Orden
-  ADD (CONSTRAINT  R010013 FOREIGN KEY (cd_idemisor) REFERENCES bbvatesor.TSI010_Emisor(cd_idemisor));
+  ADD (CONSTRAINT  R0050134 FOREIGN KEY (cd_idintermediario) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
+  
+ALTER TABLE bbvatesor.TSI013_Orden
+  ADD (CONSTRAINT  R0050135 FOREIGN KEY (cd_idlugar) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
+  
+ALTER TABLE bbvatesor.TSI013_Orden
+  ADD (CONSTRAINT  R0050136 FOREIGN KEY (cd_idpais) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
+   
+ALTER TABLE bbvatesor.TSI013_Orden
+  ADD (CONSTRAINT  R0050137 FOREIGN KEY (cd_idtipmoneda) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
 
 ALTER TABLE bbvatesor.TSI014_OrdenEstado
   ADD (CONSTRAINT  R005014 FOREIGN KEY (cd_idgeneral) REFERENCES bbvatesor.TSI005_General(cd_idgeneral));
@@ -608,27 +634,27 @@ values (6, 'TIPOEMISOR', 'Otros', 'Otros', '1', to_date('25-01-2016', 'dd-mm-yyy
 
 --TIPOAPERTURA
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (7, 'TIPOAPERTURA', 'Normal', 'Normal', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (7, 'TIPOAPERTURA', 'Normal', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (8, 'TIPOAPERTURA', 'Coberturado', 'Coberturado', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (8, 'TIPOAPERTURA', 'Coberturado', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --TIPOOPERACIONFWD
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (9, 'TIPOOPERACIONFWD', 'FULL', 'FULL', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (9, 'TIPOOPERACIONFWD', 'FULL', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (10, 'TIPOOPERACIONFWD', 'NDF', 'NDF', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (10, 'TIPOOPERACIONFWD', 'NDF', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
---OPERACION
+--MONEDAOPERACION
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (11, 'OPERACION', 'COMPRA', 'COMPRA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (11, 'MONEDAOPERACION', 'COMPRA', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (12, 'OPERACION', 'VENTA', 'VENTA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (12, 'MONEDAOPERACION', 'VENTA', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --TIPOOPERACIONCUENTA
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (13, 'TIPOOPERACIONCUENTA', 'ABONO', 'ABONO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (13, 'TIPOOPERACIONCUENTA', 'ABONO', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (14, 'TIPOOPERACIONCUENTA', 'CARGO', 'CARGO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (14, 'TIPOOPERACIONCUENTA', 'CARGO', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --ESPECIE
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
@@ -715,160 +741,201 @@ values (51, 'ESTADOORDEN', 'Enviado', '4', '1', to_date('28-01-2016', 'dd-mm-yyy
 
 --BROKERS
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (52, 'BROKERS', 'CREDIBOLSA SAB', 'CREDIBOLSA SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (52, 'BROKERS', 'CREDIBOLSA SAB', 'CREDIBOLSA SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (53, 'BROKERS', 'LEK SECURITIES', 'LEK SECURITIES', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (53, 'BROKERS', 'LEK SECURITIES', 'LEK SECURITIES', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (54, 'BROKERS', 'INTELIGO', 'INTELIGO', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (54, 'BROKERS', 'INTELIGO', 'INTELIGO', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (55, 'BROKERS', 'MGS SAB', 'MGS SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (55, 'BROKERS', 'MGS SAB', 'MGS SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (56, 'BROKERS', 'SCOTIA SAB', 'SCOTIA SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (56, 'BROKERS', 'SCOTIA SAB', 'SCOTIA SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (57, 'BROKERS', 'SEMINARIO SAB', 'SEMINARIO SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (57, 'BROKERS', 'SEMINARIO SAB', 'SEMINARIO SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (58, 'BROKERS', 'COMPASS GROUP SAB', 'COMPASS GROUP SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (58, 'BROKERS', 'COMPASS GROUP SAB', 'COMPASS GROUP SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (59, 'BROKERS', 'BTG Pactual Perú', 'BTG Pactual Perú', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (59, 'BROKERS', 'BTG Pactual Perú', 'BTG Pactual Perú', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (60, 'BROKERS', 'LARRAIN PERU SAB', 'LARRAIN PERU SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (60, 'BROKERS', 'LARRAIN PERU SAB', 'LARRAIN PERU SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (61, 'BROKERS', 'LARRAIN VIAL CHILE', 'LARRAIN VIAL CHILE', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (61, 'BROKERS', 'LARRAIN VIAL CHILE', 'LARRAIN VIAL CHILE', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (62, 'BROKERS', 'CONTINENTAL SAB', 'CONTINENTAL SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (62, 'BROKERS', 'CONTINENTAL SAB', 'CONTINENTAL SAB', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 
 --LUGAR_NEGOCIACION
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (63, 'LUGAR_NEGOCIACION', 'O.T.C.', '01', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (63, 'LUGAR_NEGOCIACION', 'O.T.C.', '01', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (64, 'LUGAR_NEGOCIACION', 'MERCADO CENTRALIZADO', '02', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (64, 'LUGAR_NEGOCIACION', 'MERCADO CENTRALIZADO', '02', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 
 --PAIS_NEGOCIACION
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (65, 'PAIS_NEGOCIACION', 'PERU', '001', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (65, 'PAIS_NEGOCIACION', 'PERU', '001', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (66, 'PAIS_NEGOCIACION', 'U.S.A.', '002', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (66, 'PAIS_NEGOCIACION', 'U.S.A.', '002', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (67, 'PAIS_NEGOCIACION', 'ALEMANIA', '005', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (67, 'PAIS_NEGOCIACION', 'ALEMANIA', '005', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (68, 'PAIS_NEGOCIACION', 'ARABIA SAUDITA', '010', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (68, 'PAIS_NEGOCIACION', 'ARABIA SAUDITA', '010', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (69, 'PAIS_NEGOCIACION', 'BELGICA', '011', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (69, 'PAIS_NEGOCIACION', 'BELGICA', '011', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (70, 'PAIS_NEGOCIACION', 'ARGENTINA', '012', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (70, 'PAIS_NEGOCIACION', 'ARGENTINA', '012', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (71, 'PAIS_NEGOCIACION', 'AUSTRALIA', '013', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (71, 'PAIS_NEGOCIACION', 'AUSTRALIA', '013', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (72, 'PAIS_NEGOCIACION', 'AUSTRIA', '014', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (72, 'PAIS_NEGOCIACION', 'AUSTRIA', '014', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (73, 'PAIS_NEGOCIACION', 'BAHAMAS', '015', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (73, 'PAIS_NEGOCIACION', 'BAHAMAS', '015', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (74, 'PAIS_NEGOCIACION', 'BARBADOS', '018', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (74, 'PAIS_NEGOCIACION', 'BARBADOS', '018', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (75, 'PAIS_NEGOCIACION', 'BELIZE', '019', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (75, 'PAIS_NEGOCIACION', 'BELIZE', '019', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (76, 'PAIS_NEGOCIACION', 'BERMUDAS', '022', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (76, 'PAIS_NEGOCIACION', 'BERMUDAS', '022', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (77, 'PAIS_NEGOCIACION', 'BOLIVIA', '024', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (77, 'PAIS_NEGOCIACION', 'BOLIVIA', '024', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (78, 'PAIS_NEGOCIACION', 'BRASIL', '026', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (78, 'PAIS_NEGOCIACION', 'BRASIL', '026', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (79, 'PAIS_NEGOCIACION', 'BULGARIA', '028', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (79, 'PAIS_NEGOCIACION', 'BULGARIA', '028', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (80, 'PAIS_NEGOCIACION', 'CANADA', '034', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (80, 'PAIS_NEGOCIACION', 'CANADA', '034', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (81, 'PAIS_NEGOCIACION', 'CHILE', '037', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (81, 'PAIS_NEGOCIACION', 'CHILE', '037', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (82, 'PAIS_NEGOCIACION', 'CHINA', '038', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (82, 'PAIS_NEGOCIACION', 'CHINA', '038', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (83, 'PAIS_NEGOCIACION', 'COLOMBIA', '040', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (83, 'PAIS_NEGOCIACION', 'COLOMBIA', '040', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (84, 'PAIS_NEGOCIACION', 'COSTA RICA', '044', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (84, 'PAIS_NEGOCIACION', 'COSTA RICA', '044', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (85, 'PAIS_NEGOCIACION', 'CUBA', '047', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (85, 'PAIS_NEGOCIACION', 'CUBA', '047', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (86, 'PAIS_NEGOCIACION', 'DINAMARCA', '048', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (86, 'PAIS_NEGOCIACION', 'DINAMARCA', '048', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (87, 'PAIS_NEGOCIACION', 'DOMINICA', '050', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (87, 'PAIS_NEGOCIACION', 'DOMINICA', '050', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (88, 'PAIS_NEGOCIACION', 'ECUADOR', '051', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (88, 'PAIS_NEGOCIACION', 'ECUADOR', '051', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (89, 'PAIS_NEGOCIACION', 'EL SALVADOR', '054', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (89, 'PAIS_NEGOCIACION', 'EL SALVADOR', '054', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (90, 'PAIS_NEGOCIACION', 'ESPAÑA', '057', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (90, 'PAIS_NEGOCIACION', 'ESPAÑA', '057', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (91, 'PAIS_NEGOCIACION', 'FILIPINAS', '060', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (91, 'PAIS_NEGOCIACION', 'FILIPINAS', '060', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (92, 'PAIS_NEGOCIACION', 'FINLANDIA', '061', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (92, 'PAIS_NEGOCIACION', 'FINLANDIA', '061', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (93, 'PAIS_NEGOCIACION', 'FRANCIA', '062', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (93, 'PAIS_NEGOCIACION', 'FRANCIA', '062', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (94, 'PAIS_NEGOCIACION', 'GRECIA', '067', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (94, 'PAIS_NEGOCIACION', 'GRECIA', '067', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (95, 'PAIS_NEGOCIACION', 'GUATEMALA', '068', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (95, 'PAIS_NEGOCIACION', 'GUATEMALA', '068', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (96, 'PAIS_NEGOCIACION', 'HAITI', '073', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (96, 'PAIS_NEGOCIACION', 'HAITI', '073', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (97, 'PAIS_NEGOCIACION', 'HOLANDA', '074', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (97, 'PAIS_NEGOCIACION', 'HOLANDA', '074', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (98, 'PAIS_NEGOCIACION', 'HONDURAS', '075', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (98, 'PAIS_NEGOCIACION', 'HONDURAS', '075', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (99, 'PAIS_NEGOCIACION', 'HUNGRIA', '076', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (99, 'PAIS_NEGOCIACION', 'HUNGRIA', '076', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (100, 'PAIS_NEGOCIACION', 'IRLANDIA', '084', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (100, 'PAIS_NEGOCIACION', 'IRLANDIA', '084', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (101, 'PAIS_NEGOCIACION', 'ISRAEL', '088', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (101, 'PAIS_NEGOCIACION', 'ISRAEL', '088', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (102, 'PAIS_NEGOCIACION', 'ITALIA', '089', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (102, 'PAIS_NEGOCIACION', 'ITALIA', '089', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (103, 'PAIS_NEGOCIACION', 'JAMAICA', '091', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (103, 'PAIS_NEGOCIACION', 'JAMAICA', '091', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (104, 'PAIS_NEGOCIACION', 'JAPON', '092', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (104, 'PAIS_NEGOCIACION', 'JAPON', '092', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (105, 'PAIS_NEGOCIACION', 'OTROS PAISES', '099', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (105, 'PAIS_NEGOCIACION', 'OTROS PAISES', '099', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (106, 'PAIS_NEGOCIACION', 'LIECHTENSTEIN', '100', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (106, 'PAIS_NEGOCIACION', 'LIECHTENSTEIN', '100', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (107, 'PAIS_NEGOCIACION', 'LUXEMBURGO', '101', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (107, 'PAIS_NEGOCIACION', 'LUXEMBURGO', '101', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (108, 'PAIS_NEGOCIACION', 'MEXICO', '111', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (108, 'PAIS_NEGOCIACION', 'MEXICO', '111', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (109, 'PAIS_NEGOCIACION', 'NICARAGUA', '119', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (109, 'PAIS_NEGOCIACION', 'NICARAGUA', '119', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (110, 'PAIS_NEGOCIACION', 'NORUEGA', '122', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (110, 'PAIS_NEGOCIACION', 'NORUEGA', '122', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (111, 'PAIS_NEGOCIACION', 'NUEVA ZELANDA', '123', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (111, 'PAIS_NEGOCIACION', 'NUEVA ZELANDA', '123', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (112, 'PAIS_NEGOCIACION', 'PANAMA', '127', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (112, 'PAIS_NEGOCIACION', 'PANAMA', '127', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (113, 'PAIS_NEGOCIACION', 'PARAGUAY', '129', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (113, 'PAIS_NEGOCIACION', 'PARAGUAY', '129', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (114, 'PAIS_NEGOCIACION', 'POLONIA', '130', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (114, 'PAIS_NEGOCIACION', 'POLONIA', '130', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (115, 'PAIS_NEGOCIACION', 'PORTUGAL', '131', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (115, 'PAIS_NEGOCIACION', 'PORTUGAL', '131', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (116, 'PAIS_NEGOCIACION', 'PUERTO RICO', '132', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (116, 'PAIS_NEGOCIACION', 'PUERTO RICO', '132', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (117, 'PAIS_NEGOCIACION', 'REPUBLICA DOMINICANA', '136', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (117, 'PAIS_NEGOCIACION', 'REPUBLICA DOMINICANA', '136', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (118, 'PAIS_NEGOCIACION', 'RUMANIA', '143', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (118, 'PAIS_NEGOCIACION', 'RUMANIA', '143', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (119, 'PAIS_NEGOCIACION', 'RUSIA', '144', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (119, 'PAIS_NEGOCIACION', 'RUSIA', '144', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (120, 'PAIS_NEGOCIACION', 'SUECIA', '162', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (120, 'PAIS_NEGOCIACION', 'SUECIA', '162', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (121, 'PAIS_NEGOCIACION', 'SUIZA', '163', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (121, 'PAIS_NEGOCIACION', 'SUIZA', '163', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (122, 'PAIS_NEGOCIACION', 'SURINAME', '164', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (122, 'PAIS_NEGOCIACION', 'SURINAME', '164', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (123, 'PAIS_NEGOCIACION', 'URUGUAY', '177', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (123, 'PAIS_NEGOCIACION', 'URUGUAY', '177', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (124, 'PAIS_NEGOCIACION', 'VENEZUELA', '179', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (124, 'PAIS_NEGOCIACION', 'VENEZUELA', '179', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (125, 'PAIS_NEGOCIACION', 'YUGOSLAVIA', '181', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (125, 'PAIS_NEGOCIACION', 'YUGOSLAVIA', '181', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (126, 'PAIS_NEGOCIACION', 'REINO UNIDO', '200', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (126, 'PAIS_NEGOCIACION', 'REINO UNIDO', '200', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 
+--OPERACION
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (127, 'OPERACION', 'Cancelación', 'Cancelación', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (128, 'OPERACION', 'Apertura DPF', 'Apertura DPF', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (129, 'OPERACION', 'Apertura DPF Cob', 'Apertura DPF Cob', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (130, 'OPERACION', 'Precancelación', 'Precancelación', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (131, 'OPERACION', 'Renovación DPF', 'Renovación DPF', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (132, 'OPERACION', 'Compra USD Spot', 'Compra USD Spot', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (133, 'OPERACION', 'Venta USD Spot', 'Venta USD Spot', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (134, 'OPERACION', 'Compra USD FWD', 'Compra USD FWD', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (135, 'OPERACION', 'Venta USD FWD', 'Venta USD FWD', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (136, 'OPERACION', 'Abono Cta Ahorro', 'Abono Cta Ahorro', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (137, 'OPERACION', 'Retiro Cta Ahorro', 'Retiro Cta Ahorro', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (138, 'OPERACION', 'Compra Fija', 'Compra Fija', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (139, 'OPERACION', 'Venta Fija', 'Venta Fija', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (140, 'OPERACION', 'Compra Variable', 'Compra Variable', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (141, 'OPERACION', 'Venta Variable', 'Venta Variable', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+
+
+ /*
+ *******************************************
+ * INSERTS TSI004_TIPOCAMBIO
+ *******************************************
+ */
+insert into BBVATESOR.TSI004_TIPOCAMBIO (CD_IDTIPOCAMBIO, FH_FEC_INGRESO, NU_VALOR, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA)
+values (1, to_date('04-02-2016', 'dd-mm-yyyy'), 2.8078, '1', to_date('04-02-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null);
+commit;
 
  /*
  *******************************************
