@@ -21,23 +21,17 @@ public class Constante {
      * Fecha Inicial
      */
     public final static Date FECHA_ACTUAL = new Date();
+    
     /**
      * Dominio
      */
-    
     public static final String TIPO_APERTURA = "TIPOAPERTURA";
     public static final String MONEDA_OPERACION = "MONEDAOPERACION";
     public static final String TIPO_OPERACION_FWD = "TIPOOPERACIONFWD";
     public static final String TIPO_OPERACION_CUENTA = "TIPOOPERACIONCUENTA";
     
-    public static class OrdenEstado{
-    	public static final String GENERADO = "1";
-    	public static final String APROBADO = "2";
-    	public static final String RECHAZADO = "3";
-    	public static final String ENVIADO = "4";
-    }
-    
     public static class Dominio{
+    	public static final String OPERACION = "OPERACION";
     	public static final String TIPO_EMISOR = "TIPOEMISOR";
     	public static final String TIPO_OPERACION = "TIPOOPERACION";
     	public static final String MONEDA = "MONEDA";
@@ -45,6 +39,9 @@ public class Constante {
     	public static final String ESTADO_ORDEN = "ESTADOORDEN";
     	public static final String ESPECIE = "ESPECIE";
     	public static final String RUTAPROCESOCARGA = "RUTAPROCESOCARGA";
+    	public static final String INTERMEDIARIO = "BROKERS";
+    	public static final String LUGAR = "LUGAR_NEGOCIACION";
+    	public static final String PAIS = "PAIS_NEGOCIACION";
     }
     
     /**
@@ -56,6 +53,31 @@ public class Constante {
     
     public static final Double VALOR_CERO = 0.0;
     
+    public static class OrdenEstado{
+    	public static final String GENERADO = "1";
+    	public static final String APROBADO = "2";
+    	public static final String RECHAZADO = "3";
+    	public static final String ENVIADO = "4";
+    }
+    
+    /**
+     * Operaciones
+     */
+    public static final Integer ID_OPERA_CANCELACION = 127;
+    public static final Integer ID_OPERA_APERTURA_DPF = 128;
+    public static final Integer ID_OPERA_APERTURA_DPF_COB = 129;
+    public static final Integer ID_OPERA_PRE_CANCELACION = 130;
+    public static final Integer ID_OPERA_RENOVACION = 131;
+    public static final Integer ID_OPERA_COMPRA_SPOT = 132;
+    public static final Integer ID_OPERA_VENTA_SPOT = 133;
+    public static final Integer ID_OPERA_COMPRA_FWD= 134;
+    public static final Integer ID_OPERA_VENTA_FWD = 135;
+    public static final Integer ID_OPERA_ABONO_CTA_AHORRO = 136;
+    public static final Integer ID_OPERA_RETIRO_CTA_AHORRO = 137;
+    public static final Integer ID_OPERA_COMPRA_FIJA = 138;
+    public static final Integer ID_OPERA_VENTA_FIJA = 139;
+    public static final Integer ID_OPERA_COMPRA_VARIABLE = 139;
+    public static final Integer ID_OPERA_VENTA_VARIABLE = 139;
     /**
      * Combos
      */

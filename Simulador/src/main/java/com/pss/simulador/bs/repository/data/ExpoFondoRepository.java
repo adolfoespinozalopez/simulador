@@ -31,7 +31,7 @@ public class ExpoFondoRepository {
 	
 	public boolean executeExposicionDelFondo(String nbFondo){
 		try {
-			Map parametros = new HashMap();	
+			Map<String, Object> parametros = new HashMap<String, Object>();	
 			parametros.put("PNOM_FONDO", nbFondo);
 			this.spEjecutarData.execute(parametros);
 			return true;

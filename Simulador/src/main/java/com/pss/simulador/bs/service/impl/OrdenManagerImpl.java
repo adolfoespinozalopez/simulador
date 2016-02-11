@@ -40,14 +40,13 @@ public class OrdenManagerImpl implements OrdenManager{
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(Constante.FECHA_ACTUAL);
 		calendar.set(Calendar.DATE, -1);
-		Integer idGeneral = null;
-		if(!idOperacion.equals(Constante.NO_OPTION_SELECTED)){
-			idGeneral = Integer.parseInt(idOperacion);
+		if(idOperacion.equals(Constante.NO_OPTION_SELECTED)){
+			idOperacion = null;
 		}
 		if(strEstado.equals(Constante.NO_OPTION_SELECTED)){
 			strEstado = null;
 		}
-		return ordenRepository.findByFilter(calendar.getTime(), idGeneral, strEstado, strUserName);
+		return ordenRepository.findByFilter(calendar.getTime(), idOperacion, strEstado, strUserName);
 	}
 
 	@Transactional

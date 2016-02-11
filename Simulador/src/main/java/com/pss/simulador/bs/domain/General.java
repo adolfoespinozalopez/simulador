@@ -58,10 +58,18 @@ public class General implements java.io.Serializable {
 	private String fgEditable;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "contraparte")
     private List<Orden> ordenContraparteList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdTipoOperacion")
-    private List<Orden> ordenTipoOperacionList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "operacion")
+    private List<Orden> ordenOperacionList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "especie")
     private List<Orden> ordenEspecieList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "intermediario")
+    private List<Orden> ordenIntermediarioList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lugar")
+    private List<Orden> ordenLugarList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pais")
+    private List<Orden> ordenPaisList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tipoMoneda")
+    private List<Orden> ordenTipoMonedaList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cdIdgeneral")
     private List<OrdenEstado> ordenEstadoList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "general")
@@ -186,12 +194,44 @@ public class General implements java.io.Serializable {
 		this.ordenContraparteList = ordenContraparteList;
 	}
 
-	public List<Orden> getOrdenTipoOperacionList() {
-		return ordenTipoOperacionList;
+	public List<Orden> getOrdenOperacionList() {
+		return ordenOperacionList;
 	}
 
-	public void setOrdenTipoOperacionList(List<Orden> ordenTipoOperacionList) {
-		this.ordenTipoOperacionList = ordenTipoOperacionList;
+	public void setOrdenOperacionList(List<Orden> ordenOperacionList) {
+		this.ordenOperacionList = ordenOperacionList;
+	}
+
+	public List<Orden> getOrdenIntermediarioList() {
+		return ordenIntermediarioList;
+	}
+
+	public void setOrdenIntermediarioList(List<Orden> ordenIntermediarioList) {
+		this.ordenIntermediarioList = ordenIntermediarioList;
+	}
+
+	public List<Orden> getOrdenLugarList() {
+		return ordenLugarList;
+	}
+
+	public void setOrdenLugarList(List<Orden> ordenLugarList) {
+		this.ordenLugarList = ordenLugarList;
+	}
+
+	public List<Orden> getOrdenPaisList() {
+		return ordenPaisList;
+	}
+
+	public void setOrdenPaisList(List<Orden> ordenPaisList) {
+		this.ordenPaisList = ordenPaisList;
+	}
+
+	public List<Orden> getOrdenTipoMonedaList() {
+		return ordenTipoMonedaList;
+	}
+
+	public void setOrdenTipoMonedaList(List<Orden> ordenTipoMonedaList) {
+		this.ordenTipoMonedaList = ordenTipoMonedaList;
 	}
 
 	public List<OrdenEstado> getOrdenEstadoList() {

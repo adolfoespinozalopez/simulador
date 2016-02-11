@@ -134,6 +134,8 @@ public class Infoport implements java.io.Serializable {
 	private String montoTotal;
 	@Transient
 	private Date fhFecEfectividad;
+	@Transient
+	private Integer idOperacion;
 	
 	public Infoport() {
 	}
@@ -540,6 +542,14 @@ public class Infoport implements java.io.Serializable {
 
 	public void setFhFecEfectividad(Date fhFecEfectividad) {
 		this.fhFecEfectividad = fhFecEfectividad;
+	}
+
+	public Integer getIdOperacion() {
+		return idOperacion;
+	}
+
+	public void setIdOperacion(Integer idOperacion) {
+		this.idOperacion = idOperacion;
 	}
 	
 }

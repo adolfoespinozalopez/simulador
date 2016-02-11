@@ -31,6 +31,9 @@ DROP TABLE bbvatesor.TSI013_Orden CASCADE CONSTRAINTS PURGE;
 DROP TABLE bbvatesor.TSI010_Emisor CASCADE CONSTRAINTS PURGE;
 DROP TABLE bbvatesor.TSI008_Fondo CASCADE CONSTRAINTS PURGE;
 DROP TABLE bbvatesor.TSI005_General CASCADE CONSTRAINTS PURGE;
+DROP TABLE bbvatesor.TSI009_EXPOFONDO CASCADE CONSTRAINTS PURGE;
+DROP TABLE bbvatesor.TSI016_PROCESOCARGA CASCADE CONSTRAINTS PURGE;
+DROP TABLE bbvatesor.TSI017_PROCESOLOG CASCADE CONSTRAINTS PURGE;
 
 /*
  *******************************************
@@ -51,6 +54,7 @@ DROP SEQUENCE bbvatesor.SEQ_PERFIL;
 DROP SEQUENCE bbvatesor.SEQ_SALDO;
 DROP SEQUENCE bbvatesor.SEQ_PROCESOCARGA;
 DROP SEQUENCE bbvatesor.SEQ_PROCESOLOG;
+DROP SEQUENCE BBVATESOR.SEQ_EXPOFONDO;
 
 CREATE SEQUENCE bbvatesor.SEQ_TIPOCAMBIO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE bbvatesor.SEQ_GENERAL INCREMENT BY 1 START WITH 100;
@@ -66,6 +70,7 @@ CREATE SEQUENCE bbvatesor.SEQ_PERFIL INCREMENT BY 1 START WITH 4;
 CREATE SEQUENCE bbvatesor.SEQ_SALDO INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE bbvatesor.SEQ_PROCESOCARGA INCREMENT BY 1 START WITH 1;
 CREATE SEQUENCE bbvatesor.SEQ_PROCESOLOG INCREMENT BY 1 START WITH 1;
+CREATE SEQUENCE bbvatesor.SEQ_EXPOFONDO INCREMENT BY 1 START WITH 1;
 
 /*
  *******************************************
@@ -401,10 +406,10 @@ CREATE TABLE bbvatesor.TSI013_Orden (
 	im_tasa_precancel  NUMBER  NULL ,
 	im_monto_final  NUMBER  NULL ,
 	im_tipoCambioSpot  NUMBER  NULL ,
-	tp_moneOperacion CHAR(1) NULL ,
-	tp_forward  CHAR(1)  NULL ,
-	tp_apertura  CHAR(1)  NULL ,
-	tp_operacuenta  CHAR(1)  NULL ,
+	tp_moneOperacion VARCHAR2(40) NULL ,
+	tp_forward  VARCHAR2(40)  NULL ,
+	tp_apertura  VARCHAR2(40)  NULL ,
+	tp_operacuenta  VARCHAR2(40)  NULL ,
 	nu_puntofwd  NUMBER  NULL ,
 	im_tipoCambioFwd  NUMBER  NULL ,
 	nb_mnemonico  VARCHAR(15)  NULL ,
@@ -634,27 +639,27 @@ values (6, 'TIPOEMISOR', 'Otros', 'Otros', '1', to_date('25-01-2016', 'dd-mm-yyy
 
 --TIPOAPERTURA
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (7, 'TIPOAPERTURA', 'Normal', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (7, 'TIPOAPERTURA', 'Normal', 'Normal', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (8, 'TIPOAPERTURA', 'Coberturado', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (8, 'TIPOAPERTURA', 'Coberturado', 'Coberturado', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --TIPOOPERACIONFWD
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (9, 'TIPOOPERACIONFWD', 'FULL', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (9, 'TIPOOPERACIONFWD', 'FULL', 'FULL', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (10, 'TIPOOPERACIONFWD', 'NDF', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (10, 'TIPOOPERACIONFWD', 'NDF', 'NDF', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --MONEDAOPERACION
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (11, 'MONEDAOPERACION', 'COMPRA', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (11, 'MONEDAOPERACION', 'COMPRA', 'COMPRA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (12, 'MONEDAOPERACION', 'VENTA', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (12, 'MONEDAOPERACION', 'VENTA', 'VENTA', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --TIPOOPERACIONCUENTA
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (13, 'TIPOOPERACIONCUENTA', 'ABONO', '1', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (13, 'TIPOOPERACIONCUENTA', 'ABONO', 'ABONO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
-values (14, 'TIPOOPERACIONCUENTA', 'CARGO', '2', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
+values (14, 'TIPOOPERACIONCUENTA', 'CARGO', 'CARGO', '1', to_date('13-01-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 --ESPECIE
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
@@ -1251,16 +1256,6 @@ CREATE TABLE BBVATESOR.TSI009_EXPOFONDO (
 CREATE  UNIQUE INDEX BBVATESOR.ISI009P1_EXPOFONDO ON BBVATESOR.TSI009_EXPOFONDO(CID_EXPO  ASC);
 
 ALTER TABLE BBVATESOR.TSI009_EXPOFONDO ADD CONSTRAINT  ISI009P1_EXPOFONDO PRIMARY KEY (CID_EXPO);
-
-/*
- *******************************************
- *SEQUENCE NUEVA TABLA EXPOFONDO
- *******************************************
-*/
-
-DROP SEQUENCE BBVATESOR.SEQ_EXPOFONDO;
-CREATE SEQUENCE BBVATESOR.SEQ_EXPOFONDO INCREMENT BY 1 START WITH 1;
-
 
 /*
  *******************************************

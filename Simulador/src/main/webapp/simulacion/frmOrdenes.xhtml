@@ -36,7 +36,7 @@
                                          valueChangeListener="#{ordenController.realizarFiltroDeOperacion}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{ordenController.listaTipoOperacion}" var="tipo" 
-										   itemValue="#{tipo.cdIdgeneral}" itemLabel="#{tipo.nbDescGeneral}" />
+										   itemValue="#{tipo.nbValorGeneral}" itemLabel="#{tipo.nbDescGeneral}" />
                             <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes"
                             		onstart="PF('blkPanel').show()" oncomplete="PF('blkPanel').hide()"/>
                         </p:selectOneMenu>
@@ -106,10 +106,10 @@
                                 <h:outputText value="#{item.fondo.nbNomFondo}"/>
                             </p:column>
                             <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.cdIdgeneral.nbDescGeneral}">
-                                <h:outputText value="#{item.cdIdTipoOperacion.nbDescGeneral}"/>
+                                <h:outputText value="#{item.operacion.nbDescGeneral}"/>
                             </p:column>
                             <p:column headerText="Moneda" style="width: 6%;text-align: left;">
-                            	<h:outputText value="#{ordenController.mapaMoneda[item.tpTipmoneda]}" />
+                            	<h:outputText value="#{item.tipoMoneda.nbDescGeneral}" />
                             </p:column>
                             <p:column headerText="Contraparte" style="width: 15%;text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
                                 <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
@@ -121,7 +121,9 @@
                                 <h:outputText value="#{item.nbMnemonico}"/>
                             </p:column>
                             <p:column headerText="Monto / Cantidad" style="width: 12%;text-align: left;">
-                                <h:outputText value="#{item.imMontoFinal}"/>
+                                <h:outputText value="#{item.imMontoFinal}">
+									<f:convertNumber groupingUsed="true" locale="es" maxFractionDigits="0" />
+								</h:outputText>
                             </p:column>
                             <p:column headerText="Usuario" style="width: 10%;text-align: left;" sortBy="#{item.cdUsuCreacion}">
                                 <h:outputText value="#{item.cdUsuCreacion}"/>

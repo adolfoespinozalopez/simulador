@@ -126,6 +126,18 @@ public class Utilitarios {
     	return null;
     }
     
+    public static General buscaGeneralPorIDEnLista(List<General> lista, Integer id){
+    	if(id == null){
+    		return null;
+    	}
+    	for (General g : lista) {
+			if(g.getCdIdgeneral().equals(id)){
+				return g;
+			}
+		}
+    	return null;
+    }
+    
     public static boolean copiaPropiedades(DetalleOrden destino, Infoport origen){
     	try {
 			BeanUtils.copyProperties(destino, origen);

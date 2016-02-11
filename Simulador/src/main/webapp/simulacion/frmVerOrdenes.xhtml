@@ -55,10 +55,10 @@
 					<h:outputText value="#{item.fondo.nbNomFondo}" />
 				</p:column>
 				<p:column headerText="Operación" style="width: 10%;text-align: left;">
-					<h:outputText value="#{item.cdIdTipoOperacion.nbDescGeneral}" />
+					<h:outputText value="#{item.operacion.nbDescGeneral}" />
 				</p:column>
-				<p:column headerText="Moneda" style="width: 6%;text-align: left;">
-					<h:outputText value="#{portafolioController.mapaMoneda[item.tpTipmoneda]}" />
+				<p:column headerText="Moneda" style="width: 7%;text-align: left;">
+					<h:outputText value="#{item.tipoMoneda.nbDescGeneral}" />
 				</p:column>
 				<p:column headerText="Contraparte" style="width: 15%;text-align: left;">
 					<h:outputText value="#{item.contraparte.nbDescGeneral}" />

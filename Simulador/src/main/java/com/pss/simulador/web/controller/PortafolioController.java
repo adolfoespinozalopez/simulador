@@ -94,10 +94,19 @@ public class PortafolioController extends GenericController{
 	/*
 	 * Modal
 	 */
+	List<General> listaOperacion = new ArrayList<General>();
 	List<General> listaContraparte = new ArrayList<General>();
 	List<General> listaMoneda = new ArrayList<General>();
 	List<General> listaEspecie = new ArrayList<General>();
-	private Map<Integer, String> mapaMoneda = new HashMap<Integer, String>();
+	
+	List<General> listaIntermediario = new ArrayList<General>();
+	private Integer selectedIntermediario = Constante.NO_OPTION_SELECTED_INT;
+	
+	List<General> listaLugar = new ArrayList<General>();
+	private Integer selectedLugar = Constante.NO_OPTION_SELECTED_INT;
+	
+	List<General> listaPais = new ArrayList<General>();
+	private Integer selectedPais = Constante.NO_OPTION_SELECTED_INT;
 	
 	private String tasaPreCancelacion;
 	private String montoPreCancelacion;
@@ -156,6 +165,7 @@ public class PortafolioController extends GenericController{
 		//Combos
 		listaFondo = fondoManager.findAll();
 		listaEmisor = emisorManager.findAllActive();
+		listaOperacion = generalManager.findByDomainAndState(Constante.Dominio.OPERACION, Constante.ESTADO_ACTIVO);
 		listaTipoOperacion = generalManager.findByDomainAndState(Constante.Dominio.TIPO_OPERACION, Constante.ESTADO_ACTIVO);
 		listaOrdenEstado = generalManager.findByDomainAndState(Constante.Dominio.ESTADO_ORDEN, Constante.ESTADO_ACTIVO);
 		
@@ -163,10 +173,9 @@ public class PortafolioController extends GenericController{
 		listaContraparte = generalManager.findByDomainAndState(Constante.Dominio.CONTRAPARTE, Constante.ESTADO_ACTIVO);
 		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
 		listaEspecie =  generalManager.findByDomainAndState(Constante.Dominio.ESPECIE, Constante.ESTADO_ACTIVO);
-		
-		for (General moneda : listaMoneda) {
-			mapaMoneda.put(moneda.getCdIdgeneral(), moneda.getNbDescGeneral());
-		}
+		listaIntermediario = generalManager.findByDomainAndState(Constante.Dominio.INTERMEDIARIO, Constante.ESTADO_ACTIVO);
+		listaLugar = generalManager.findByDomainAndState(Constante.Dominio.LUGAR, Constante.ESTADO_ACTIVO);
+		listaPais = generalManager.findByDomainAndState(Constante.Dominio.PAIS, Constante.ESTADO_ACTIVO);
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {
@@ -605,6 +614,14 @@ public class PortafolioController extends GenericController{
 		this.ordenManager = ordenManager;
 	}
 
+	public List<General> getListaOperacion() {
+		return listaOperacion;
+	}
+
+	public void setListaOperacion(List<General> listaOperacion) {
+		this.listaOperacion = listaOperacion;
+	}
+
 	public List<General> getListaContraparte() {
 		return listaContraparte;
 	}
@@ -624,6 +641,54 @@ public class PortafolioController extends GenericController{
 	public List<General> getListaEspecie() {
 		return listaEspecie;
 	}
+	
+	public List<General> getListaIntermediario() {
+		return listaIntermediario;
+	}
+
+	public void setListaIntermediario(List<General> listaIntermediario) {
+		this.listaIntermediario = listaIntermediario;
+	}
+
+	public List<General> getListaLugar() {
+		return listaLugar;
+	}
+
+	public void setListaLugar(List<General> listaLugar) {
+		this.listaLugar = listaLugar;
+	}
+
+	public List<General> getListaPais() {
+		return listaPais;
+	}
+
+	public void setListaPais(List<General> listaPais) {
+		this.listaPais = listaPais;
+	}
+
+	public Integer getSelectedIntermediario() {
+		return selectedIntermediario;
+	}
+
+	public void setSelectedIntermediario(Integer selectedIntermediario) {
+		this.selectedIntermediario = selectedIntermediario;
+	}
+
+	public Integer getSelectedLugar() {
+		return selectedLugar;
+	}
+
+	public void setSelectedLugar(Integer selectedLugar) {
+		this.selectedLugar = selectedLugar;
+	}
+
+	public Integer getSelectedPais() {
+		return selectedPais;
+	}
+
+	public void setSelectedPais(Integer selectedPais) {
+		this.selectedPais = selectedPais;
+	}
 
 	public void setListaEspecie(List<General> listaEspecie) {
 		this.listaEspecie = listaEspecie;
@@ -635,14 +700,6 @@ public class PortafolioController extends GenericController{
 
 	public void setNotificacionController(NotificacionController notificacionController) {
 		this.notificacionController = notificacionController;
-	}
-
-	public Map<Integer, String> getMapaMoneda() {
-		return mapaMoneda;
-	}
-
-	public void setMapaMoneda(Map<Integer, String> mapaMoneda) {
-		this.mapaMoneda = mapaMoneda;
 	}
 
 	public void cancelar() {
@@ -659,28 +716,30 @@ public class PortafolioController extends GenericController{
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	//if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL)==0){
-        		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
-            	if(selectedInfo.getNbIsin().trim().endsWith("C")){
-            		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
-            	}
+        	if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL)==0){
             	verDetallesDeCancelarDeposito();
             	context.execute("PF('manteCancelarDeposito').show()");
-        	/*}else{
+        	}else{
         		mensajeValida = "La fecha de vencimiento no es igual a la actual.";
         		context.execute("PF('msjVal').show()");
-        	}*/
+        	}
         }
 	}
 	
 	public void verDetallesDeCancelarDeposito(){
 		try {
+			selectedInfo.setFhFecEfectividad(null);
+			selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
+        	if(selectedInfo.getNbIsin().trim().endsWith("C")){
+        		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
+        	}
 			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(selectedInfo.getFhFecVencimiento(), selectedInfo.getFhFecEmision()));
 	    	Double valorDepositoMo = Utilitarios.round(selectedInfo.getImValorSinInter() * Math.pow((1 + selectedInfo.getImCupon() / 100), (selectedInfo.getPlazo().doubleValue() / 360)), 2);
 	    	Double intereses = (valorDepositoMo - selectedInfo.getImValorSinInter());
 	    	selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
 	    	selectedInfo.setMontoIntereses(formato.format(intereses));
 	    	selectedInfo.setMontoTotal(formato.format(selectedInfo.getImValorSinInter() + intereses));
+	    	selectedInfo.setIdOperacion(Constante.ID_OPERA_CANCELACION);
 		} catch (Exception e) {
 			LOG.error("Error obteniendo los calculos de cancelar deposito.", e);
 		}
@@ -705,11 +764,13 @@ public class PortafolioController extends GenericController{
 	
 	public void verDetallesDePreCancelarDeposito(){
 		try {
+			selectedInfo.setFhFecEfectividad(null);
 			selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
 			selectedInfo.setMontoIntereses(formatoTasa.format(selectedInfo.getImCupon()));
 			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(new Date(), selectedInfo.getFhFecEmision()));
 			tasaPreCancelacion = formatoTasa.format(selectedInfo.getImCupon());
 			calcularMontoPreCancelacion();
+			selectedInfo.setIdOperacion(Constante.ID_OPERA_PRE_CANCELACION);
 		} catch (Exception e) {
 			LOG.error("Error obteniendo los calculos de pre cancelar deposito.", e);
 		}
@@ -731,6 +792,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeApertura(){
+		selectedInfo.setFhFecEfectividad(null);
 		selectedFondoAper = Constante.NO_OPTION_SELECTED;
     	selectedContraAper = Constante.NO_OPTION_SELECTED;
     	selectedMonedaAper = Constante.NO_OPTION_SELECTED;
@@ -753,10 +815,12 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeRenovacion(){
+		selectedInfo.setFhFecEfectividad(null);
 		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
     	if(selectedInfo.getNbIsin().trim().endsWith("C")){
     		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
     	}
+    	selectedInfo.setIdOperacion(Constante.ID_OPERA_RENOVACION);
 		importeRenova = formato.format(selectedInfo.getImValorSinInter());
 		tasaRenova = "";
 		plazoRenova = "";
@@ -770,6 +834,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeSpot(){
+		selectedInfo.setFhFecEfectividad(null);
 		selectedTipoSpot = Constante.NO_OPTION_SELECTED;
 		selectedContraSpot = Constante.NO_OPTION_SELECTED;
 		tipoCambioSpot = "";
@@ -782,6 +847,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeFwd(){
+		selectedInfo.setFhFecEfectividad(null);
 		selectedTipoFwd = Constante.NO_OPTION_SELECTED;
 		selectedContraFwd = Constante.NO_OPTION_SELECTED;
 		selectedSettleFwd = Constante.NO_OPTION_SELECTED;
@@ -797,6 +863,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeAbonoCargo(){
+		selectedInfo.setFhFecEfectividad(null);
 		selectedFondoAbono = Constante.NO_OPTION_SELECTED;
 		selectedTipoAbono = Constante.NO_OPTION_SELECTED;
 		selectedContraAbono = Constante.NO_OPTION_SELECTED;
@@ -805,11 +872,13 @@ public class PortafolioController extends GenericController{
 	
 	public void validarRentaFija(){
 		RequestContext context = RequestContext.getCurrentInstance();
+		selectedInfo.setFhFecEfectividad(null);
 		context.execute("PF('manteRentaFija').show()");
 	}
 	
 	public void validarRentaVariable(){
 		RequestContext context = RequestContext.getCurrentInstance();
+		selectedInfo.setFhFecEfectividad(null);
 		context.execute("PF('manteRentaVariable').show()");
 	}
 	
@@ -817,7 +886,7 @@ public class PortafolioController extends GenericController{
 		RequestContext context = RequestContext.getCurrentInstance();
 		try {
 			Orden orden = generaOrden();
-			orden.setTpTipodeposito(selectedInfo.getTipoApertura());
+			orden.setTpApertura(selectedInfo.getTipoApertura());
 			String monto = selectedInfo.getMontoCapital().replace(".", "").replace(",", ".");
 			orden.setImCapital(Utilitarios.parseToDouble(monto));
 			monto = selectedInfo.getMontoIntereses().replace(".", "").replace(",", ".");
@@ -838,51 +907,6 @@ public class PortafolioController extends GenericController{
 			Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 		} catch (Exception e) {
 			Utilitarios.mostrarMensajeError("msgCancelar", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
-		}
-	}
-	
-	public Orden generaOrden(){
-		Orden orden = new Orden();
-		orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
-		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
-		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
-		orden.setCdIdTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()));
-		General tipoMoneda = Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda());
-		if(tipoMoneda != null){
-			orden.setTpTipmoneda(tipoMoneda.getCdIdgeneral());
-		}
-		orden.setImTasa(selectedInfo.getImCupon());
-		orden.setNuPlazoDia(selectedInfo.getPlazo());
-		orden.setStEstado(Constante.OrdenEstado.GENERADO);
-		orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
-		orden.setFhFecInicio(selectedInfo.getFhFecEmision());
-		orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
-		orden.setNbMnemonico(selectedInfo.getNbMnemonico());
-		orden.setFhFecCreacion(new Date());
-		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
-		return orden;
-	}
-	
-	public boolean guardaOrden(Orden orden){
-		try {
-			ordenManager.save(orden);
-			OrdenEstado ordenEstado = new OrdenEstado();
-			
-			ordenEstado.setOrden(orden);
-			ordenEstado.setFhFecCreacion(new Date());
-			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
-			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
-			ordenManager.saveEstado(ordenEstado);
-			
-			DetalleOrden detalle = new DetalleOrden();
-			Utilitarios.copiaPropiedades(detalle, selectedInfo);
-			detalle.setCdIddetalle(null);
-			detalle.setOrden(orden);
-			
-			ordenManager.saveDetalle(detalle);
-			return true;
-		} catch (Exception e) {
-			return false;
 		}
 	}
 	
@@ -913,8 +937,13 @@ public class PortafolioController extends GenericController{
 		RequestContext context = RequestContext.getCurrentInstance();
 		try {
 			if(validaFormularioDeApertura()){
+				if(selectedTipoAper.equals(Constante.TIPOAPERTURA_NORMAL)){
+					selectedInfo.setIdOperacion(Constante.ID_OPERA_APERTURA_DPF);
+				}else{
+					selectedInfo.setIdOperacion(Constante.ID_OPERA_APERTURA_DPF_COB);
+				}
 				Orden orden = generaOrden();
-				orden.setTpTipodeposito(selectedTipoAper);
+				orden.setTpApertura(selectedTipoAper);
 				orden.setImTasa(Utilitarios.parseToDouble(tasaAper));
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoAper));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeAper));
@@ -978,13 +1007,13 @@ public class PortafolioController extends GenericController{
 		RequestContext context = RequestContext.getCurrentInstance();
 		try {
 			if(validaFormularioDeRenovacion()){
-				
 				Orden orden = generaOrden();
-				orden.setTpTipodeposito(selectedInfo.getTipoApertura());
+				orden.setTpApertura(selectedInfo.getTipoApertura());
 				orden.setImTasa(Utilitarios.parseToDouble(tasaRenova));
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoRenova));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeRenova));
 				orden.setFhFecVencimiento(fechaVctoRenova);
+				guardaOrden(orden);
 				
 				context.execute("PF('manteRenuevaDeposito').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -994,8 +1023,16 @@ public class PortafolioController extends GenericController{
 		}
 	}
 	
+	public void guardaOpCompraVentaSpot(){
+		
+	}
+	
+	public void guardaOpCompraVentaForward(){
+		
+	}
+
 	public void calcularFechaVctoRenueva(){
-		if(!Utilitarios.isInteger(plazoAper)){
+		if(!Utilitarios.isInteger(plazoRenova)){
 			plazoRenova = "";
 			Utilitarios.mostrarMensajeAdvertencia("msgRenovar", "Ingrese un número en el campo Plazo.", "Error en Plazo");
 			fechaVctoRenova = null;
@@ -1004,7 +1041,7 @@ public class PortafolioController extends GenericController{
 			cal.setTime(Constante.FECHA_ACTUAL);
 			cal.add(Calendar.DATE, Utilitarios.parseToInteger(plazoRenova));
 			fechaVctoRenova = cal.getTime(); 
-		}		 
+		}
 	}
 	
 	public boolean validaFormularioDeRenovacion(){
@@ -1021,5 +1058,52 @@ public class PortafolioController extends GenericController{
 			return false;
 		}
 		return true;
+	}
+	
+	
+	public Orden generaOrden(){
+		Orden orden = new Orden();
+		orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
+		orden.setTpTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()).getNbValorGeneral());
+		orden.setImTasa(selectedInfo.getImCupon());
+		orden.setNuPlazoDia(selectedInfo.getPlazo());
+		orden.setFhFecInicio(selectedInfo.getFhFecEmision());
+		orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
+		orden.setNbMnemonico(selectedInfo.getNbMnemonico());
+		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
+		orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedInfo.getIdOperacion()));
+		orden.setTipoMoneda(Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda()));
+		orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
+		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedIntermediario));
+		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedLugar));
+		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedPais));
+		orden.setStEstado(Constante.OrdenEstado.GENERADO);
+		orden.setFhFecCreacion(new Date());
+		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+		return orden;
+	}
+	
+	public boolean guardaOrden(Orden orden){
+		try {
+			ordenManager.save(orden);
+			OrdenEstado ordenEstado = new OrdenEstado();
+			
+			ordenEstado.setOrden(orden);
+			ordenEstado.setFhFecCreacion(new Date());
+			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
+			ordenManager.saveEstado(ordenEstado);
+			
+			DetalleOrden detalle = new DetalleOrden();
+			Utilitarios.copiaPropiedades(detalle, selectedInfo);
+			detalle.setCdIddetalle(null);
+			detalle.setOrden(orden);
+			
+			ordenManager.saveDetalle(detalle);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 }

@@ -69,38 +69,39 @@
                         				 styleClass="ordenes ui-state-active" actionListener="#{portafolioController.verOrdenes}" 
                         				 update=":dlgVerOrdenes, :frmVerOrdenes:panelVerOrdenes" 
                         				 oncomplete="PF('verOrdenes').show()"/>
+                        				 
                         <p:megaMenu id="menuOpciones" orientation="horizontal" style="margin-top:10px" >
                         	<p:submenu label="Money Market" icon="fa fa-money" styleClass="nav2" rendered="#{(portafolioController.selectedTipoOperacion=='-1')?true:(portafolioController.selectedTipoOperacion=='M')?true:false}">
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
 	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"
+	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"/>
 	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" actionListener="#{portafolioController.validarPreCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"
+	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"/>
 	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" actionListener="#{portafolioController.validarAperturaDeposito}"
-	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito"
+	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" actionListener="#{portafolioController.validarRenovarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgRenuevaDeposito, :frmRenuevaDeposito:panelRenuevaDeposito"
+	                        						update=":dlgMensajeVal, :dlgRenuevaDeposito, :frmRenuevaDeposito:panelRenuevaDeposito" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
 	                        		<p:submenu label="Compra / Venta USD" >
 	                        			<p:menuitem value="Spot" icon="ui-icon-cart" actionListener="#{portafolioController.validarSpot}"
-	                        						update=":dlgMensajeVal, :dlgSpot, :frmSpot:panelSpot"
+	                        						update=":dlgMensajeVal, :dlgSpot, :frmSpot:panelSpot" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        			<p:menuitem value="Forward" icon="ui-icon-cart" actionListener="#{portafolioController.validarFwd}"
-	                        						update=":dlgMensajeVal, :dlgFwd, :frmFwd:panelFwd"
+	                        						update=":dlgMensajeVal, :dlgFwd, :frmFwd:panelFwd" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
                         			<p:submenu label="Cuenta Ahorros" >
                         				<p:menuitem value="Abono / Cargo" icon="ui-icon-transferthick-e-w" actionListener="#{portafolioController.validarAbonoCargo}"
-	                        						update=":dlgMensajeVal, :dlgAbonoCargo, :frmAbonoCargo:panelAbonoCargo"
+	                        						update=":dlgMensajeVal, :dlgAbonoCargo, :frmAbonoCargo:panelAbonoCargo" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
                         			</p:submenu>                        		
                         		</p:column>
@@ -109,7 +110,7 @@
                         		<p:column>
 	                        		<p:submenu label="Operación" >
 	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaFija}"
-	                        						update=":dlgMensajeVal, :dlgRentaFija, :frmRentaFija:panelRentaFija"
+	                        						update=":dlgMensajeVal, :dlgRentaFija, :frmRentaFija:panelRentaFija" resetValues="true"
 	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'F')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
@@ -329,7 +330,7 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
-                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="290">
+                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="320">
                 	<ui:include src="frmRenuevaDeposito.xhtml" />
                     <p:ajax event="close" update=":frmRenuevaDeposito" resetValues="true"/>
                 </p:dialog>
@@ -345,21 +346,21 @@
                 		  widgetVar="manteFwd" resizable="false" width="540" height="600">
                     <ui:include src="frmFwd.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmFwd" />
+                            update=":frmFwd" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgAbonoCargo" modal="true" header="Abono / Cargo de Cuenta de Ahorros" 
                 		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="220">
                     <ui:include src="frmAbonoCargo.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmAbonoCargo" />
+                            update=":frmAbonoCargo" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija - Pre Asignación" 
                 		  widgetVar="manteRentaFija" resizable="false" width="560" height="600">
                     <ui:include src="frmRentaFija.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmRentaFija" />
+                            update=":frmRentaFija" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgRentaVariable" modal="true" header="Renta Variable - Pre Asignación" 
@@ -370,7 +371,7 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 
-                		  widgetVar="verOrdenes" resizable="false" width="850" height="440">
+                		  widgetVar="verOrdenes" resizable="false" width="860" height="440">
                     <ui:include src="frmVerOrdenes.xhtml" />
                     <p:ajax event="close"  update=":frmVerOrdenes" />
                 </p:dialog>
