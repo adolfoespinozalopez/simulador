@@ -5,6 +5,7 @@ package com.pss.simulador.bs.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,6 @@ public interface ProcesoCargaManager {
 	public List<ProcesoCarga> findProcesoCargaByFechas(Date dtDesde, Date dtHasta);
 	public ProcesoCarga saveProcesoCarga(ProcesoCarga procesoCarga);
 	public Boolean copyFileToLocal(InputStream is) throws IOException;
-	public Boolean saveLoadFile(List<Infoport> lstInfoportLoad, List<Saldo> lstSaldos,List<CobranzaPago> lstCobPag, Date fhFecImporta);
+	public Boolean saveLoadFile(List<Infoport> lstInfoportLoad, List<Saldo> lstSaldos,List<CobranzaPago> lstCobPag, Date fhFecImporta) throws SQLException, Exception;
 	public Boolean deleteAllOtherLoad(Date fhFecImporta);
 }

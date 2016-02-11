@@ -1080,7 +1080,7 @@ create table BBVATESOR.TSI017_PROCESOLOG
   cd_idproceso   NUMBER,
   fh_fecreg      DATE,
   tp_tipomensaje VARCHAR2(10),
-  ms_mensaje     VARCHAR2(200)
+  ms_mensaje     VARCHAR2(2000)
 );
 -- Add comments to the columns 
 comment on column BBVATESOR.TSI017_PROCESOLOG.cd_idlog

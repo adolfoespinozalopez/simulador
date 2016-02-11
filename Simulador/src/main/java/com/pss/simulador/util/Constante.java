@@ -110,4 +110,17 @@ public class Constante {
     	public static final String CODIGO_V = "V";
     	public static final String CODIGO_F = "F";
     }
+    public static class Log{
+    	public static class Mensaje{
+    		public static final String MSJ_ERROR_PARSE_DOUBLE = "Error de lectura del campo. Error al convertir el valor a Numérico.";
+    		public static final String MSJ_ERROR_PARSE_INTEGER = "Error de lectura del campo. Error al convertir el valor a Numérico Entero.";
+    		public static final String MSJ_ERROR_PARSE_DATE = "Error de lectura del campo. Error al convertir el valor a Fecha.";
+    		public static final String MSJ_ERROR_PARSE_DOUBLE_TO_STRING_ENTERO = "Error de lectura del campo. Error al convertir el valor entero a texto.";
+    	}
+    	public static class TipoMensaje{
+    		public static final String INFO = "INFO";
+    		public static final String WARNING = "WARNING";
+    		public static final String ERROR = "ERROR";
+    	}
+    }
 }

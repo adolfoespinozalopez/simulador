@@ -71,7 +71,7 @@ public class ProcesoLog implements java.io.Serializable {
 		this.procesoCarga = procesoCarga;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "FH_FECREG", length = 7)
 	public Date getFhFecreg() {
 		return this.fhFecreg;

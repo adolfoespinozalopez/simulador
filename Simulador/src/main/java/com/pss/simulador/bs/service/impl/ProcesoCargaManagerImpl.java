@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -100,7 +101,7 @@ public class ProcesoCargaManagerImpl implements ProcesoCargaManager {
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	public Boolean saveLoadFile(List<Infoport> lstInfoportLoad,
-			List<Saldo> lstSaldos, List<CobranzaPago> lstCobPag, Date fhFecImporta) {
+			List<Saldo> lstSaldos, List<CobranzaPago> lstCobPag, Date fhFecImporta) throws SQLException, Exception{
 		infoportRepository.save(lstInfoportLoad);
 		saldoRepository.save(lstSaldos);
 		cobranzaPagoRepository.save(lstCobPag);

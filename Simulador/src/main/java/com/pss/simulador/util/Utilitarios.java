@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
+import com.pss.simulador.bs.domain.ProcesoCarga;
+import com.pss.simulador.bs.domain.ProcesoLog;
 /**
 *
 * @author Adolfo Espinoza
@@ -107,51 +109,18 @@ public class Utilitarios {
     }
     
     
-    public static Double parseToDouble(Object obj){
-    	try {
-			return obj!=null?(Double)obj:null;
-		} catch (Exception e) {
-			try {
-				return Double.parseDouble(String.valueOf(obj));
-			} catch (Exception e2) {
-				logger.error(e2,e2);
-			}
-		}
-    	return null;
-    }
+    public static boolean isEmpty(Object obj) {
+		return obj==null || String.valueOf(obj).trim().isEmpty();
+	}
     
-    public static Integer parseToInteger(Object obj){
-    	try {
-    		return obj!=null?(Integer)obj:null;
-		} catch (Exception e) {
-			try {
-				return Integer.parseInt(String.valueOf(obj));
-			} catch (Exception e2) {
-				logger.error(e2,e2);
-			}
-		}
-    	return null;
-    }
-    
-    public static String parseToString(Object obj){
-    	return (obj!=null)?String.valueOf(obj).trim():null;
-    }
-    
-    public static String parseDoubleToString(Object obj){
-    	try {
-    		return (obj!=null)?String.format("%.0f", obj):null;
-		} catch (Exception e) {
-			logger.error(e,e);
-		}
-    	return null;
-    }
-    
-    public static Date parseToDate(Object obj){
-    	try {
-    		return (obj!=null)?(Date)obj:null;
-		} catch (Exception e) {
-			logger.error(e,e);
-		}
-    	return null;
-    }
+    public static List<ProcesoLog> addLog(String strTipoMensaje, String strMensajeLog, List<ProcesoLog> lstProcesoLog, Integer cdIdproceso) {
+		ProcesoLog procesoLog = new ProcesoLog();
+		procesoLog.setFhFecreg(new Date());
+		procesoLog.setTpTipomensaje(strTipoMensaje);
+		procesoLog.setMsMensaje(strMensajeLog);
+		procesoLog.setProcesoCarga(new ProcesoCarga(cdIdproceso));
+		lstProcesoLog.add(procesoLog);
+		return lstProcesoLog;
+
+	}
 }

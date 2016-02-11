@@ -2,7 +2,6 @@
 package com.pss.simulador.bs.thead;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,9 +22,11 @@ import com.pss.simulador.bs.domain.CobranzaPago;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
+import com.pss.simulador.bs.domain.ProcesoLog;
 import com.pss.simulador.bs.domain.Saldo;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.ProcesoCargaManager;
+import com.pss.simulador.helper.CargaArchivoHelper;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
 
@@ -44,6 +45,7 @@ public class ProcesoCargaRunnable implements Runnable {
 	@Autowired
 	ProcesoCargaManager procesoCargaManager;
 	private ProcesoCarga procesoCarga;
+	private List<ProcesoLog> lstProcesoLog = new ArrayList<ProcesoLog>();
 	public void run() {
 
 		List<General> lstGeneral = generalManager.findByDomain(
@@ -66,11 +68,19 @@ public class ProcesoCargaRunnable implements Runnable {
 			if(procesoCargaManager.saveLoadFile(lstInfoportLoad, lstSaldos, lstCobPag, this.getProcesoCarga().getFhFecImporta())){
 				procesoCargaManager.deleteAllOtherLoad(this.getProcesoCarga().getFhFecImporta());
 			}
-		} catch (FileNotFoundException e) {
-			logger.error(e,e);
 		} catch (IOException e) {
 			logger.error(e,e);
-		}finally{
+			this.setLstProcesoLog(Utilitarios.addLog(Constante.Log.TipoMensaje.ERROR, 
+					"Error no controlado. Error leer la ruta del archivo. Mensaje:"+e.getMessage()+" - Causa:"+e.getCause(), 
+					this.getLstProcesoLog(), 
+					this.getProcesoCarga().getCdIdproceso()));
+		} catch (Exception e) {
+			logger.error(e,e);
+			this.setLstProcesoLog(Utilitarios.addLog(Constante.Log.TipoMensaje.ERROR, 
+					"Error no controlado. Mensaje:"+e.getMessage(), 
+					this.getLstProcesoLog(), 
+					this.getProcesoCarga().getCdIdproceso()));
+		} finally{
 			try {
 				is.close();
 				workbook.close();
@@ -81,9 +91,25 @@ public class ProcesoCargaRunnable implements Runnable {
 		procesoCarga.setCdUsuModifica(procesoCarga.getCdUsuCreacion());
 		procesoCarga.setFhFecModifica(new Date());
 		procesoCarga.setFhFecFin(new Date());
-		procesoCarga.setStEstadoProceso(Constante.EstadoProceso.TERMINADO);
+		procesoCarga.setProcesoLogList(this.getLstProcesoLog());
+		procesoCarga.setStEstadoProceso(this.obtenerEstadoProcesoByLog(this.getLstProcesoLog()));	
 		procesoCarga = procesoCargaManager.saveProcesoCarga(procesoCarga);
 		
+	}
+	
+	/**
+	 * @param lstProcesoLog2
+	 * @return
+	 */
+	private String obtenerEstadoProcesoByLog(List<ProcesoLog> lstProcesoLog2) {
+		String strEstado = Constante.EstadoProceso.TERMINADO;
+		for (ProcesoLog procesoLog : lstProcesoLog2) {
+			if (procesoLog.getTpTipomensaje().equals(Constante.Log.TipoMensaje.ERROR)){
+				strEstado = Constante.EstadoProceso.ERRADO;
+				break;
+			}
+		}
+		return strEstado;
 	}
 
 	/**
@@ -98,18 +124,20 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			CobranzaPago cobranzaPago = new CobranzaPago();
 			if (contaFila >= nroFilaData){
-				cobranzaPago.setCdCodFondo(Utilitarios.parseDoubleToString(hsObjCols.get(0)));
-				cobranzaPago.setTipOperacion(Utilitarios.parseToString(hsObjCols.get(1)));
-				cobranzaPago.setFhFecIngreso(Utilitarios.parseToDate(hsObjCols.get(2)));
-				cobranzaPago.setFhFecLiq(Utilitarios.parseToDate(hsObjCols.get(3)));
-				cobranzaPago.setNbDescripcion(Utilitarios.parseToString(hsObjCols.get(4)));
-				cobranzaPago.setTpMoneda(Utilitarios.parseToString(hsObjCols.get(5)));
-				cobranzaPago.setImMonto(Utilitarios.parseToDouble(hsObjCols.get(6)));
-				cobranzaPago.setImMtoMonFondo(Utilitarios.parseToDouble(hsObjCols.get(7)));
-				cobranzaPago.setCdSigla(Utilitarios.parseToString(hsObjCols.get(8)));
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "SALDOS");
+				cobranzaPago.setCdCodFondo(helper.parseDoubleToString(hsObjCols.get(0),1));
+				cobranzaPago.setTipOperacion(helper.parseToString(hsObjCols.get(1)));
+				cobranzaPago.setFhFecIngreso(helper.parseToDate(hsObjCols.get(2),3));
+				cobranzaPago.setFhFecLiq(helper.parseToDate(hsObjCols.get(3),4));
+				cobranzaPago.setNbDescripcion(helper.parseToString(hsObjCols.get(4)));
+				cobranzaPago.setTpMoneda(helper.parseToString(hsObjCols.get(5)));
+				cobranzaPago.setImMonto(helper.parseToDouble(hsObjCols.get(6),7));
+				cobranzaPago.setImMtoMonFondo(helper.parseToDouble(hsObjCols.get(7),8));
+				cobranzaPago.setCdSigla(helper.parseToString(hsObjCols.get(8)));
 				cobranzaPago.setStEstado(Constante.ESTADO_ACTIVO);
 				cobranzaPago.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
 				lstResult.add(cobranzaPago);
+				this.setLstProcesoLog(helper.getLstLog());
 			}
 			contaFila++;
 			
@@ -124,45 +152,47 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Saldo saldo = new Saldo();
 			if (contaFila >= nroFilaData){
-				saldo.setCdCodFondo(Utilitarios.parseToString(hsObjCols.get(0)));
-				saldo.setNbNomFondo(Utilitarios.parseToString(hsObjCols.get(1)));
-				saldo.setTpTipmoneda(Utilitarios.parseToString(hsObjCols.get(2)));
-				saldo.setNuNumCuenta(Utilitarios.parseToString(hsObjCols.get(3)));
-				saldo.setToSaldoInicial(Utilitarios.parseToDouble(hsObjCols.get(4)));
-				saldo.setImDifRescate(Utilitarios.parseToDouble(hsObjCols.get(5)));
-				saldo.setImSuscripcion(Utilitarios.parseToDouble(hsObjCols.get(6)));
-				saldo.setImRescate(Utilitarios.parseToDouble(hsObjCols.get(7)));
-				saldo.setImVencimiento(Utilitarios.parseToDouble(hsObjCols.get(8)));
-				saldo.setImComprasTmasn(Utilitarios.parseToDouble(hsObjCols.get(9)));
-				saldo.setImVentasTmasn(Utilitarios.parseToDouble(hsObjCols.get(10)));
-				saldo.setImCompra(Utilitarios.parseToDouble(hsObjCols.get(11)));
-				saldo.setImVenta(Utilitarios.parseToDouble(hsObjCols.get(12)));
-				saldo.setImCxpAcciones(Utilitarios.parseToDouble(hsObjCols.get(13)));
-				saldo.setImCxcAcciones(Utilitarios.parseToDouble(hsObjCols.get(14)));
-				saldo.setImComision(Utilitarios.parseToDouble(hsObjCols.get(15)));
-				saldo.setToSaldoFinal(Utilitarios.parseToDouble(hsObjCols.get(16)));
-				saldo.setImRescateTmasn(Utilitarios.parseToDouble(hsObjCols.get(17)));
-				saldo.setImCarteTmenosuno(Utilitarios.parseToDouble(hsObjCols.get(18)));
-				saldo.setImPorcLiquidez(Utilitarios.parseToDouble(hsObjCols.get(19)));
-				saldo.setToSaldoInvertir(Utilitarios.parseToDouble(hsObjCols.get(20)));
-				saldo.setNbObservacion(Utilitarios.parseToString(hsObjCols.get(21)));
-				saldo.setPcPorcPatrimonio(Utilitarios.parseToDouble(hsObjCols.get(22)));
-				saldo.setImPatMonFondo(Utilitarios.parseToDouble(hsObjCols.get(23)));
-				saldo.setPcPorcPatTot(Utilitarios.parseToDouble(hsObjCols.get(24)));
-				saldo.setPcPorcContinenta(Utilitarios.parseToDouble(hsObjCols.get(25)));
-				saldo.setPcPorcTotal(Utilitarios.parseToDouble(hsObjCols.get(26)));
-				saldo.setImMtoExceso(Utilitarios.parseToDouble(hsObjCols.get(27)));
-				saldo.setPcPorcAcciones(Utilitarios.parseToDouble(hsObjCols.get(28)));
-				saldo.setImVinculado(Utilitarios.parseToDouble(hsObjCols.get(29)));
-				saldo.setImLiquidezInmedi(Utilitarios.parseToDouble(hsObjCols.get(30)));
-				saldo.setImSolicitudSusc(Utilitarios.parseToDouble(hsObjCols.get(31)));
-				saldo.setImSolicitudResc(Utilitarios.parseToDouble(hsObjCols.get(32)));
-				saldo.setImCxpPendiente(Utilitarios.parseToDouble(hsObjCols.get(33)));
-				saldo.setImSaldoTmasn(Utilitarios.parseToDouble(hsObjCols.get(34)));
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "SALDOS");
+				saldo.setCdCodFondo(helper.parseToString(hsObjCols.get(0)));
+				saldo.setNbNomFondo(helper.parseToString(hsObjCols.get(1)));
+				saldo.setTpTipmoneda(helper.parseToString(hsObjCols.get(2)));
+				saldo.setNuNumCuenta(helper.parseToString(hsObjCols.get(3)));
+				saldo.setToSaldoInicial(helper.parseToDouble(hsObjCols.get(4),5));
+				saldo.setImDifRescate(helper.parseToDouble(hsObjCols.get(5),6));
+				saldo.setImSuscripcion(helper.parseToDouble(hsObjCols.get(6),7));
+				saldo.setImRescate(helper.parseToDouble(hsObjCols.get(7),8));
+				saldo.setImVencimiento(helper.parseToDouble(hsObjCols.get(8),9));
+				saldo.setImComprasTmasn(helper.parseToDouble(hsObjCols.get(9),10));
+				saldo.setImVentasTmasn(helper.parseToDouble(hsObjCols.get(10),11));
+				saldo.setImCompra(helper.parseToDouble(hsObjCols.get(11),12));
+				saldo.setImVenta(helper.parseToDouble(hsObjCols.get(12),13));
+				saldo.setImCxpAcciones(helper.parseToDouble(hsObjCols.get(13),14));
+				saldo.setImCxcAcciones(helper.parseToDouble(hsObjCols.get(14),15));
+				saldo.setImComision(helper.parseToDouble(hsObjCols.get(15),16));
+				saldo.setToSaldoFinal(helper.parseToDouble(hsObjCols.get(16),17));
+				saldo.setImRescateTmasn(helper.parseToDouble(hsObjCols.get(17),18));
+				saldo.setImCarteTmenosuno(helper.parseToDouble(hsObjCols.get(18),19));
+				saldo.setImPorcLiquidez(helper.parseToDouble(hsObjCols.get(19),20));
+				saldo.setToSaldoInvertir(helper.parseToDouble(hsObjCols.get(20),21));
+				saldo.setNbObservacion(helper.parseToString(hsObjCols.get(21)));
+				saldo.setPcPorcPatrimonio(helper.parseToDouble(hsObjCols.get(22),23));
+				saldo.setImPatMonFondo(helper.parseToDouble(hsObjCols.get(23),24));
+				saldo.setPcPorcPatTot(helper.parseToDouble(hsObjCols.get(24),25));
+				saldo.setPcPorcContinenta(helper.parseToDouble(hsObjCols.get(25),26));
+				saldo.setPcPorcTotal(helper.parseToDouble(hsObjCols.get(26),27));
+				saldo.setImMtoExceso(helper.parseToDouble(hsObjCols.get(27),28));
+				saldo.setPcPorcAcciones(helper.parseToDouble(hsObjCols.get(28),29));
+				saldo.setImVinculado(helper.parseToDouble(hsObjCols.get(29),30));
+				saldo.setImLiquidezInmedi(helper.parseToDouble(hsObjCols.get(30),31));
+				saldo.setImSolicitudSusc(helper.parseToDouble(hsObjCols.get(31),32));
+				saldo.setImSolicitudResc(helper.parseToDouble(hsObjCols.get(32),33));
+				saldo.setImCxpPendiente(helper.parseToDouble(hsObjCols.get(33),34));
+				saldo.setImSaldoTmasn(helper.parseToDouble(hsObjCols.get(34),35));
 				saldo.setStEstado(Constante.ESTADO_ACTIVO);
 				saldo.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
 			
 				lstResult.add(saldo);
+				this.setLstProcesoLog(helper.getLstLog());
 			}
 			contaFila++;
 			
@@ -178,46 +208,47 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Infoport infoport = new Infoport();
 			if (contaFila >= nroFilaData){
-				infoport.setNbNomFondo(Utilitarios.parseToString(hsObjCols.get(0)));
-				infoport.setTpTipfondo(Utilitarios.parseToString(hsObjCols.get(1)));
-				infoport.setNbNomEmisor(Utilitarios.parseToString(hsObjCols.get(2)));
-				infoport.setTpRatingEmisor(Utilitarios.parseToString(hsObjCols.get(3)));
-				infoport.setNbEspecie(Utilitarios.parseToString(hsObjCols.get(4)));
-				infoport.setFhFecEmision(Utilitarios.parseToDate(hsObjCols.get(5)));
-				infoport.setFhFecVencimiento(Utilitarios.parseToDate(hsObjCols.get(6)));
-				infoport.setImNominalEnMil(Utilitarios.parseToDouble(hsObjCols.get(7)));
-				infoport.setImCupon(Utilitarios.parseToDouble(hsObjCols.get(8)));
-				infoport.setFhFecUltCupon(Utilitarios.parseToDate(hsObjCols.get(9)));
-				infoport.setTpModalidad(Utilitarios.parseToString(hsObjCols.get(10)));
-				infoport.setImPrecioLimpio(Utilitarios.parseToDouble(hsObjCols.get(11)));
-				infoport.setImPrecioSucio(Utilitarios.parseToDouble(hsObjCols.get(12)));
-				infoport.setImValorSinInter(Utilitarios.parseToDouble(hsObjCols.get(13)));
-				infoport.setImInteresCorrid(Utilitarios.parseToDouble(hsObjCols.get(14)));
-				infoport.setImValorMonRef(Utilitarios.parseToDouble(hsObjCols.get(15)));
-				infoport.setTpAbrevMoneda(Utilitarios.parseToString(hsObjCols.get(16)));
-				infoport.setImValorMonLocal(Utilitarios.parseToDouble(hsObjCols.get(17)));
-				infoport.setImTotCtasCobrar(Utilitarios.parseToDouble(hsObjCols.get(18)));
-				infoport.setImTotCtasPagar(Utilitarios.parseToDouble(hsObjCols.get(19)));
-				infoport.setNuPeriodo(Utilitarios.parseToDouble(hsObjCols.get(20)));
-				infoport.setImYtm(Utilitarios.parseToDouble(hsObjCols.get(21)));
-				infoport.setImDuracNorm(Utilitarios.parseToDouble(hsObjCols.get(22)));
-				infoport.setImDuracModif(Utilitarios.parseToDouble(hsObjCols.get(23)));
-				infoport.setTpClasifica(Utilitarios.parseToString(hsObjCols.get(24)));
-				infoport.setImPrecioAct(Utilitarios.parseToDouble(hsObjCols.get(25)));
-				infoport.setImPrecCom(Utilitarios.parseToDouble(hsObjCols.get(26)));
-				infoport.setNbIsin(Utilitarios.parseToString(hsObjCols.get(27)));
-				infoport.setNbMnemonico(Utilitarios.parseToString(hsObjCols.get(28)));
-				infoport.setNuNumDiasVcto(Utilitarios.parseToDouble(hsObjCols.get(29)));
-				infoport.setFhFecvctoSgtCup(Utilitarios.parseToDate(hsObjCols.get(30)));
-				infoport.setFhFecUltOperac(Utilitarios.parseToDate(hsObjCols.get(31)));
-				infoport.setImDuracNorLibor(Utilitarios.parseToDouble(hsObjCols.get(32)));
-				infoport.setImCompraTMasN(Utilitarios.parseToDouble(hsObjCols.get(33)));
-				infoport.setNbObservacion(Utilitarios.parseToString(hsObjCols.get(34)));
-				infoport.setImValorPorDurac(Utilitarios.parseToDouble(hsObjCols.get(35)));
-				infoport.setImValorPorYtm(Utilitarios.parseToDouble(hsObjCols.get(36)));
-				infoport.setNuDiaParaVenc(Utilitarios.parseToDouble(hsObjCols.get(37)));
-				infoport.setStEstadoPort(Utilitarios.parseToString(hsObjCols.get(38)));
-				infoport.setStCondicion(Utilitarios.parseDoubleToString(hsObjCols.get(39)));
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "INFOPORT");
+				infoport.setNbNomFondo(helper.parseToString(hsObjCols.get(0)));
+				infoport.setTpTipfondo(helper.parseToString(hsObjCols.get(1)));
+				infoport.setNbNomEmisor(helper.parseToString(hsObjCols.get(2)));
+				infoport.setTpRatingEmisor(helper.parseToString(hsObjCols.get(3)));
+				infoport.setNbEspecie(helper.parseToString(hsObjCols.get(4)));
+				infoport.setFhFecEmision(helper.parseToDate(hsObjCols.get(5),6));
+				infoport.setFhFecVencimiento(helper.parseToDate(hsObjCols.get(6),7));
+				infoport.setImNominalEnMil(helper.parseToDouble(hsObjCols.get(7),8));
+				infoport.setImCupon(helper.parseToDouble(hsObjCols.get(8),9));
+				infoport.setFhFecUltCupon(helper.parseToDate(hsObjCols.get(9),10));
+				infoport.setTpModalidad(helper.parseToString(hsObjCols.get(10)));
+				infoport.setImPrecioLimpio(helper.parseToDouble(hsObjCols.get(11),12));
+				infoport.setImPrecioSucio(helper.parseToDouble(hsObjCols.get(12),13));
+				infoport.setImValorSinInter(helper.parseToDouble(hsObjCols.get(13),14));
+				infoport.setImInteresCorrid(helper.parseToDouble(hsObjCols.get(14),15));
+				infoport.setImValorMonRef(helper.parseToDouble(hsObjCols.get(15),16));
+				infoport.setTpAbrevMoneda(helper.parseToString(hsObjCols.get(16)));
+				infoport.setImValorMonLocal(helper.parseToDouble(hsObjCols.get(17),18));
+				infoport.setImTotCtasCobrar(helper.parseToDouble(hsObjCols.get(18),19));
+				infoport.setImTotCtasPagar(helper.parseToDouble(hsObjCols.get(19),20));
+				infoport.setNuPeriodo(helper.parseToDouble(hsObjCols.get(20),21));
+				infoport.setImYtm(helper.parseToDouble(hsObjCols.get(21),22));
+				infoport.setImDuracNorm(helper.parseToDouble(hsObjCols.get(22),23));
+				infoport.setImDuracModif(helper.parseToDouble(hsObjCols.get(23),24));
+				infoport.setTpClasifica(helper.parseToString(hsObjCols.get(24)));
+				infoport.setImPrecioAct(helper.parseToDouble(hsObjCols.get(25),26));
+				infoport.setImPrecCom(helper.parseToDouble(hsObjCols.get(26),27));
+				infoport.setNbIsin(helper.parseToString(hsObjCols.get(27)));
+				infoport.setNbMnemonico(helper.parseToString(hsObjCols.get(28)));
+				infoport.setNuNumDiasVcto(helper.parseToDouble(hsObjCols.get(29),30));
+				infoport.setFhFecvctoSgtCup(helper.parseToDate(hsObjCols.get(30),31));
+				infoport.setFhFecUltOperac(helper.parseToDate(hsObjCols.get(31),32));
+				infoport.setImDuracNorLibor(helper.parseToDouble(hsObjCols.get(32),33));
+				infoport.setImCompraTMasN(helper.parseToDouble(hsObjCols.get(33),34));
+				infoport.setNbObservacion(helper.parseToString(hsObjCols.get(34)));
+				infoport.setImValorPorDurac(helper.parseToDouble(hsObjCols.get(35),35));
+				infoport.setImValorPorYtm(helper.parseToDouble(hsObjCols.get(36),36));
+				infoport.setNuDiaParaVenc(helper.parseToDouble(hsObjCols.get(37),37));
+				infoport.setStEstadoPort(helper.parseToString(hsObjCols.get(38)));
+				infoport.setStCondicion(helper.parseDoubleToString(hsObjCols.get(39),40));
 				infoport.setStEstado(Constante.ESTADO_ACTIVO);
 				if(infoport.getNbEspecie()!=null && !infoport.getNbEspecie().isEmpty()){
 					if (infoport.getNbEspecie().equals(Constante.Especie.DESC_CERTIFICADOS) ||
@@ -234,7 +265,9 @@ public class ProcesoCargaRunnable implements Runnable {
 					}
 				}
 				infoport.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
+				
 				lstResult.add(infoport);
+				this.setLstProcesoLog(helper.getLstLog());
 			}
 			contaFila++;
 			
@@ -298,6 +331,20 @@ public class ProcesoCargaRunnable implements Runnable {
 
 	public void setProcesoCarga(ProcesoCarga procesoCarga) {
 		this.procesoCarga = procesoCarga;
+	}
+
+	/**
+	 * @return the lstProcesoLog
+	 */
+	public List<ProcesoLog> getLstProcesoLog() {
+		return lstProcesoLog;
+	}
+
+	/**
+	 * @param lstProcesoLog the lstProcesoLog to set
+	 */
+	public void setLstProcesoLog(List<ProcesoLog> lstProcesoLog) {
+		this.lstProcesoLog = lstProcesoLog;
 	}
 
 	
