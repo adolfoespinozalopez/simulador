@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAbonoCargo">
     	<p:focus context="panelAbonoCargo"/>
         <p:panel id="panelAbonoCargo" header="Detalle Abono / Cargo" 
@@ -15,7 +16,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -28,11 +29,8 @@
                             <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 210px;" 
                                          	value="#{portafolioController.selectedFondoAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BBVA SOLES" itemValue="BBVA SOLES" />
-	                            <f:selectItem itemLabel="BBVA MODERADO-S" itemValue="BBVA MODERADO-S" />
-	                            <f:selectItem itemLabel="BBVA CREC.SOLES" itemValue="BBVA CREC.SOLES" />
-	                            <f:selectItem itemLabel="BBVA AGRESIVO-S" itemValue="BBVA AGRESIVO-S" />
-	                            <f:selectItem itemLabel="CASH DOLARES" itemValue="CASH DOLARES" />
+	                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
+										   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
@@ -53,12 +51,8 @@
                             <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 210px;" 
                                          	value="#{portafolioController.selectedContraAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
-	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
-	                            <f:selectItem itemLabel="BANCO GNB" itemValue="BANCO GNB" />
-	                            <f:selectItem itemLabel="BANCO RIPLEY" itemValue="BANCO RIPLEY" />
-	                            <f:selectItem itemLabel="BIF" itemValue="BIF" />
-	                            <f:selectItem itemLabel="BANCO SANTANDER" itemValue="BANCO SANTANDER" />
+	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
@@ -66,7 +60,9 @@
                         <td><p:outputLabel value="Monto en USD:" for="txtMontoAbono"/></td>
                         <td>
 	                        <p:inputText id="txtMontoAbono" style="width: 200px;" maxlength="30" required="true"
-                                         value="#{portafolioController.montoAbono}" />
+                                         value="#{portafolioController.montoAbono}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 50px;"><p:message for="txtMontoAbono" display="icon" /></td>
                     </tr>

@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmRentaFija">
     	<p:focus context="panelRentaFija"/>
         <p:panel id="panelRentaFija" header="Detalle Renta Fija" >
@@ -43,9 +44,6 @@
 	                            <f:selectItem itemLabel="Bonos de arrendamiento" itemValue="Bonos de arrendami" />
 	                            <f:selectItem itemLabel="Bonos subordinados" itemValue="Bonos subordinados" />
 	                            <f:selectItem itemLabel="Instrumentos de gobierno" itemValue="Instrumentos de go" />
-	                            <f:selectItem itemLabel="Certificados" itemValue="Certificados" />
-	                            <f:selectItem itemLabel="Instrumentos coberturados" itemValue="Instrum.Coberturad" />
-	                            <f:selectItem itemLabel="Letras del Tesoro" itemValue="Letras del Tesoro" />
 	                        </p:selectOneMenu>
                         </td>
                         <td style="width: 50px;"><p:message for="lstEspecieFija" display="icon" /></td>
@@ -66,7 +64,9 @@
                         <td><p:outputLabel value="Monto:" for="txtMontoFija"/></td>
                         <td>
 	                        <p:inputText id="txtMontoFija" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}" />
+                                         value="#{portafolioController.tipoCambioSpot}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td><p:message for="txtMontoFija" display="icon" /></td>
                         <td><p:outputLabel value="Mnemonico:" for="txtMnemonico"/></td>
@@ -79,13 +79,17 @@
                     <tr>
                         <td><h:outputLabel value="Precio Limpio:"/></td>
                         <td colspan="2">
-	                        <p:inputText id="txtPreLimpioFija" style="width: 100px;" maxlength="30" 
-                                         value="#{portafolioController.tipoCambioSpot}" />
+	                        <p:inputText id="txtPreLimpioFija" style="width: 100px;" maxlength="15" 
+                                         value="#{portafolioController.tipoCambioSpot}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td><p:outputLabel value="Precio Sucio:" for="txtPreSucioFija"/></td>
                         <td>
-	                        <p:inputText id="txtPreSucioFija" style="width: 120px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}" />
+	                        <p:inputText id="txtPreSucioFija" style="width: 120px;" maxlength="15" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td><p:message for="txtPreSucioFija" display="icon" /></td>
                     </tr>

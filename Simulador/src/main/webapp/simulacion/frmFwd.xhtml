@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmFwd">
     	<p:focus context="panelFwd"/>
         <p:panel id="panelFwd" header="Detalle Compra / Venta Forward" 
@@ -15,7 +16,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -36,15 +37,11 @@
                     <tr>
                         <td><h:outputLabel value="Contraparte:"/></td>
                         <td colspan="5">
-                            <p:selectOneMenu id="lstContraparteFwd" required="true" style="width: 230px;" 
+                            <p:selectOneMenu id="lstContraparteFwd" required="true" style="width: 250px;" 
                                          	value="#{portafolioController.selectedContraFwd}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
-	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
-	                            <f:selectItem itemLabel="BANCO GNB" itemValue="BANCO GNB" />
-	                            <f:selectItem itemLabel="BANCO RIPLEY" itemValue="BANCO RIPLEY" />
-	                            <f:selectItem itemLabel="BIF" itemValue="BIF" />
-	                            <f:selectItem itemLabel="BANCO SANTANDER" itemValue="BANCO SANTANDER" />
+	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
@@ -62,13 +59,15 @@
                     <tr>
                         <td><p:outputLabel value="Tipo de Cambio Spot:" for="txtCambioSpotFwd"/></td>
                         <td>
-	                        <p:inputText id="txtCambioSpotFwd" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}" />
+	                        <p:inputText id="txtCambioSpotFwd" style="width: 100px;" maxlength="15" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 50px;"><p:message for="txtCambioSpotFwd" display="icon" /></td>
                         <td><p:outputLabel value="Puntos FWD:" for="txtPuntosFwd"/></td>
                         <td>
-	                        <p:inputText id="txtPuntosFwd" style="width: 100px;" maxlength="30" required="true"
+	                        <p:inputText id="txtPuntosFwd" style="width: 100px;" maxlength="15" required="true"
                                          value="#{portafolioController.puntosFwd}" />
                         </td>
                         <td style="width: 50px;"><p:message for="txtPuntosFwd" display="icon" /></td>
@@ -76,14 +75,18 @@
                     <tr>
                         <td><p:outputLabel value="Tipo de Cambio Fwd:" for="txtCambioFwd"/></td>
                         <td>
-	                        <p:inputText id="txtCambioFwd" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioFwd}" />
+	                        <p:inputText id="txtCambioFwd" style="width: 100px;" maxlength="15" required="true"
+                                         value="#{portafolioController.tipoCambioFwd}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 50px;"><p:message for="txtCambioFwd" display="icon" /></td>
                         <td><p:outputLabel value="Plazo:" for="txtPlazoFwd"/></td>
                         <td>
-	                        <p:inputText id="txtPlazoFwd" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.plazoFwd}" />
+	                        <p:inputText id="txtPlazoFwd" style="width: 100px;" maxlength="10" required="true"
+                                         value="#{portafolioController.plazoFwd}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 50px;"><p:message for="txtPlazoFwd" display="icon" /></td>
                     </tr>

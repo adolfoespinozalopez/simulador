@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmRenuevaDeposito">
     	<p:focus context="panelRenuevaDeposito"/>
         <p:panel id="panelRenuevaDeposito" header="Detalle Renovación" 
@@ -15,7 +16,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -52,21 +53,28 @@
                         <td><p:outputLabel value="Importe:" for="txtImpRen"/></td>
                         <td colspan="4">
 	                        <p:inputText id="txtImpRen" style="width: 315px;" maxlength="30" required="true"
-                                         value="#{portafolioController.importeRenova}" />
+                                         value="#{portafolioController.importeRenova}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td><p:message for="txtImpRen" display="icon" /></td>
                     </tr>
                     <tr>
                     	<td><p:outputLabel value="Tasa:" for="txtTasaRen"/></td>
                         <td>
-	                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tasaRenova}" />
+	                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="12" required="true"
+                                         value="#{portafolioController.tasaRenova}" >
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 40px;"><p:message for="txtTasaRen" display="icon" /></td>
                         <td><p:outputLabel value="Plazo:" for="txtPlazoRen"/></td>
                         <td>
-	                        <p:inputText id="txtPlazoRen" style="width: 100px;" maxlength="30" required="true" 
-                                         value="#{portafolioController.plazoRenova}" />
+	                        <p:inputText id="txtPlazoRen" style="width: 100px;" maxlength="10" required="true" 
+                                         value="#{portafolioController.plazoRenova}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVctoRenueva}" update="@this, :frmRenuevaDeposito:fecVctoRen, msgRenovar, growl" />
+						    </p:inputText>
                         </td>
                         <td style="width: 40px;"><p:message for="txtPlazoRen" display="icon" /></td>
                     </tr>
@@ -88,10 +96,11 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Renovar" icon="ui-icon-disk" update="panelRenuevaDeposito" validateClient="true" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Renovar Depósito" icon="ui-icon-disk" update="panelRenuevaDeposito, msgRenovar, growl" validateClient="true" 
+                                 actionListener="#{portafolioController.guardaOpRenuevaDeposito}" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteRenuevaDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
+        <p:messages id="msgRenovar" showDetail="false" autoUpdate="true" closable="true" />
     </h:form>
 </ui:composition>

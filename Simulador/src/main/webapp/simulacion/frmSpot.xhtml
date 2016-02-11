@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmSpot">
     	<p:focus context="panelSpot"/>
         <p:panel id="panelSpot" header="Detalle Compra / Venta Spot" 
@@ -15,7 +16,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -36,23 +37,21 @@
                     <tr>
                         <td><h:outputLabel value="Contraparte:"/></td>
                         <td colspan="2">
-                            <p:selectOneMenu id="lstContraparteSpot" required="true" style="width: 230px;" 
+                            <p:selectOneMenu id="lstContraparteSpot" required="true" style="width: 250px;" 
                                          	value="#{portafolioController.selectedContraSpot}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="BANCO DE CREDITO" itemValue="BANCO DE CREDITO" />
-	                            <f:selectItem itemLabel="BANCO CONTINENTAL" itemValue="BANCO CONTINENTAL" />
-	                            <f:selectItem itemLabel="BANCO GNB" itemValue="BANCO GNB" />
-	                            <f:selectItem itemLabel="BANCO RIPLEY" itemValue="BANCO RIPLEY" />
-	                            <f:selectItem itemLabel="BIF" itemValue="BIF" />
-	                            <f:selectItem itemLabel="BANCO SANTANDER" itemValue="BANCO SANTANDER" />
+	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
 	                        </p:selectOneMenu>
                         </td>
                     </tr>
                     <tr>
                         <td><p:outputLabel value="Tipo de Cambio Spot:" for="txtCambioSpot"/></td>
                         <td>
-	                        <p:inputText id="txtCambioSpot" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}" />
+	                        <p:inputText id="txtCambioSpot" style="width: 100px;" maxlength="15" required="true"
+                                         value="#{portafolioController.tipoCambioSpot}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 50px;"><p:message for="txtCambioSpot" display="icon" /></td>
                     </tr>

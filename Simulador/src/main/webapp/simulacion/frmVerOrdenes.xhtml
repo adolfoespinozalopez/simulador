@@ -58,7 +58,7 @@
 					<h:outputText value="#{item.cdIdTipoOperacion.nbDescGeneral}" />
 				</p:column>
 				<p:column headerText="Moneda" style="width: 6%;text-align: left;">
-					<h:outputText value="#{item.tpTipmoneda}" />
+					<h:outputText value="#{portafolioController.mapaMoneda[item.tpTipmoneda]}" />
 				</p:column>
 				<p:column headerText="Contraparte" style="width: 15%;text-align: left;">
 					<h:outputText value="#{item.contraparte.nbDescGeneral}" />
@@ -70,7 +70,9 @@
 					<h:outputText value="#{item.nbMnemonico}" />
 				</p:column>
 				<p:column headerText="Monto / Cantidad" style="width: 12%;text-align: left;">
-                	<h:outputText value="#{item.imMontoFinal}"/>
+                	<h:outputText value="#{item.imMontoFinal}">
+						<f:convertNumber groupingUsed="true" locale="es" maxFractionDigits="0" />
+					</h:outputText>
                 </p:column>
 				<p:column headerText="Efectividad" style="width: 10%;text-align: center;">
 					<h:outputText value="#{item.fhFecEfectividad}">

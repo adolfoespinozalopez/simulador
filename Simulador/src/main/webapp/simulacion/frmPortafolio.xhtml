@@ -17,9 +17,11 @@
             	<div style="float: left;"><h1 class="title-sh">Portafolio</h1></div>
             	<div style="float: right;padding-top: 15px;color: #0078d2;">
             		<h:outputText value="Tipo de cambio al" style="font-size: 12px;"/>
-            		<h:outputLabel value="#{portafolioController.fechaActual}" style="font-weight:bold;font-size: 14px;"/>
+            		<h:outputLabel value="#{portafolioController.fechaActual}" styleClass="tcActual" />
             		<h:outputText value=" con valor de" style="font-size: 12px;"/>
-            		<h:outputLabel value="#{portafolioController.valorTipoCambio}" style="font-weight:bold;font-size: 14px;"/>
+            		<h:outputLabel value="#{notificacionController.tipoCambioActual.nuValor}" styleClass="tcActual">
+						<f:convertNumber locale="es_PE" pattern="#,##" maxFractionDigits="2" />
+					</h:outputLabel>
             	</div>
             	<p:separator style="clear:both;" />
                 <h:form id="frmPortafolio">
@@ -28,7 +30,7 @@
                     </style>
                     <p:panel id="panPortafolio" >
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
-                        <p:selectOneMenu id="lstFondo" style="width: 160px;" 
+                        <p:selectOneMenu id="lstFondo" style="width: 160px;" filter="true" filterMatchMode="startsWith"
                                          value="#{portafolioController.selectedFondo}" 
                                          valueChangeListener="#{portafolioController.realizarFiltroDeFondo}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
@@ -37,7 +39,7 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <h:outputText value="Emisor :" style="padding-left: 20px;padding-right: 5px;"/>
-						<p:selectOneMenu id="lstEmisor" style="width: 250px;" 
+						<p:selectOneMenu id="lstEmisor" style="width: 250px;" filter="true" filterMatchMode="startsWith"
 										 value="#{portafolioController.selectedEmisor}"
 										 valueChangeListener="#{portafolioController.realizarFiltroDeEmisor}">
 							<f:selectItem itemLabel="Todos" itemValue="-1" />
@@ -72,27 +74,34 @@
                         		<p:column>
 	                        		<p:submenu label="Depósito" >
 	                        			<p:menuitem value="Cancelar" icon="ui-icon-closethick" actionListener="#{portafolioController.validarCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"/>
+	                        						update=":dlgMensajeVal, :dlgCancelarDeposito, :frmCancelarDeposito:panelCancelarDeposito"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"/>
 	                        			<p:menuitem value="Pre - Cancelar" icon="ui-icon-cancel" actionListener="#{portafolioController.validarPreCancelarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"/>
+	                        						update=":dlgMensajeVal, :dlgPreCancelarDeposito, :frmPreCancelarDeposito:panelPreCancelarDeposito"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"/>
 	                        			<p:menuitem value="Apertura" icon="ui-icon-folder-open" actionListener="#{portafolioController.validarAperturaDeposito}"
-	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgAperturaDeposito, :frmAperturaDeposito:panelAperturaDeposito"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        			<p:menuitem value="Renovar" icon="ui-icon-folder-collapsed" actionListener="#{portafolioController.validarRenovarDeposito}"
-	                        						update=":dlgMensajeVal, :dlgRenuevaDeposito, :frmRenuevaDeposito:panelRenuevaDeposito"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgRenuevaDeposito, :frmRenuevaDeposito:panelRenuevaDeposito"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
 	                        		<p:submenu label="Compra / Venta USD" >
 	                        			<p:menuitem value="Spot" icon="ui-icon-cart" actionListener="#{portafolioController.validarSpot}"
-	                        						update=":dlgMensajeVal, :dlgSpot, :frmSpot:panelSpot"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgSpot, :frmSpot:panelSpot"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        			<p:menuitem value="Forward" icon="ui-icon-cart" actionListener="#{portafolioController.validarFwd}"
-	                        						update=":dlgMensajeVal, :dlgFwd, :frmFwd:panelFwd"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgFwd, :frmFwd:panelFwd"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         		<p:column>
                         			<p:submenu label="Cuenta Ahorros" >
                         				<p:menuitem value="Abono / Cargo" icon="ui-icon-transferthick-e-w" actionListener="#{portafolioController.validarAbonoCargo}"
-	                        						update=":dlgMensajeVal, :dlgAbonoCargo, :frmAbonoCargo:panelAbonoCargo"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgAbonoCargo, :frmAbonoCargo:panelAbonoCargo"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'M')?false:true:false}"></p:menuitem>
                         			</p:submenu>                        		
                         		</p:column>
                         	</p:submenu>
@@ -100,7 +109,8 @@
                         		<p:column>
 	                        		<p:submenu label="Operación" >
 	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaFija}"
-	                        						update=":dlgMensajeVal, :dlgRentaFija, :frmRentaFija:panelRentaFija"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgRentaFija, :frmRentaFija:panelRentaFija"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'F')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         	</p:submenu>
@@ -108,7 +118,8 @@
                         		<p:column>
 	                        		<p:submenu label="Operación" >
 	                        			<p:menuitem value="Pre - Asignación" icon="ui-icon-clock" actionListener="#{portafolioController.validarRentaVariable}"
-	                        						update=":dlgMensajeVal, :dlgRentaVariable, :frmRentaVariable:panelRentaVariable"></p:menuitem>
+	                        						update=":dlgMensajeVal, :dlgRentaVariable, :frmRentaVariable:panelRentaVariable"
+	                        						disabled="#{(portafolioController.selectedInfo != null)?(portafolioController.selectedInfo.tpOperacion == 'V')?false:true:false}"></p:menuitem>
 	                        		</p:submenu>
                         		</p:column>
                         	</p:submenu>
@@ -120,7 +131,8 @@
 								selectionMode="single" rowIndexVar="index" rowKey="#{item.cdIdinfoport}"
 								selection="#{portafolioController.selectedInfo}"
 								frozenColumns="5" style="width:100%;" styleClass="infoport">
-								
+								<p:ajax event="rowSelect" update=":frmPortafolio:menuOpciones" />
+	                                		
 								<p:column headerText="Nombre del Fondo" sortBy="#{item.nbNomFondo}" 
 											style="width:100px;text-align: left;">
 									<h:outputText value="#{item.nbNomFondo}" />
@@ -299,38 +311,34 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgCancelarDeposito" modal="true" header="Cancelación de Depósitos a Plazo" 
-                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="350">
+                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="370">
                     <ui:include src="frmCancelarDeposito.xhtml" />
-                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmCancelarDeposito" />
+                    <p:ajax event="close" update=":frmCancelarDeposito" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgPreCancelarDeposito" modal="true" header="Pre - Cancelación de Depósitos a Plazo" 
-                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="360">
+                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="400">
                     <ui:include src="frmPreCancelarDeposito.xhtml" />
-                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmPreCancelarDeposito" />
+                    <p:ajax event="close" update=":frmPreCancelarDeposito" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgAperturaDeposito" modal="true" header="Apertura de Depósito a Plazo" 
-                		  widgetVar="manteAperturaDeposito" resizable="false" width="490" height="290">
+                		  widgetVar="manteAperturaDeposito" resizable="false" width="500" height="320">
                     <ui:include src="frmAperturaDeposito.xhtml" />
-                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmAperturaDeposito" />
+                    <p:ajax event="close" update=":frmAperturaDeposito" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
                 		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="290">
                 	<ui:include src="frmRenuevaDeposito.xhtml" />
-                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmRenuevaDeposito" />
+                    <p:ajax event="close" update=":frmRenuevaDeposito" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
                 		  widgetVar="manteSpot" resizable="false" width="540" height="560">
                     <ui:include src="frmSpot.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmSpot" />
+                            update=":frmSpot" resetValues="true" />
                 </p:dialog>
                 
                 <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 

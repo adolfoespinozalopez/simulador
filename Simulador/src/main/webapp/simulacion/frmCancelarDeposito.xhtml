@@ -4,7 +4,6 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:h="http://java.sun.com/jsf/html">
     <h:form id="frmCancelarDeposito">
-    	<p:focus context="panelCancelarDeposito"/>
         <p:panel id="panelCancelarDeposito" header="Detalle Cancelación" 
                  rendered="#{(portafolioController.selectedInfo != null)?true:false}">
             <table style="width: 100%;">
@@ -100,17 +99,18 @@
                         </td>
                     </tr>
                     <tr>
-                    	<td colspan="4"><BR/></td>
+                    	<td colspan="4"></td>
                     </tr>
                 </tbody>
             </table>
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton process="@form" value="Cancelar Depósito" icon="ui-icon-disk" update="panelCancelarDeposito, growl" 
+                <p:commandButton process="@form" value="Cancelar Depósito" icon="ui-icon-disk" update="panelCancelarDeposito, msgCancelar, growl" 
                                  actionListener="#{portafolioController.guardaOpCancelarDeposito}" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteCancelarDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
+        <p:messages id="msgCancelar" showDetail="false" autoUpdate="true" closable="true" />
     </h:form>
 </ui:composition>

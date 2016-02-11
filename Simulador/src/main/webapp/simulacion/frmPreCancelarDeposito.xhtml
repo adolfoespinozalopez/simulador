@@ -2,11 +2,16 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+    
     <h:form id="frmPreCancelarDeposito">
     	<p:focus context="panelPreCancelarDeposito"/>
         <p:panel id="panelPreCancelarDeposito" header="Detalle Pre - Cancelación" 
                  rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+            <p:blockUI block=":frmPreCancelarDeposito:fldPreCancelar" widgetVar="blkPanelPre" >
+        		Espere mientras se calculan los datos<br />
+    		</p:blockUI>
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
@@ -15,7 +20,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -81,13 +86,16 @@
             			<tr>
             				<td style="width: 80px;"><p:outputLabel value="Tasa:" for="txtTasaPre"/></td>
             				<td>
-            					<p:inputText id="txtTasaPre" style="width: 80px;" maxlength="10" required="true" 
-                             				 value="#{portafolioController.tasaPreCancelacion}" />
+            					<p:inputText id="txtTasaPre" style="width: 80px;" maxlength="12" required="true" 
+                             				 value="#{portafolioController.tasaPreCancelacion}" >
+                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>	 
+                             	</p:inputText>
                             </td>
                             <td><p:message for="txtTasaPre" display="icon" /></td>
-                            <td><p:commandButton value="Calcular" icon="ui-icon-calculator" validateClient="true"
+                            <td><p:commandButton id="btnCalcular" value="Calcular" icon="ui-icon-calculator" validateClient="true"
                             					 actionListener="#{portafolioController.calcularMontoPreCancelacion}" 
-                            					 update="lblMontoPreCancel" process="@this, txtTasaPre" /></td>
+                            					 update="lblMontoPreCancel, msgPreCancelar, growl" process="@this, txtTasaPre" 
+                            					 onclick="PF('blkPanelPre').show();" oncomplete="PF('blkPanelPre').hide();"/></td>
             			</tr>
             			<tr>
                     		<td colspan="4"><BR/></td>
@@ -102,10 +110,11 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Pre - Cancelar" icon="ui-icon-disk" update="panelPreCancelarDeposito" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Pre - Cancelar Depósito" icon="ui-icon-disk" update="panelPreCancelarDeposito, msgPreCancelar, growl" 
+                                 actionListener="#{portafolioController.guardaOpPreCancelarDeposito}" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('mantePreCancelarDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
+        <p:messages id="msgPreCancelar" showDetail="false" autoUpdate="true" closable="true" />
     </h:form>
 </ui:composition>

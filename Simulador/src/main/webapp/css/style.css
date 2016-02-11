@@ -652,3 +652,8 @@ h1.title-sh {
 	color: #FF0000;
 	background: #FFDCDC;
 }
+.tcActual{
+	font-weight: bold;
+    font-size: 17px;
+    color: #C71D5E;
+}

@@ -2,7 +2,8 @@
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAperturaDeposito">
     	<p:focus context="panelAperturaDeposito"/>
         <p:panel id="panelAperturaDeposito" header="Detalle Apertura" 
@@ -15,7 +16,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaInicial}" required="true"
+                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -57,7 +58,7 @@
                         <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
                         <td colspan="2">
 	                        <p:selectOneMenu id="lstTipoAper" required="true" style="width: 112px;" 
-                                         	value="#{portafolioController.selectedMonedaAper}" >
+                                         	value="#{portafolioController.selectedTipoAper}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="NORMAL" itemValue="NORMAL" />
 	                            <f:selectItem itemLabel="COBERTURADO" itemValue="COBERTURADO" />
@@ -68,21 +69,28 @@
                         <td><p:outputLabel value="Importe:" for="txtImpAper"/></td>
                         <td colspan="4">
 	                        <p:inputText id="txtImpAper" style="width: 315px;" maxlength="30" required="true"
-                                         value="#{portafolioController.importeAper}" />
+                                         value="#{portafolioController.importeAper}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td><p:message for="txtImpAper" display="icon" /></td>
                     </tr>
                     <tr>
                     	<td><p:outputLabel value="Tasa:" for="txtTasaAper"/></td>
                         <td>
-	                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{portafolioController.tasaAper}" />
+	                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="12" required="true"
+                                         value="#{portafolioController.tasaAper}">
+                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+						    </p:inputText>
                         </td>
                         <td style="width: 40px;"><p:message for="txtTasaAper" display="icon" /></td>
                         <td><p:outputLabel value="Plazo:" for="txtPlazoAper"/></td>
                         <td>
-	                        <p:inputText id="txtPlazoAper" style="width: 105px;" maxlength="30" required="true" 
-                                         value="#{portafolioController.plazoAper}" />
+	                        <p:inputText id="txtPlazoAper" style="width: 105px;" maxlength="10" required="true" 
+                                         value="#{portafolioController.plazoAper}" >
+                            	<pe:keyFilter regEx="/[\d\.\s,]/" />
+                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVcto}" update="@this, :frmAperturaDeposito:fecVcto, msgAperturar, growl" />
+						    </p:inputText>
                         </td>
                         <td style="width: 40px;"><p:message for="txtPlazoAper" display="icon" /></td>
                     </tr>
@@ -104,10 +112,11 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Aperturar" icon="ui-icon-disk" update="panelAperturaDeposito" validateClient="true" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Aperturar Depósito" icon="ui-icon-disk" update="panelAperturaDeposito, msgAperturar, growl" 
+                                 actionListener="#{portafolioController.guardaOpAperturaDeposito}" style="margin-right:10px" />
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteAperturaDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
+        <p:messages id="msgAperturar" showDetail="false" autoUpdate="true" closable="true" />
     </h:form>
 </ui:composition>
