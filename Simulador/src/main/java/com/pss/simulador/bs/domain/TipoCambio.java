@@ -55,6 +55,10 @@ public class TipoCambio implements java.io.Serializable {
 	public TipoCambio() {
 	}
 
+	public TipoCambio(Double nuvalor) {
+		this.nuValor = nuvalor;
+	}
+	
 	public TipoCambio(Integer cdIdtipocambio) {
 		this.cdIdtipocambio = cdIdtipocambio;
 	}

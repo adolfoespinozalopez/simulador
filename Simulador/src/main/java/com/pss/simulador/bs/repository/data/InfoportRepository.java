@@ -21,7 +21,7 @@ import com.pss.simulador.bs.domain.Infoport;
 @Repository
 public interface InfoportRepository extends CrudRepository<Infoport, Integer> {
 
-	@Query(value = "SELECT f FROM Infoport f WHERE f.fhFecImporta >= :fecImporta AND f.stEstado = '1' "
+	@Query(value = "SELECT f FROM Infoport f WHERE f.fhFecImporta >= :fecImporta "
 			+ "AND (:nomFondo  IS NULL OR f.nbNomFondo LIKE :nomFondo) "
 			+ "AND (:nomEmisor IS NULL OR f.nbNomEmisor =:nomEmisor) "
 			+ "AND (:vencehoy  IS NULL OR f.stEstadoPort LIKE :vencehoy) "

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.repository.data.InfoportRepository;
@@ -42,4 +43,9 @@ public class InfoportManagerImpl implements InfoportManager {
 		return infoportRepository.findByFilter(calendar.getTime() ,nomFondo, nomEmisor, vencehoy, operacion);
 	}
 
+	@Transactional
+	public Infoport save(Infoport infoport) {
+		return infoportRepository.save(infoport);
+	}
+	
 }

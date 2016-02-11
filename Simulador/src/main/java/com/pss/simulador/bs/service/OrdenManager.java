@@ -19,5 +19,5 @@ public interface OrdenManager {
 	public List<DetalleOrden> findDetalleByOrden(Integer idOrden);
 	public Orden save(Orden orden);
 	public OrdenEstado saveEstado(OrdenEstado ordenEstado);
-	
+	public DetalleOrden saveDetalle(DetalleOrden detalleOrden);
 }

@@ -13,5 +13,5 @@ import com.pss.simulador.bs.domain.Infoport;
 public interface InfoportManager {
 
 	public List<Infoport> findByFilter(String nomFondo, String nomEmisor, String vencehoy, String operacion);
-	
+	public Infoport save(Infoport infoport);
 }

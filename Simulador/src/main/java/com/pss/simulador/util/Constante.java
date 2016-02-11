@@ -54,6 +54,8 @@ public class Constante {
     public static final String TIPOAPERTURA_NORMAL = "NORMAL";
     public static final String VENCE_HOY = "VENCE HOY";
     
+    public static final Double VALOR_CERO = 0.0;
+    
     /**
      * Combos
      */
@@ -64,21 +66,27 @@ public class Constante {
      * Alertas
      */
     public static final String ORDENES_PAGE = "frmOrdenes.jsf";
+    public static final String PORTAFOLIO_PAGE = "frmPortafolio.jsf";
+    
     public static final int HORA_MONEY_MARKET = 11;
     public static final int HORA_RENTA_FIJA = 13;
     public static final int HORA_RENTA_VARIABLE = 15;
     public static final int MINUTO_ALERTA = 30;
-    
     /**
-     * Perfil
+     * Observaciones de Operaciones de Orden
      */
+    public static final String CANCELAR_OBS = "Cancelar"; 
+    
     public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
     
     public static final String WSLDAP_ENDPOINT = "http://118.180.14.23:8080/ws-ldap3/wService?wsdl";
-    
+    /**
+     * Perfil
+     */
     public static class Perfil{
     	public static final Integer TIPO_ADMINISTRADOR = 1;
     	public static final Integer TIPO_INVERSIONISTA = 2;
+    	public static final Integer TIPO_RIESGO = 3;
     }
     
     public static class Mensajes{

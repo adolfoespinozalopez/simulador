@@ -1,5 +1,6 @@
 package com.pss.simulador.util;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
@@ -11,12 +12,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
+import com.pss.simulador.bs.domain.DetalleOrden;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
+import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
 import com.pss.simulador.bs.domain.ProcesoLog;
+
 /**
 *
 * @author Adolfo Espinoza
@@ -56,17 +61,30 @@ public class Utilitarios {
     }
     
     public static boolean tieneNumeros(String cadena) {
-        Pattern p = Pattern.compile("[0-9]");
-        Matcher m = p.matcher(cadena);
-        if (m.find()) {
-            return true;
-        }
-        return false;
+    	try {
+    		Pattern p = Pattern.compile("[0-9]");
+            Matcher m = p.matcher(cadena);
+            if (m.find()) {
+                return true;
+            }
+    	} catch (Exception e) {
+			return false;
+		}
+    	return false;
     }
     
     public static boolean isDouble(String cadena) {
 		try {
 			Double.parseDouble(cadena);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+    
+    public static boolean isInteger(String cadena) {
+		try {
+			Integer.parseInt(cadena);
 			return true;
 		} catch (Exception e) {
 			return false;
@@ -108,6 +126,44 @@ public class Utilitarios {
     	return null;
     }
     
+    public static boolean copiaPropiedades(DetalleOrden destino, Infoport origen){
+    	try {
+			BeanUtils.copyProperties(destino, origen);
+			return true;
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			return false;
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			return false;
+		}
+    }
+    
+    public static Double parseToDouble(Object obj){
+    	try {
+			return obj!=null?(Double)obj:null;
+		} catch (Exception e) {
+			try {
+				return Double.parseDouble(String.valueOf(obj));
+			} catch (Exception e2) {
+				logger.error(e2,e2);
+			}
+		}
+    	return null;
+    }
+    
+    public static Integer parseToInteger(Object obj){
+    	try {
+    		return obj!=null?(Integer)obj:null;
+		} catch (Exception e) {
+			try {
+				return Integer.parseInt(String.valueOf(obj));
+			} catch (Exception e2) {
+				logger.error(e2,e2);
+			}
+		}
+    	return null;
+    }
     
     public static boolean isEmpty(Object obj) {
 		return obj==null || String.valueOf(obj).trim().isEmpty();

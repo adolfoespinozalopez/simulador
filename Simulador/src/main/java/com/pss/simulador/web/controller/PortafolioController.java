@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.pss.simulador.bs.domain.DetalleOrden;
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
@@ -63,13 +66,15 @@ public class PortafolioController extends GenericController{
 	
 	private String mensajeValida;
 	private String fechaActual;
-	private String valorTipoCambio;
 	
 	private List<General> listaOrdenEstado = new ArrayList<General>();
 	
 	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
+	
+	@Autowired
+	private NotificacionController notificacionController;
 	
 	@Autowired
 	private FondoManager fondoManager;
@@ -92,6 +97,7 @@ public class PortafolioController extends GenericController{
 	List<General> listaContraparte = new ArrayList<General>();
 	List<General> listaMoneda = new ArrayList<General>();
 	List<General> listaEspecie = new ArrayList<General>();
+	private Map<Integer, String> mapaMoneda = new HashMap<Integer, String>();
 	
 	private String tasaPreCancelacion;
 	private String montoPreCancelacion;
@@ -141,30 +147,26 @@ public class PortafolioController extends GenericController{
 		ejecutarbusqueda();
 		fechaInicial = Constante.FECHA_ACTUAL;
 		fechaActual = formatoFecha.format(fechaInicial);
-		//Cambiar por obtenerTipoDeCambio
-		valorTipoCambio = "3.40";
 		
 		Calendar cal = GregorianCalendar.getInstance();
 		cal.setTime(fechaInicial);
 		cal.add(Calendar.DATE, 3);
 		fechaFinal = cal.getTime();
 		
-		
-		
+		//Combos
 		listaFondo = fondoManager.findAll();
-		/*
-		if(this.isAdmin()){
-		}else{
-			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
-		}*/
 		listaEmisor = emisorManager.findAllActive();
 		listaTipoOperacion = generalManager.findByDomainAndState(Constante.Dominio.TIPO_OPERACION, Constante.ESTADO_ACTIVO);
 		listaOrdenEstado = generalManager.findByDomainAndState(Constante.Dominio.ESTADO_ORDEN, Constante.ESTADO_ACTIVO);
 		
-		//Modal
+		//Modal Combos
 		listaContraparte = generalManager.findByDomainAndState(Constante.Dominio.CONTRAPARTE, Constante.ESTADO_ACTIVO);
 		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
 		listaEspecie =  generalManager.findByDomainAndState(Constante.Dominio.ESPECIE, Constante.ESTADO_ACTIVO);
+		
+		for (General moneda : listaMoneda) {
+			mapaMoneda.put(moneda.getCdIdgeneral(), moneda.getNbDescGeneral());
+		}
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {
@@ -514,14 +516,6 @@ public class PortafolioController extends GenericController{
 	public void setFechaActual(String fechaActual) {
 		this.fechaActual = fechaActual;
 	}
-
-	public String getValorTipoCambio() {
-		return valorTipoCambio;
-	}
-
-	public void setValorTipoCambio(String valorTipoCambio) {
-		this.valorTipoCambio = valorTipoCambio;
-	}
 	
 	public Date getFechaInicial() {
 		return fechaInicial;
@@ -635,6 +629,22 @@ public class PortafolioController extends GenericController{
 		this.listaEspecie = listaEspecie;
 	}
 
+	public NotificacionController getNotificacionController() {
+		return notificacionController;
+	}
+
+	public void setNotificacionController(NotificacionController notificacionController) {
+		this.notificacionController = notificacionController;
+	}
+
+	public Map<Integer, String> getMapaMoneda() {
+		return mapaMoneda;
+	}
+
+	public void setMapaMoneda(Map<Integer, String> mapaMoneda) {
+		this.mapaMoneda = mapaMoneda;
+	}
+
 	public void cancelar() {
 		selectedInfo = null;
 	}
@@ -649,17 +659,17 @@ public class PortafolioController extends GenericController{
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL)==0){
+        	//if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL)==0){
         		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_NORMAL);
             	if(selectedInfo.getNbIsin().trim().endsWith("C")){
             		selectedInfo.setTipoApertura(Constante.TIPOAPERTURA_COBERTURADO);
             	}
             	verDetallesDeCancelarDeposito();
             	context.execute("PF('manteCancelarDeposito').show()");
-        	}else{
+        	/*}else{
         		mensajeValida = "La fecha de vencimiento no es igual a la actual.";
         		context.execute("PF('msjVal').show()");
-        	}
+        	}*/
         }
 	}
 	
@@ -683,8 +693,13 @@ public class PortafolioController extends GenericController{
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	verDetallesDePreCancelarDeposito();
-        	context.execute("PF('mantePreCancelarDeposito').show()");
+        	if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL) == 0){
+        		mensajeValida = "La fecha de vencimiento es igual a la actual.";
+        		context.execute("PF('msjVal').show()");
+        	}else{
+        		verDetallesDePreCancelarDeposito();
+            	context.execute("PF('mantePreCancelarDeposito').show()");
+        	}
         }
 	}
 	
@@ -705,19 +720,14 @@ public class PortafolioController extends GenericController{
 		if(Utilitarios.isDouble(tasaPreCancelacion)){
 			montoPreCancelacion = formato.format(selectedInfo.getImValorSinInter() * Math.pow((1 + Double.parseDouble(tasaPreCancelacion) / 100), (selectedInfo.getPlazo().doubleValue() / 360)));
 		}else{
-			Utilitarios.mostrarMensajeAdvertencia("txtTasaPre", "Error en tasa", "Error en tasa 2");
+			Utilitarios.mostrarMensajeAdvertencia("msgPreCancelar", "Verifique el valor en el campo Tasa. Ejm: "+selectedInfo.getMontoIntereses(), "Error en tasa");
 		}
 	}
 	
 	public void validarAperturaDeposito(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedInfo == null) {
-            mensajeValida = "Debe seleccionar un registro.";
-            context.execute("PF('msjVal').show()");
-        }else{
-        	inicializaDatosDeApertura();
-        	context.execute("PF('manteAperturaDeposito').show()");
-        }
+        inicializaDatosDeApertura();
+        context.execute("PF('manteAperturaDeposito').show()");
 	}
 	
 	public void inicializaDatosDeApertura(){
@@ -755,13 +765,8 @@ public class PortafolioController extends GenericController{
 	
 	public void validarSpot(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedInfo == null) {
-            mensajeValida = "Debe seleccionar un registro.";
-            context.execute("PF('msjVal').show()");
-        }else{
-        	inicializaDatosDeSpot();
-        	context.execute("PF('manteSpot').show()");
-        }
+        inicializaDatosDeSpot();
+        context.execute("PF('manteSpot').show()");
 	}
 	
 	public void inicializaDatosDeSpot(){
@@ -772,13 +777,8 @@ public class PortafolioController extends GenericController{
 	
 	public void validarFwd(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedInfo == null) {
-            mensajeValida = "Debe seleccionar un registro.";
-            context.execute("PF('msjVal').show()");
-        }else{
-        	inicializaDatosDeFwd();
-        	context.execute("PF('manteFwd').show()");
-        }
+        inicializaDatosDeFwd();
+        context.execute("PF('manteFwd').show()");
 	}
 	
 	public void inicializaDatosDeFwd(){
@@ -792,13 +792,8 @@ public class PortafolioController extends GenericController{
 	
 	public void validarAbonoCargo(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (selectedInfo == null) {
-            mensajeValida = "Debe seleccionar un registro.";
-            context.execute("PF('msjVal').show()");
-        }else{
-        	inicializaDatosDeAbonoCargo();
-        	context.execute("PF('manteAbonoCargo').show()");
-        }
+        inicializaDatosDeAbonoCargo();
+        context.execute("PF('manteAbonoCargo').show()");
 	}
 	
 	public void inicializaDatosDeAbonoCargo(){
@@ -819,47 +814,212 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void guardaOpCancelarDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
 		try {
-			Orden orden = new Orden();
-			orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
-			orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
-			orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
-			orden.setCdIdTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()));
-			General tipoMoneda = Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda());
-			if(tipoMoneda != null){
-				orden.setTpTipmoneda(tipoMoneda.getCdIdgeneral());
-			}
-			orden.setStEstado(Constante.OrdenEstado.GENERADO);
-			orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
-			orden.setImTasa(selectedInfo.getImCupon());
-			orden.setNuPlazoDia(selectedInfo.getPlazo());
-			orden.setFhFecInicio(selectedInfo.getFhFecEmision());
-			orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
-			orden.setNbMnemonico(selectedInfo.getNbMnemonico());
+			Orden orden = generaOrden();
+			orden.setTpTipodeposito(selectedInfo.getTipoApertura());
 			String monto = selectedInfo.getMontoCapital().replace(".", "").replace(",", ".");
-			orden.setImCapital(Double.parseDouble(monto));
+			orden.setImCapital(Utilitarios.parseToDouble(monto));
 			monto = selectedInfo.getMontoIntereses().replace(".", "").replace(",", ".");
-			orden.setImInteres(Double.parseDouble(monto));
+			orden.setImInteres(Utilitarios.parseToDouble(monto));
 			monto = selectedInfo.getMontoTotal().replace(".", "").replace(",", ".");
-			orden.setImMontoFinal(Double.parseDouble(monto));
+			orden.setImMontoFinal(Utilitarios.parseToDouble(monto));
 			
-			orden.setFhFecCreacion(new Date());
-			orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+			if(selectedInfo.getFhFecEfectividad().compareTo(Constante.FECHA_ACTUAL)==0){
+				selectedInfo.setImValorMonLocal(Constante.VALOR_CERO);
+				selectedInfo.setImValorMonRef(Constante.VALOR_CERO);
+				selectedInfo.setNbObservacion(Constante.CANCELAR_OBS);
+				selectedInfo.setStEstado(Constante.ESTADO_INACTIVO);
+				infoportManager.save(selectedInfo);
+			}
+			guardaOrden(orden);
 			
+			context.execute("PF('manteCancelarDeposito').hide()");
+			Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgCancelar", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public Orden generaOrden(){
+		Orden orden = new Orden();
+		orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
+		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
+		orden.setCdIdTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()));
+		General tipoMoneda = Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda());
+		if(tipoMoneda != null){
+			orden.setTpTipmoneda(tipoMoneda.getCdIdgeneral());
+		}
+		orden.setImTasa(selectedInfo.getImCupon());
+		orden.setNuPlazoDia(selectedInfo.getPlazo());
+		orden.setStEstado(Constante.OrdenEstado.GENERADO);
+		orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
+		orden.setFhFecInicio(selectedInfo.getFhFecEmision());
+		orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
+		orden.setNbMnemonico(selectedInfo.getNbMnemonico());
+		orden.setFhFecCreacion(new Date());
+		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+		return orden;
+	}
+	
+	public boolean guardaOrden(Orden orden){
+		try {
 			ordenManager.save(orden);
-			
 			OrdenEstado ordenEstado = new OrdenEstado();
+			
 			ordenEstado.setOrden(orden);
 			ordenEstado.setFhFecCreacion(new Date());
 			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
 			ordenManager.saveEstado(ordenEstado);
 			
-			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			DetalleOrden detalle = new DetalleOrden();
+			Utilitarios.copiaPropiedades(detalle, selectedInfo);
+			detalle.setCdIddetalle(null);
+			detalle.setOrden(orden);
+			
+			ordenManager.saveDetalle(detalle);
+			return true;
 		} catch (Exception e) {
-			Utilitarios.mostrarMensajeError(null, Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+			return false;
 		}
 	}
 	
+	public void guardaOpPreCancelarDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			tasaPreCancelacion = tasaPreCancelacion.replace(",", ".");
+			if(!Utilitarios.isDouble(tasaPreCancelacion)){
+				Utilitarios.mostrarMensajeAdvertencia("msgPreCancelar", "Verifique el valor en el campo Tasa. Ejm: "+selectedInfo.getMontoIntereses(), "Error en tasa");
+				return;
+			}
+			Orden orden = generaOrden();
+			orden.setImTasaPrecancel(Utilitarios.parseToDouble(tasaPreCancelacion));
+			String monto = selectedInfo.getMontoCapital().replace(".", "").replace(",", ".");
+			orden.setImCapital(Utilitarios.parseToDouble(monto));
+			montoPreCancelacion = montoPreCancelacion.replace(".", "").replace(",", ".");
+			orden.setImMontoFinal(Utilitarios.parseToDouble(montoPreCancelacion));
+			guardaOrden(orden);
+			
+			context.execute("PF('mantePreCancelarDeposito').hide()");
+			Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgPreCancelar", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
 	
+	public void guardaOpAperturaDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeApertura()){
+				Orden orden = generaOrden();
+				orden.setTpTipodeposito(selectedTipoAper);
+				orden.setImTasa(Utilitarios.parseToDouble(tasaAper));
+				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoAper));
+				orden.setImMontoFinal(Utilitarios.parseToDouble(importeAper));
+				orden.setFhFecVencimiento(fechaVctoAper);
+				guardaOrden(orden);
+				
+				context.execute("PF('manteAperturaDeposito').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgAperturar", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public void calcularFechaVcto(){
+		if(!Utilitarios.isInteger(plazoAper)){
+			plazoAper = "";
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			fechaVctoAper = null;
+		}else{
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(Constante.FECHA_ACTUAL);
+			cal.add(Calendar.DATE, Utilitarios.parseToInteger(plazoAper));
+			fechaVctoAper = cal.getTime(); 
+		}		 
+	}
+	
+	public boolean validaFormularioDeApertura(){
+		if(selectedFondoAper.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Seleccione un valor en el campo Fondo.", "Error en Fondo");
+			return false;
+		}
+		if(selectedContraAper.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Seleccione un valor en el campo Contraparte.", "Error en Contraparte");
+			return false;
+		}
+		if(selectedMonedaAper.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Seleccione un valor en el campo Moneda.", "Error en Moneda");
+			return false;
+		}
+		if(selectedTipoAper.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Seleccione un valor en el campo Tipo.", "Error en Tipo");
+			return false;
+		}
+		if(!Utilitarios.isDouble(importeAper)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Verifique el valor en el campo Importe.", "Error en Importe");
+			return false;
+		}
+		if(!Utilitarios.isDouble(tasaAper)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Verifique el valor en el campo Tasa.", "Error en Tasa");
+			return false;
+		}
+		if(!Utilitarios.isInteger(plazoAper)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAperturar", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			return false;
+		}
+		return true;
+	}
+	
+	public void guardaOpRenuevaDeposito(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeRenovacion()){
+				
+				Orden orden = generaOrden();
+				orden.setTpTipodeposito(selectedInfo.getTipoApertura());
+				orden.setImTasa(Utilitarios.parseToDouble(tasaRenova));
+				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoRenova));
+				orden.setImMontoFinal(Utilitarios.parseToDouble(importeRenova));
+				orden.setFhFecVencimiento(fechaVctoRenova);
+				
+				context.execute("PF('manteRenuevaDeposito').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgRenovar", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public void calcularFechaVctoRenueva(){
+		if(!Utilitarios.isInteger(plazoAper)){
+			plazoRenova = "";
+			Utilitarios.mostrarMensajeAdvertencia("msgRenovar", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			fechaVctoRenova = null;
+		}else{
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(Constante.FECHA_ACTUAL);
+			cal.add(Calendar.DATE, Utilitarios.parseToInteger(plazoRenova));
+			fechaVctoRenova = cal.getTime(); 
+		}		 
+	}
+	
+	public boolean validaFormularioDeRenovacion(){
+		if(!Utilitarios.isDouble(importeRenova)){
+			Utilitarios.mostrarMensajeAdvertencia("msgRenovar", "Verifique el valor en el campo Importe.", "Error en Importe");
+			return false;
+		}
+		if(!Utilitarios.isDouble(tasaRenova)){
+			Utilitarios.mostrarMensajeAdvertencia("msgRenovar", "Verifique el valor en el campo Tasa.", "Error en Tasa");
+			return false;
+		}
+		if(!Utilitarios.isInteger(plazoRenova)){
+			Utilitarios.mostrarMensajeAdvertencia("msgRenovar", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			return false;
+		}
+		return true;
+	}
 }
