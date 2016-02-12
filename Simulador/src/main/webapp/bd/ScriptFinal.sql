@@ -931,6 +931,8 @@ insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL,
 values (140, 'OPERACION', 'Compra Variable', 'Compra Variable', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
 insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
 values (141, 'OPERACION', 'Venta Variable', 'Venta Variable', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '1');
+insert into bbvatesor.tsi005_general (CD_IDGENERAL, NB_DOMINIO, NB_DESC_GENERAL, NB_VALOR_GENERAL, ST_ESTADO, FH_FEC_CREACION, CD_USU_CREACION, FH_FEC_MODIFICA, CD_USU_MODIFICA, FH_FEC_ELIMINA, CD_USU_ELIMINA, fg_editable)
+values (142, 'RUTAPROCESOCARGA', 'Ruta de Archivo de Proceso de Carga', 'G:\mnt\simulador\tmp\portafolios.xlsm', '1', to_date('11-02-2016', 'dd-mm-yyyy'), 'Inicial', null, '', null, '', '0');
 
 
  /*

@@ -24,6 +24,7 @@ import com.pss.simulador.bs.domain.CobranzaPago;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
+import com.pss.simulador.bs.domain.ProcesoLog;
 import com.pss.simulador.bs.domain.Saldo;
 import com.pss.simulador.bs.repository.data.CobranzaPagoRepository;
 import com.pss.simulador.bs.repository.data.GeneralRepository;
@@ -114,6 +115,11 @@ public class ProcesoCargaManagerImpl implements ProcesoCargaManager {
 		saldoRepository.deleteAllByDistintoFechaImportacion(FechasUtil.formatFecha(fhFecImporta, "yyyyMMddhhmmss") );
 		cobranzaPagoRepository.deleteAllByDistintoFechaImportacion(FechasUtil.formatFecha(fhFecImporta, "yyyyMMddhhmmss") );
 		return true;
+	}
+
+	
+	public List<ProcesoLog> findProcesoLogByIdProceso(Integer cdIdproceso) {
+		return procesoLogRepository.findByIdProceso(cdIdproceso);
 	}
 	
 

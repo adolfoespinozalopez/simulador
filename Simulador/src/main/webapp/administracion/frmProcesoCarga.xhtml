@@ -84,8 +84,9 @@
                                 <h:outputText value="#{item.stDescEstadoProceso}"/>
                             </p:column>
                             <p:column headerText="Opciones" style="text-align: center;">
-                                <p:commandButton icon="fa fa-fw fa-file-text-o"  
-                                                 style="width: 20px; height: 20px;" title="Descargar Log">
+                                <p:commandButton icon="fa fa-fw fa-file-text-o" ajax="false" actionListener="#{procesoCargaController.prepDownload(item.cdIdproceso) }"
+                                                 style="width: 20px; height: 20px;" title="Descargar Log" >
+									<p:fileDownload value="#{procesoCargaController.download}" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdProceso" oncomplete="PF('dlgConfirmacion').show()" icon="ui-icon-trash" 
                                                  style="width: 20px; height: 20px;" disabled="#{item.stEstado!=1}" title="Eliminar">

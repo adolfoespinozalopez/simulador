@@ -12,6 +12,7 @@ import java.util.List;
 import com.pss.simulador.bs.domain.CobranzaPago;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
+import com.pss.simulador.bs.domain.ProcesoLog;
 import com.pss.simulador.bs.domain.Saldo;
 
 /**
@@ -21,6 +22,7 @@ import com.pss.simulador.bs.domain.Saldo;
 public interface ProcesoCargaManager {
 
 	public List<ProcesoCarga> findProcesoCargaByFechas(Date dtDesde, Date dtHasta);
+	public List<ProcesoLog> findProcesoLogByIdProceso(Integer cdIdproceso);
 	public ProcesoCarga saveProcesoCarga(ProcesoCarga procesoCarga);
 	public Boolean copyFileToLocal(InputStream is) throws IOException;
 	public Boolean saveLoadFile(List<Infoport> lstInfoportLoad, List<Saldo> lstSaldos,List<CobranzaPago> lstCobPag, Date fhFecImporta) throws SQLException, Exception;

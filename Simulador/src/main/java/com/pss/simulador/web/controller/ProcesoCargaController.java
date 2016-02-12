@@ -1,24 +1,25 @@
 package com.pss.simulador.web.controller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+
 import org.apache.log4j.Logger;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.ProcesoCarga;
+import com.pss.simulador.bs.domain.ProcesoLog;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.ProcesoCargaManager;
 import com.pss.simulador.bs.thead.ProcesoCargaRunnable;
@@ -50,6 +51,9 @@ public class ProcesoCargaController extends GenericController {
 	
 	@Autowired
 	private ProcesoCargaRunnable procesoCargaThread;
+	
+	 private DefaultStreamedContent download;
+	
 	
 	public ProcesoCargaController(){
 		
@@ -84,14 +88,12 @@ public class ProcesoCargaController extends GenericController {
 		// Carga Archivo
 		try {
 			if(procesoCargaManager.copyFileToLocal(filePlantilla.getInputstream())){
-				
 				procesoCarga.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				procesoCarga.setFhFecIni(fhFecImporta);
 				procesoCarga.setFhFecImporta(fhFecImporta);
 				procesoCarga.setStEstadoProceso(Constante.EstadoProceso.EN_PROCESO);
 				procesoCarga.setStEstado(Constante.ESTADO_ACTIVO);
 				procesoCarga = procesoCargaManager.saveProcesoCarga(procesoCarga);
-				
 			}
 		} catch (IOException e) {
 			logger.error(e,e);
@@ -103,6 +105,27 @@ public class ProcesoCargaController extends GenericController {
 		Utilitarios.mostrarMensajeInfo(null, filePlantilla.getFileName() + ". Se proceso de carga se ejecutó correctaente. ", null);
 		this.limpiarFormulario();
 		this.buscar();
+	}
+	
+	public void setDownload(DefaultStreamedContent download) {
+	    this.download = download;
+	}
+	
+	public DefaultStreamedContent getDownload() throws Exception {
+	    return download;
+	}
+
+	public void prepDownload(Integer idProceso) throws Exception {
+		System.out.println("idProceso:"+idProceso);
+		List<ProcesoLog> lstProcesoLog = procesoCargaManager.findProcesoLogByIdProceso(idProceso);
+	  String date = "G:\\test1.txt";
+	  File file = new File(date);
+	  InputStream input = new FileInputStream(file);
+	  ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+	  setDownload(new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName()));
+	  
+	  
+	  
 	}
 	
 	public void eliminar() {
