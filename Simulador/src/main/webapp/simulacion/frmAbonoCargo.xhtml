@@ -6,8 +6,7 @@
     xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAbonoCargo">
     	<p:focus context="panelAbonoCargo"/>
-        <p:panel id="panelAbonoCargo" header="Detalle Abono / Cargo" 
-                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+        <p:panel id="panelAbonoCargo" header="Detalle Abono / Cargo" >
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
@@ -16,7 +15,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
+                                        value="#{portafolioController.fechaEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -74,10 +73,12 @@
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
-                <p:commandButton value="Confirmar Abono / Cargo" icon="ui-icon-disk" update="panelAbonoCargo" validateClient="true" 
-                                 style="margin-right:10px" />
+                <p:commandButton process="@form" value="Confirmar Abono / Cargo" icon="ui-icon-disk" update="panelAbonoCargo, msgAbono, growl" validateClient="true" 
+                                 actionListener="#{portafolioController.guardaOpAbonoCargoDeAhorros}" style="margin-right:10px" 
+                                 disabled="#{portafolioController.isRiesgo()}"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteAbonoCargo').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
+        <p:messages id="msgAbono" showDetail="false" autoUpdate="true" closable="true" />
     </h:form>
 </ui:composition>

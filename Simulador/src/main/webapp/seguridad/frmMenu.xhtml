@@ -2,8 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:c="http://java.sun.com/jsp/jstl/core">
+                xmlns:h="http://java.sun.com/jsf/html">
     <style type="text/css">
         body{
             background: none !important;
@@ -15,15 +14,15 @@
             <h:form id="frmMenuAccesos">
                 <p:menubar  autoDisplay="false" style="border: 0px;" styleClass="nav">
                     <p:menuitem value="" url="/" icon="fa fa-home"/>
-                    <p:submenu label="Seguridad" icon="fa fa-users" rendered="#{__USUARIO_SESSION__.bEsAdmin}">
+                    <p:submenu label="Seguridad" icon="fa fa-users" rendered="#{(__USUARIO_SESSION__.bEsAdmin)?true:(__USUARIO_SESSION__.bEsInversion)?false:true}">
                         <p:menuitem value="Perfiles" url="/seguridad/frmPerfiles.jsf" icon="fa fa-user"/>
                     </p:submenu> 
-                    <p:submenu label="Administración" icon="fa fa-cogs" rendered="#{__USUARIO_SESSION__.bEsAdmin}">
-                        <p:menuitem value="Fondos" url="/administracion/frmFondos.jsf" icon="fa fa-building-o"/>
-                        <p:menuitem value="Tipo de Cambio" url="/administracion/frmTipoCambio.jsf" icon="fa fa-usd"/>
+                    <p:submenu label="Administración" icon="fa fa-cogs" >
+                        <p:menuitem value="Fondos" url="/administracion/frmFondos.jsf" icon="fa fa-building-o" rendered="#{(__USUARIO_SESSION__.bEsAdmin)?true:(__USUARIO_SESSION__.bEsInversion)?false:true}"/>
+                        <p:menuitem value="Tipo de Cambio" url="/administracion/frmTipoCambio.jsf" icon="fa fa-usd" rendered="#{(__USUARIO_SESSION__.bEsRiesgo)?false:true}"/>
                         <p:menuitem value="Generales" url="/administracion/frmGenerales.jsf" icon="fa fa-support"/>
-                        <p:menuitem value="Emisores" url="/administracion/frmEmisores.jsf" icon="fa fa-bank"/>
-                        <p:menuitem value="Proceso Carga" url="/administracion/frmProcesoCarga.jsf" icon="fa fa-cogs"/>
+                        <p:menuitem value="Emisores" url="/administracion/frmEmisores.jsf" icon="fa fa-bank" rendered="#{(__USUARIO_SESSION__.bEsInversion)?false:true}"/>
+                        <p:menuitem value="Proceso Carga" url="/administracion/frmProcesoCarga.jsf" icon="fa fa-cogs" rendered="#{(__USUARIO_SESSION__.bEsRiesgo)?false:true}"/>
                     </p:submenu>
                     <p:submenu label="Simulación" icon="fa fa-paper-plane-o">
                     	<p:menuitem value="Portafolio" url="/simulacion/frmPortafolio.jsf" icon="fa fa-briefcase"/>

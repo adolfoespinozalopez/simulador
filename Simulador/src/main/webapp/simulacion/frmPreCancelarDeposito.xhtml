@@ -95,7 +95,8 @@
                             <td><p:commandButton id="btnCalcular" value="Calcular" icon="ui-icon-calculator" validateClient="true"
                             					 actionListener="#{portafolioController.calcularMontoPreCancelacion}" 
                             					 update="lblMontoPreCancel, msgPreCancelar, growl" process="@this, txtTasaPre" 
-                            					 onclick="PF('blkPanelPre').show();" oncomplete="PF('blkPanelPre').hide();"/></td>
+                            					 onclick="PF('blkPanelPre').show();" oncomplete="PF('blkPanelPre').hide();"
+                            					 disabled="#{portafolioController.isRiesgo()}"/></td>
             			</tr>
             			<tr>
                     		<td colspan="4"><BR/></td>
@@ -111,7 +112,8 @@
         <p:toolbar>
             <p:toolbarGroup align="right">
                 <p:commandButton process="@form" value="Pre - Cancelar Depósito" icon="ui-icon-disk" update="panelPreCancelarDeposito, msgPreCancelar, growl" 
-                                 actionListener="#{portafolioController.guardaOpPreCancelarDeposito}" style="margin-right:10px" />
+                                 actionListener="#{portafolioController.guardaOpPreCancelarDeposito}" style="margin-right:10px" 
+                                 disabled="#{portafolioController.isRiesgo()}"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('mantePreCancelarDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

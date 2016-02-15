@@ -6,8 +6,7 @@
     xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAperturaDeposito">
     	<p:focus context="panelAperturaDeposito"/>
-        <p:panel id="panelAperturaDeposito" header="Detalle Apertura" 
-                 rendered="#{(portafolioController.selectedInfo != null)?true:false}">
+        <p:panel id="panelAperturaDeposito" header="Detalle Apertura" >
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
@@ -16,7 +15,7 @@
                             <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
                                         effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
                                         showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
+                                        value="#{portafolioController.fechaEfectividad}" required="true"
                                         mindate="#{portafolioController.fechaInicial}"
                                         maxdate="#{portafolioController.fechaFinal}">
                             </p:calendar>
@@ -98,7 +97,7 @@
                         <td><h:outputLabel value="Fecha Vcto:"/></td>
                         <td colspan="5">
                             <p:calendar maxlength="10" id="fecVcto" size="13" effect="fadeIn" 
-                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+                        				locale="es" navigator="true" pattern="EEE, dd/MM/yyyy" disabled="true"
                                         value="#{portafolioController.fechaVctoAper}"
                                         styleClass="disabled">
                             </p:calendar>
@@ -113,7 +112,8 @@
         <p:toolbar>
             <p:toolbarGroup align="right">
                 <p:commandButton process="@form" value="Aperturar Depósito" icon="ui-icon-disk" update="panelAperturaDeposito, msgAperturar, growl" 
-                                 actionListener="#{portafolioController.guardaOpAperturaDeposito}" style="margin-right:10px" />
+                                 actionListener="#{portafolioController.guardaOpAperturaDeposito}" style="margin-right:10px" 
+                                 disabled="#{portafolioController.isRiesgo()}"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteAperturaDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

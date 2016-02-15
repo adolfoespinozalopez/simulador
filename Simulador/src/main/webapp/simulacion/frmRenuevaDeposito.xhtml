@@ -97,7 +97,8 @@
         <p:toolbar>
             <p:toolbarGroup align="right">
                 <p:commandButton process="@form" value="Renovar Depósito" icon="ui-icon-disk" update="panelRenuevaDeposito, msgRenovar, growl" validateClient="true" 
-                                 actionListener="#{portafolioController.guardaOpRenuevaDeposito}" style="margin-right:10px" />
+                                 actionListener="#{portafolioController.guardaOpRenuevaDeposito}" style="margin-right:10px" 
+                                 disabled="#{portafolioController.isRiesgo()}"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteRenuevaDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

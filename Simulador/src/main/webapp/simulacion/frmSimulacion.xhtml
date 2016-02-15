@@ -29,7 +29,7 @@
                     </style>
                     <p:panel id="panSimulacion">
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
-                        <p:selectOneMenu id="lstFondo" style="width: 180px;"
+                        <p:selectOneMenu id="lstFondo" style="width: 180px;" disabled="#{portafolioController.isRiesgo()}"
                                          value="#{simulacionController.selectedNombreFondo}" 
                                          valueChangeListener="#{simulacionController.realizarFiltroDeFondo}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />

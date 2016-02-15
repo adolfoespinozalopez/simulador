@@ -107,7 +107,8 @@
         <p:toolbar>
             <p:toolbarGroup align="right">
                 <p:commandButton process="@form" value="Cancelar Depósito" icon="ui-icon-disk" update="panelCancelarDeposito, msgCancelar, growl" 
-                                 actionListener="#{portafolioController.guardaOpCancelarDeposito}" style="margin-right:10px" />
+                                 actionListener="#{portafolioController.guardaOpCancelarDeposito}" style="margin-right:10px" 
+                                 disabled="#{portafolioController.isRiesgo()}"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteCancelarDeposito').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

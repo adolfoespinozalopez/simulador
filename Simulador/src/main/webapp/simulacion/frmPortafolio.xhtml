@@ -56,7 +56,7 @@
                             <f:selectItem itemLabel="NO" itemValue="ACTIVO" />
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
-                        <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
+                        <h:outputText value="Tipo Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
                                          value="#{portafolioController.selectedTipoOperacion}" 
                                          valueChangeListener="#{portafolioController.realizarFiltroDeOperacion}">
@@ -336,21 +336,21 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
-                		  widgetVar="manteSpot" resizable="false" width="540" height="560">
+                		  widgetVar="manteSpot" resizable="false" width="540" height="570">
                     <ui:include src="frmSpot.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=":frmSpot" resetValues="true" />
                 </p:dialog>
                 
                 <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 
-                		  widgetVar="manteFwd" resizable="false" width="540" height="600">
+                		  widgetVar="manteFwd" resizable="false" width="540" height="610">
                     <ui:include src="frmFwd.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=":frmFwd" resetValues="true"/>
                 </p:dialog>
                 
                 <p:dialog id="dlgAbonoCargo" modal="true" header="Abono / Cargo de Cuenta de Ahorros" 
-                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="220">
+                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="270">
                     <ui:include src="frmAbonoCargo.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
                             update=":frmAbonoCargo" resetValues="true"/>
@@ -371,7 +371,7 @@
                 </p:dialog>
                 
                 <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 
-                		  widgetVar="verOrdenes" resizable="false" width="860" height="440">
+                		  widgetVar="verOrdenes" resizable="false" width="880" height="440">
                     <ui:include src="frmVerOrdenes.xhtml" />
                     <p:ajax event="close"  update=":frmVerOrdenes" />
                 </p:dialog>

@@ -589,13 +589,13 @@ ALTER TABLE bbvatesor.TSI015_DetalleOrden
  *******************************************
  */
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (1, 'Administrador de Sistema', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (1, 'Administrador de Sistema', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (2, 'Administrador de Inversiones', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (2, 'Administrador de Inversiones', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 1, to_date('21-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (3, 'Inversionista EUR', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 2, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (3, 'Riesgo', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 3, to_date('21-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 insert into bbvatesor.TSI007_PERFIL (cd_idperfil, nb_mon_perfil, fh_fec_inicio, fh_fec_fin, tp_tipperfil, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado)
-values (4, 'Inversionista BBVA Soles', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 2, to_date('21-01-2016', 'dd-mm-yyyy'), 'P00000', null, null, null, null, '1');
+values (4, 'Inversionista', to_date('21-01-2016', 'dd-mm-yyyy'), to_date('19-01-2017', 'dd-mm-yyyy'), 2, to_date('21-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1');
 commit;
 
 
@@ -612,6 +612,9 @@ values (2, null, null, null, 'P005738', null, 1, '1', to_date('29-01-2016', 'dd-
 
 insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
 values (3, null, null, null, 'P020188', null, 1, '1', to_date('29-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1', 2);
+
+insert into bbvatesor.TSI006_USUARIO (cd_idusuario, nb_nom_usu, nb_ape_pat_usu, nb_ape_mat_usu, cd_login, cd_clave, tp_tipdocumento, nu_documento, fh_fec_creacion, cd_usu_creacion, fh_fec_modifica, cd_usu_modifica, fh_fec_elimina, cd_usu_elimina, st_estado, cd_idperfil)
+values (4, null, null, null, 'P004943', null, 1, '1', to_date('29-01-2016', 'dd-mm-yyyy'), 'Inicial', null, null, null, null, '1', 3);
 
 commit;
 

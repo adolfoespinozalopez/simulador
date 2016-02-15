@@ -55,7 +55,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="Tipo Perfil" style="text-align: center;">
-                                <h:outputText value="#{(item.tpTipperfil==1)?'Administrador':'Inversionista'}"/>
+                                <h:outputText value="#{(item.tpTipperfil==1)?'Administrador':(item.tpTipperfil==3)?'Riesgo':'Inversionista'}"/>
                             </p:column>
                             <p:column headerText="Activo" style="text-align: center;">
                                 <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>

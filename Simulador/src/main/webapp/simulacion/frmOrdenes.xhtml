@@ -30,7 +30,7 @@
                             <p:ajax event="change" update=":frmGestionarOrdenes:grdOrdenes" 
                             		onstart="PF('blkPanel').show()" oncomplete="PF('blkPanel').hide()"/>
                         </p:selectOneMenu>
-                        <h:outputText value="Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
+                        <h:outputText value="Tipo Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
 						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
                                          value="#{ordenController.selectedTipoOperacion}" 
                                          valueChangeListener="#{ordenController.realizarFiltroDeOperacion}">
@@ -43,8 +43,8 @@
                         <p:toolbar style="padding: 4px;margin: 4px 0px;" id="menuOpciones" >
                             <p:toolbarGroup align="left">  
                                 <p:commandButton process="@this" value="Enviar" icon="fa fa-send" 
-                                				 rendered="#{loginController.isAdmin()}" style="width: 90px;"
-                                				 disabled="#{ordenController.isRowSelected()}">
+                                				 style="width: 90px;"
+                                				 disabled="#{(loginController.isRiesgo())?true:ordenController.isRowSelected()}">
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -88,24 +88,23 @@
                             </tbody>
                         </table>
                         <p:dataTable id="grdOrdenes" value="#{ordenController.listaOrdenes}" var="item"  
-                                     selection="#{loginController.isAdmin()?ordenController.selectedOrdenes:ordenController.selectedOrden}" 
-                                     reflow="false" scrollable="true" scrollHeight="390" 
-                                     disabledSelection="#{(loginController.isAdmin())?(item.stEstado == '2')?false:true:false}"
+                                     selection="#{ordenController.selectedOrdenes}" 
+                                     reflow="false" scrollable="true" scrollHeight="370" 
+                                     disabledSelection="#{(item.stEstado == '2')?false:true}"
                                      rowIndexVar="index" rowKey="#{item.cdIdorden}" 
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="17" 
+                                     paginator="true" rows="12" 
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                      rowStyleClass="#{(item.stEstado == '3')?'anul-grid':(item.stEstado == '1')?null:(item.stEstado == '2')?'ate-grid':'cer-grid'}">
                             <p:ajax event="rowSelect" update=":frmGestionarOrdenes:menuOpciones" />
-                            <p:column selectionMode="#{loginController.isAdmin()?'multiple':'single'}" style="width:15px;text-align:center" 
-                            		rendered="#{loginController.isAdmin()}" />
+                            <p:column selectionMode="multiple" style="width:15px;text-align:center"/>
                             <p:column headerText="N°" style="width: 4%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
                             <p:column headerText="Fondo" style="width: 8%;text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
                                 <h:outputText value="#{item.fondo.nbNomFondo}"/>
                             </p:column>
-                            <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.cdIdgeneral.nbDescGeneral}">
+                            <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.operacion.nbDescGeneral}">
                                 <h:outputText value="#{item.operacion.nbDescGeneral}"/>
                             </p:column>
                             <p:column headerText="Moneda" style="width: 6%;text-align: left;">
@@ -138,19 +137,18 @@
                             </p:column>
                             <p:column headerText="Opciones" style="width: 9%;text-align: center;" >
                                 <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionAprueba').show()" icon="ui-icon-check" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar"
-                                                 rendered="#{loginController.isAdmin()}">
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar">
                                     <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionRechaza').show()" icon="ui-icon-close" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Rechazar"
-                                                 rendered="#{loginController.isAdmin()}">
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Rechazar">
                                     <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdOrdenes"  icon="ui-icon-zoomin" 
                                 				 actionListener="#{ordenController.verDetallesDeEstado(item)}"
                                 				 oncomplete="PF('verOrdenEstado').show()" update=":dlgVerOrdenEstado"
                                                  style="width: 20px; height: 20px;" title="Ver seguimiento">
+                                	<f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
