@@ -50,15 +50,17 @@ public class GenericController implements Serializable {
 		return (UsuarioSession) session.getAttribute(Constante.__USUARIO_SESSION__);
 	}
 	
-	public boolean isAdmin(){
+	public boolean isRiesgo(){
 		if(getUsuarioSession() != null){
-			if(this.getUsuarioSession().getbEsAdmin()){
-				return true;
-			}else{
-				return false;
-			}
+			return getUsuarioSession().getbEsRiesgo();
 		}
 		return false;
 	}
 
+	public boolean isInversionista(){
+		if(getUsuarioSession() != null){
+			return getUsuarioSession().getbEsInversion();
+		}
+		return false;
+	}
 }

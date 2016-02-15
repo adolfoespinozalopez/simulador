@@ -58,14 +58,8 @@ public class SimulacionController extends GenericController{
 
 	@PostConstruct
 	public void init() {
-		
-		if(this.isAdmin()){
-			listaFondo = fondoManager.findAll();
-		}else{
-			listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
-		}
-		
-		
+		listaFondo = fondoManager.findAll();
+		//listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {

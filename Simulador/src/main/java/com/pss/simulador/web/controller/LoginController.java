@@ -91,9 +91,15 @@ public class LoginController extends GenericController implements Serializable  
 		usuarioSession.setPerfil(usuarioPerf.getPerfil());
 		if(usuarioPerf.getPerfil().getTpTipperfil().equals(Constante.Perfil.TIPO_ADMINISTRADOR)){
 			usuarioSession.setbEsAdmin(true);
+			usuarioSession.setbEsRiesgo(false);
+			usuarioSession.setbEsInversion(false);
+		}else if(usuarioPerf.getPerfil().getTpTipperfil().equals(Constante.Perfil.TIPO_RIESGO)){
+			usuarioSession.setbEsAdmin(false);
+			usuarioSession.setbEsRiesgo(true);
 			usuarioSession.setbEsInversion(false);
 		}else{
 			usuarioSession.setbEsAdmin(false);
+			usuarioSession.setbEsRiesgo(false);
 			usuarioSession.setbEsInversion(true);
 		}
 		this.getSession().setAttribute(Constante.__USUARIO_SESSION__, usuarioSession);

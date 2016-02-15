@@ -6,9 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
@@ -125,11 +123,12 @@ public class PortafolioController extends GenericController{
 	private String plazoRenova;
 	private Date fechaVctoRenova;
 	
+	private List<Fondo> listaFondoSelected = new ArrayList<Fondo>();
+	
 	private String selectedTipoSpot = Constante.NO_OPTION_SELECTED;
 	private String selectedContraSpot = Constante.NO_OPTION_SELECTED;
 	private String tipoCambioSpot;
 	
-	private String montoUno;
 	private String montoTotal;
 	
 	private String selectedTipoFwd = Constante.NO_OPTION_SELECTED;
@@ -138,15 +137,33 @@ public class PortafolioController extends GenericController{
 	private String puntosFwd;
 	private String tipoCambioFwd;
 	private String plazoFwd;
+	private Date fechaVctoFwd;
+	private DecimalFormat formatoFwd = new DecimalFormat("###,###,###.000000");
 	
 	private String selectedFondoAbono = Constante.NO_OPTION_SELECTED;
 	private String selectedTipoAbono = Constante.NO_OPTION_SELECTED;
 	private String selectedContraAbono = Constante.NO_OPTION_SELECTED;
 	private String montoAbono;
 	
+	/*
+	 * Modal RF / RV
+	 */
+	private Date fechaEfectividad;
+	private String selectedTipo = Constante.NO_OPTION_SELECTED;
+	private String selectedEspecie = Constante.NO_OPTION_SELECTED;
+	private String selectedEmisorModal = Constante.NO_OPTION_SELECTED;
+	private String monto;
+	private String mnemonico;
+	private String precioLimpio;
+	private String precioSucio;
+	private String precioReferencial;
+	
 	private Date fechaInicial;
 	private Date fechaFinal;
 	
+	/*
+	 * Modal Ordenes
+	 */
 	private List<Orden> listaOrdenes = new ArrayList<Orden>();
 	private Orden selectedOrden;
 	
@@ -422,14 +439,6 @@ public class PortafolioController extends GenericController{
 		this.tipoCambioSpot = tipoCambioSpot;
 	}
 
-	public String getMontoUno() {
-		return montoUno;
-	}
-
-	public void setMontoUno(String montoUno) {
-		this.montoUno = montoUno;
-	}
-
 	public String getMontoTotal() {
 		return montoTotal;
 	}
@@ -484,6 +493,14 @@ public class PortafolioController extends GenericController{
 
 	public void setPlazoFwd(String plazoFwd) {
 		this.plazoFwd = plazoFwd;
+	}
+
+	public Date getFechaVctoFwd() {
+		return fechaVctoFwd;
+	}
+
+	public void setFechaVctoFwd(Date fechaVctoFwd) {
+		this.fechaVctoFwd = fechaVctoFwd;
 	}
 
 	public String getSelectedFondoAbono() {
@@ -702,6 +719,86 @@ public class PortafolioController extends GenericController{
 		this.notificacionController = notificacionController;
 	}
 
+	public Date getFechaEfectividad() {
+		return fechaEfectividad;
+	}
+
+	public void setFechaEfectividad(Date fechaEfectividad) {
+		this.fechaEfectividad = fechaEfectividad;
+	}
+
+	public List<Fondo> getListaFondoSelected() {
+		return listaFondoSelected;
+	}
+
+	public void setListaFondoSelected(List<Fondo> listaFondoSelected) {
+		this.listaFondoSelected = listaFondoSelected;
+	}
+
+	public String getSelectedTipo() {
+		return selectedTipo;
+	}
+
+	public void setSelectedTipo(String selectedTipo) {
+		this.selectedTipo = selectedTipo;
+	}
+
+	public String getSelectedEspecie() {
+		return selectedEspecie;
+	}
+
+	public void setSelectedEspecie(String selectedEspecie) {
+		this.selectedEspecie = selectedEspecie;
+	}
+
+	public String getSelectedEmisorModal() {
+		return selectedEmisorModal;
+	}
+
+	public void setSelectedEmisorModal(String selectedEmisorModal) {
+		this.selectedEmisorModal = selectedEmisorModal;
+	}
+
+	public String getMonto() {
+		return monto;
+	}
+
+	public void setMonto(String monto) {
+		this.monto = monto;
+	}
+
+	public String getMnemonico() {
+		return mnemonico;
+	}
+
+	public void setMnemonico(String mnemonico) {
+		this.mnemonico = mnemonico;
+	}
+
+	public String getPrecioLimpio() {
+		return precioLimpio;
+	}
+
+	public void setPrecioLimpio(String precioLimpio) {
+		this.precioLimpio = precioLimpio;
+	}
+
+	public String getPrecioSucio() {
+		return precioSucio;
+	}
+
+	public void setPrecioSucio(String precioSucio) {
+		this.precioSucio = precioSucio;
+	}
+
+	public String getPrecioReferencial() {
+		return precioReferencial;
+	}
+
+	public void setPrecioReferencial(String precioReferencial) {
+		this.precioReferencial = precioReferencial;
+	}
+
 	public void cancelar() {
 		selectedInfo = null;
 	}
@@ -792,7 +889,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeApertura(){
-		selectedInfo.setFhFecEfectividad(null);
+		fechaEfectividad = null;
 		selectedFondoAper = Constante.NO_OPTION_SELECTED;
     	selectedContraAper = Constante.NO_OPTION_SELECTED;
     	selectedMonedaAper = Constante.NO_OPTION_SELECTED;
@@ -834,10 +931,15 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeSpot(){
-		selectedInfo.setFhFecEfectividad(null);
+		fechaEfectividad = null;
 		selectedTipoSpot = Constante.NO_OPTION_SELECTED;
 		selectedContraSpot = Constante.NO_OPTION_SELECTED;
 		tipoCambioSpot = "";
+		montoTotal = "";
+		listaFondoSelected = new ArrayList<Fondo>();
+		for (int i = 0; i < 10; i++) {
+			listaFondoSelected.add(new Fondo());
+		}
 	}
 	
 	public void validarFwd(){
@@ -847,13 +949,20 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeFwd(){
-		selectedInfo.setFhFecEfectividad(null);
+		fechaEfectividad = null;
 		selectedTipoFwd = Constante.NO_OPTION_SELECTED;
 		selectedContraFwd = Constante.NO_OPTION_SELECTED;
 		selectedSettleFwd = Constante.NO_OPTION_SELECTED;
+		tipoCambioSpot = "";
 		puntosFwd = "";
 		tipoCambioFwd = "";
 		plazoFwd = "";
+		fechaVctoFwd = null;
+		montoTotal = "";
+		listaFondoSelected = new ArrayList<Fondo>();
+		for (int i = 0; i < 10; i++) {
+			listaFondoSelected.add(new Fondo());
+		}
 	}
 	
 	public void validarAbonoCargo(){
@@ -863,7 +972,7 @@ public class PortafolioController extends GenericController{
 	}
 	
 	public void inicializaDatosDeAbonoCargo(){
-		selectedInfo.setFhFecEfectividad(null);
+		fechaEfectividad = null;
 		selectedFondoAbono = Constante.NO_OPTION_SELECTED;
 		selectedTipoAbono = Constante.NO_OPTION_SELECTED;
 		selectedContraAbono = Constante.NO_OPTION_SELECTED;
@@ -872,16 +981,32 @@ public class PortafolioController extends GenericController{
 	
 	public void validarRentaFija(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		selectedInfo.setFhFecEfectividad(null);
+		inicializaDatosDeRentaFijaVariable();
 		context.execute("PF('manteRentaFija').show()");
+	}
+	
+	public void inicializaDatosDeRentaFijaVariable(){
+		fechaEfectividad = null;
+		selectedTipo = Constante.NO_OPTION_SELECTED;
+		selectedEspecie = Constante.NO_OPTION_SELECTED;
+		selectedEmisorModal = Constante.NO_OPTION_SELECTED;
+		monto = "";
+		mnemonico = "";
+		precioLimpio = "";
+		precioSucio = "";
+		precioReferencial = "";
+		listaFondoSelected = new ArrayList<Fondo>();
+		for (int i = 0; i < 10; i++) {
+			listaFondoSelected.add(new Fondo());
+		}
 	}
 	
 	public void validarRentaVariable(){
 		RequestContext context = RequestContext.getCurrentInstance();
-		selectedInfo.setFhFecEfectividad(null);
+		inicializaDatosDeRentaFijaVariable();
 		context.execute("PF('manteRentaVariable').show()");
 	}
-	
+
 	public void guardaOpCancelarDeposito(){
 		RequestContext context = RequestContext.getCurrentInstance();
 		try {
@@ -901,7 +1026,7 @@ public class PortafolioController extends GenericController{
 				selectedInfo.setStEstado(Constante.ESTADO_INACTIVO);
 				infoportManager.save(selectedInfo);
 			}
-			guardaOrden(orden);
+			guardaOrden(orden, true);
 			
 			context.execute("PF('manteCancelarDeposito').hide()");
 			Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -924,7 +1049,7 @@ public class PortafolioController extends GenericController{
 			orden.setImCapital(Utilitarios.parseToDouble(monto));
 			montoPreCancelacion = montoPreCancelacion.replace(".", "").replace(",", ".");
 			orden.setImMontoFinal(Utilitarios.parseToDouble(montoPreCancelacion));
-			guardaOrden(orden);
+			guardaOrden(orden, true);
 			
 			context.execute("PF('mantePreCancelarDeposito').hide()");
 			Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -937,18 +1062,19 @@ public class PortafolioController extends GenericController{
 		RequestContext context = RequestContext.getCurrentInstance();
 		try {
 			if(validaFormularioDeApertura()){
+				Orden orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, selectedFondoAper, selectedContraAper);
 				if(selectedTipoAper.equals(Constante.TIPOAPERTURA_NORMAL)){
-					selectedInfo.setIdOperacion(Constante.ID_OPERA_APERTURA_DPF);
+					orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_APERTURA_DPF));
 				}else{
-					selectedInfo.setIdOperacion(Constante.ID_OPERA_APERTURA_DPF_COB);
+					orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_APERTURA_DPF_COB));
 				}
-				Orden orden = generaOrden();
+				orden.setTipoMoneda(Utilitarios.buscaGeneralEnLista(listaMoneda, selectedMonedaAper));
 				orden.setTpApertura(selectedTipoAper);
 				orden.setImTasa(Utilitarios.parseToDouble(tasaAper));
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoAper));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeAper));
 				orden.setFhFecVencimiento(fechaVctoAper);
-				guardaOrden(orden);
+				guardaOrden(orden, false);
 				
 				context.execute("PF('manteAperturaDeposito').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -1013,7 +1139,7 @@ public class PortafolioController extends GenericController{
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoRenova));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeRenova));
 				orden.setFhFecVencimiento(fechaVctoRenova);
-				guardaOrden(orden);
+				guardaOrden(orden, true);
 				
 				context.execute("PF('manteRenuevaDeposito').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -1023,14 +1149,6 @@ public class PortafolioController extends GenericController{
 		}
 	}
 	
-	public void guardaOpCompraVentaSpot(){
-		
-	}
-	
-	public void guardaOpCompraVentaForward(){
-		
-	}
-
 	public void calcularFechaVctoRenueva(){
 		if(!Utilitarios.isInteger(plazoRenova)){
 			plazoRenova = "";
@@ -1060,11 +1178,382 @@ public class PortafolioController extends GenericController{
 		return true;
 	}
 	
+	public void guardaOpCompraVentaSpot(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeSpot()){
+				Orden orden = null;
+				General operacion = null;
+				if(selectedTipoSpot.equals(Constante.MONEDAOPERACION_COMPRA)){
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_COMPRA_SPOT);
+				}else{
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_SPOT);
+				}
+				for (Fondo fondoSel : listaFondoSelected) {
+					if(fondoSel.getMonto()!=null){
+						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, fondoSel.getNbNomFondo(), selectedContraSpot);
+						orden.setOperacion(operacion);
+						orden.setTpMonedaOperacion(selectedTipoSpot);
+						orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
+						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
+						guardaOrden(orden, false);
+					}
+				}
+				context.execute("PF('manteSpot').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgSpot", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public boolean validaFormularioDeSpot(){
+		if(selectedTipoSpot.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Seleccione un valor en el campo Tipo Operación.", "Error en Tipo Operación");
+			return false;
+		}
+		if(selectedContraSpot.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Seleccione un valor en el campo Contraparte.", "Error en Contraparte");
+			return false;
+		}
+		if(!Utilitarios.isDouble(tipoCambioSpot)){
+			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Verifique el valor en el campo Tipo de Cambio Spot.", "Error en Tipo de Cambio Spot");
+			return false;
+		}
+		
+		Fondo fondoSel = null;
+		for (int i = 0; i < listaFondoSelected.size(); i++) {
+			fondoSel = listaFondoSelected.get(i);
+			if (fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && fondoSel.getMonto()!=null) {
+				Utilitarios.mostrarMensajeAdvertencia("msgSpot","Seleccione un Fondo de la Operación " + (i + 1) + ".", "Error en Fondo de Operación");
+				return false;
+			}
+			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isInteger(fondoSel.getMonto())) {
+				Utilitarios.mostrarMensajeAdvertencia("msgSpot","Ingrese un valor en el campo monto de la Operación " + (i + 1) + ".", "Error en Monto de Operación");
+				return false;
+			}
+		}
+		if(montoTotal == null || montoTotal.equals("0")){
+			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Ingrese por lo menos una Operación.", "Error en Monto Total");
+			return false;
+		}
+		if(!Utilitarios.isInteger(montoTotal)){
+			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Ingrese un número válido en cada Operación.", "Error en Monto Total");
+			return false;
+		}
+		return true;
+	}
+	
+	public void sumarMonto(){
+		montoTotal = "0";
+		Integer montoTo = 0;
+		try {
+			for (Fondo fondoSel : listaFondoSelected) {
+				if(Utilitarios.isInteger(fondoSel.getMonto())){
+					montoTo += Utilitarios.parseToInteger(fondoSel.getMonto());
+				}else{
+					fondoSel.setMonto("");
+				}
+			}
+		} catch (Exception e) {
+			montoTo = 0;
+		}
+		montoTotal = montoTo.toString();
+	}
+	
+	public void guardaOpCompraVentaForward(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeForward()){
+				Orden orden = null;
+				General operacion = null;
+				if(selectedTipoFwd.equals(Constante.MONEDAOPERACION_COMPRA)){
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_COMPRA_FWD);
+				}else{
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_FWD);
+				}
+				for (Fondo fondoSel : listaFondoSelected) {
+					if(fondoSel.getMonto()!=null){
+						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, fondoSel.getNbNomFondo(), selectedContraFwd);
+						orden.setOperacion(operacion);
+						orden.setTpMonedaOperacion(selectedTipoFwd);
+						orden.setTpForward(selectedSettleFwd);
+						orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
+						orden.setNuPuntofwd(Utilitarios.parseToInteger(puntosFwd));
+						orden.setImTipocambiofwd(Utilitarios.parseToDouble(tipoCambioFwd));
+						orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoFwd));
+						orden.setFhFecVencimiento(fechaVctoFwd);
+						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
+						guardaOrden(orden, false);
+					}
+				}
+				
+				context.execute("PF('manteFwd').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgFwd", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public boolean validaFormularioDeForward(){
+		if(selectedTipoFwd.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Seleccione un valor en el campo Tipo Operación.", "Error en Tipo Operación");
+			return false;
+		}
+		if(selectedContraFwd.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Seleccione un valor en el campo Contraparte.", "Error en Contraparte");
+			return false;
+		}
+		if(selectedSettleFwd.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Seleccione un valor en el campo Settlement.", "Error en Settlement");
+			return false;
+		}
+		if(!Utilitarios.isDouble(tipoCambioSpot)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Verifique el valor en el campo Tipo de Cambio Spot.", "Error en Tipo de Cambio Spot");
+			return false;
+		}
+		if(!Utilitarios.isInteger(puntosFwd)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese un número en el campo Puntos FWD.", "Error en Puntos FWD");
+			return false;
+		}
+		if(!Utilitarios.isDouble(tipoCambioFwd)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Verifique el valor en el campo Tipo de Cambio Fwd.", "Error en Tipo de Cambio Fwd");
+			return false;
+		}
+		if(!Utilitarios.isInteger(plazoFwd)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			return false;
+		}
+		Fondo fondoSel = null;
+		for (int i = 0; i < listaFondoSelected.size(); i++) {
+			fondoSel = listaFondoSelected.get(i);
+			if (fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && fondoSel.getMonto()!=null) {
+				Utilitarios.mostrarMensajeAdvertencia("msgFwd","Seleccione un Fondo de la Operación " + (i + 1) + ".", "Error en Fondo de Operación");
+				return false;
+			}
+			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isInteger(fondoSel.getMonto())) {
+				Utilitarios.mostrarMensajeAdvertencia("msgFwd","Ingrese un valor en el campo monto de la Operación " + (i + 1) + ".", "Error en Monto de Operación");
+				return false;
+			}
+		}
+		if(montoTotal == null || montoTotal.equals("0")){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese por lo menos una Operación.", "Error en Monto Total");
+			return false;
+		}
+		if(!Utilitarios.isInteger(montoTotal)){
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese un número válido en cada Operación.", "Error en Monto Total");
+			return false;
+		}
+		return true;
+	}
+	
+	public void calcularTipoCambioFwd(){
+		Double montoFinal = Constante.VALOR_CERO;
+		if(Utilitarios.isDouble(tipoCambioSpot)){
+			montoFinal = Utilitarios.parseToDouble(tipoCambioSpot);
+		}
+		if(Utilitarios.isInteger(puntosFwd)){
+			montoFinal += (Utilitarios.parseToInteger(puntosFwd)/10000.0);
+		}
+		tipoCambioFwd = formatoFwd.format(montoFinal);
+		tipoCambioFwd = tipoCambioFwd.replace(",", ".");
+	}
+	
+	public void calcularFechaVctoForward(){
+		if(!Utilitarios.isInteger(plazoFwd)){
+			plazoAper = "";
+			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese un número en el campo Plazo.", "Error en Plazo");
+			fechaVctoFwd = null;
+		}else{
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(Constante.FECHA_ACTUAL);
+			cal.add(Calendar.DATE, Utilitarios.parseToInteger(plazoFwd));
+			fechaVctoFwd = cal.getTime(); 
+		}
+	}
+	
+	public void guardaOpAbonoCargoDeAhorros(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeAbono()){
+				Orden orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, selectedFondoAbono, selectedContraAbono);
+				orden.setTpOperaCuenta(selectedTipoAbono);
+				if(selectedTipoAbono.equals(Constante.TIPOOPERACIONCUENTA_ABONO)){
+					orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_ABONO_CTA_AHORRO));
+				}else{
+					orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_RETIRO_CTA_AHORRO));
+				}
+				orden.setImMontoFinal(Utilitarios.parseToDouble(montoAbono));
+				guardaOrden(orden, false);
+				context.execute("PF('manteAbonoCargo').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgAbono", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public boolean validaFormularioDeAbono(){
+		if(selectedFondoAbono.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAbono", "Seleccione un valor en el campo Fondo.", "Error en Fondo");
+			return false;
+		}
+		if(selectedTipoAbono.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAbono", "Seleccione un valor en el campo Tipo Operación.", "Error en Tipo Operación");
+			return false;
+		}
+		if(selectedContraAbono.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia("msgAbono", "Seleccione un valor en el campo Contraparte.", "Error en Contraparte");
+			return false;
+		}
+		if(montoAbono == null || montoAbono.equals("0")){
+			Utilitarios.mostrarMensajeAdvertencia("msgAbono", "Ingrese un valor válido en el campo Monto.", "Error en Monto");
+			return false;
+		}
+		if(!Utilitarios.isInteger(montoAbono)){
+			montoAbono="";
+			Utilitarios.mostrarMensajeAdvertencia("msgAbono", "Ingrese un número válido en el campo Monto.", "Error en Monto");
+			return false;
+		}
+		return true;
+	}
+	
+	public void guardaOpRentaFija(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeRenta(false)){
+				Orden orden = null;
+				General operacion = null;
+				if(selectedTipo.equals(Constante.MONEDAOPERACION_COMPRA)){
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_COMPRA_FIJA);
+				}else{
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_FIJA);
+				}
+				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEspecie);
+				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
+				for (Fondo fondoSel : listaFondoSelected) {
+					if(fondoSel.getMonto()!=null){
+						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_F, fondoSel.getNbNomFondo(), null);
+						orden.setOperacion(operacion);
+						orden.setTpMonedaOperacion(selectedTipo);
+						orden.setEmisor(emisorSel);
+						orden.setEspecie(especie);
+						orden.setNbMnemonico(mnemonico);
+						orden.setImPrecioLimpio(Utilitarios.parseToDouble(precioLimpio));
+						orden.setImPrecioSucio(Utilitarios.parseToDouble(precioSucio));
+						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
+						guardaOrden(orden, false);
+					}
+				}
+				context.execute("PF('manteRentaFija').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgRentaFija", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
+	
+	public boolean validaFormularioDeRenta(boolean bEsVariable){
+		if(selectedTipo.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Seleccione un valor en el campo Tipo Operación.", "Error en Tipo Operación");
+			return false;
+		}
+		if(selectedEspecie.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Seleccione un valor en el campo Especie.", "Error en Especie");
+			return false;
+		}
+		if(selectedEmisorModal.equals(Constante.NO_OPTION_SELECTED)){
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Seleccione un valor en el campo Emisor.", "Error en Emisor");
+			return false;
+		}
+		if(monto == null || monto.equals("0")){
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Ingrese un valor válido en el campo "+(bEsVariable?"Cantidad":"Monto"), "Error en "+(bEsVariable?"Cantidad":"Monto"));
+			return false;
+		}
+		if(!Utilitarios.isDouble(monto)){
+			monto="";
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Ingrese un número válido en el campo "+(bEsVariable?"Cantidad":"Monto"), "Error en "+(bEsVariable?"Cantidad":"Monto"));
+			return false;
+		}
+		if(bEsVariable){
+			if(!Utilitarios.isDouble(precioReferencial)){
+				Utilitarios.mostrarMensajeAdvertencia("msgVar", "Verifique el valor en el campo Precio Referencial.", "Error en Precio Referencial");
+				return false;
+			}
+		}else{
+			if(!Utilitarios.isDouble(precioSucio)){
+				Utilitarios.mostrarMensajeAdvertencia("msgRentaFija", "Verifique el valor en el campo Precio Sucio.", "Error en Precio Sucio");
+				return false;
+			}
+		}
+
+		Fondo fondoSel = null;
+		for (int i = 0; i < listaFondoSelected.size(); i++) {
+			fondoSel = listaFondoSelected.get(i);
+			if (fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && fondoSel.getMonto()!=null) {
+				Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"),"Seleccione un Fondo de la Operación " + (i + 1) + ".", "Error en Fondo de Operación");
+				return false;
+			}
+			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isInteger(fondoSel.getMonto())) {
+				Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"),"Ingrese un valor en el campo monto de la Operación " + (i + 1) + ".", "Error en Monto de Operación");
+				return false;
+			}
+		}
+		if(montoTotal == null || montoTotal.equals("0")){
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Ingrese un valor válido en el campo Total.", "Error en Total");
+			return false;
+		}
+		if(!Utilitarios.isDouble(montoTotal)){
+			montoTotal="";
+			Utilitarios.mostrarMensajeAdvertencia((bEsVariable?"msgVar":"msgRentaFija"), "Ingrese un número válido en el campo Total.", "Error en Total");
+			return false;
+		}
+		if(!Utilitarios.parseToDouble(monto).equals(Utilitarios.parseToDouble(montoTotal))){
+			Utilitarios.mostrarMensajeError((bEsVariable?"msgVar":"msgRentaFija"), "El valor Total no coincide con lo establecido en el campo "+(bEsVariable?"Cantidad":"Monto"), "Error en Total");
+			return false;
+		}
+		return true;
+	}
+	
+	public void guardaOpRentaVariable(){
+		RequestContext context = RequestContext.getCurrentInstance();
+		try {
+			if(validaFormularioDeRenta(true)){
+				Orden orden = null;
+				General operacion = null;
+				if(selectedTipo.equals(Constante.MONEDAOPERACION_COMPRA)){
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_COMPRA_VARIABLE);
+				}else{
+					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_VARIABLE);
+				}
+				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEspecie);
+				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
+				for (Fondo fondoSel : listaFondoSelected) {
+					if(fondoSel.getMonto()!=null){
+						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_F, fondoSel.getNbNomFondo(), null);
+						orden.setOperacion(operacion);
+						orden.setTpMonedaOperacion(selectedTipo);
+						orden.setEmisor(emisorSel);
+						orden.setEspecie(especie);
+						orden.setNbMnemonico(mnemonico);
+						orden.setImPrecioReferencia(Utilitarios.parseToDouble(precioReferencial));
+						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
+						guardaOrden(orden, false);
+					}
+				}
+				context.execute("PF('manteRentaVariable').hide()");
+				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
+			}
+		} catch (Exception e) {
+			Utilitarios.mostrarMensajeError("msgRentaFija", Constante.Mensajes.MSJ_REGISTRO_FAIL, e.getMessage());
+		}
+	}
 	
 	public Orden generaOrden(){
 		Orden orden = new Orden();
 		orden.setFhFecEfectividad(selectedInfo.getFhFecEfectividad());
-		orden.setTpTipoOperacion(Utilitarios.buscaGeneralPorValorEnLista(listaTipoOperacion, selectedInfo.getTpOperacion()).getNbValorGeneral());
+		orden.setTpTipoOperacion(selectedInfo.getTpOperacion());
 		orden.setImTasa(selectedInfo.getImCupon());
 		orden.setNuPlazoDia(selectedInfo.getPlazo());
 		orden.setFhFecInicio(selectedInfo.getFhFecEmision());
@@ -1075,16 +1564,34 @@ public class PortafolioController extends GenericController{
 		orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedInfo.getIdOperacion()));
 		orden.setTipoMoneda(Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda()));
 		orden.setEspecie(Utilitarios.buscaGeneralEnLista(listaEspecie, selectedInfo.getNbEspecie()));
-		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedIntermediario));
-		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedLugar));
-		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedPais));
+		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaIntermediario, selectedIntermediario));
+		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
+		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
 		orden.setStEstado(Constante.OrdenEstado.GENERADO);
 		orden.setFhFecCreacion(new Date());
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 		return orden;
 	}
 	
-	public boolean guardaOrden(Orden orden){
+	public Orden generaOrdenBasica(String tipoOperacion, String nombreFondo, String contraparte){
+		Orden orden = new Orden();
+		orden.setFhFecEfectividad(fechaEfectividad);
+		orden.setTpTipoOperacion(tipoOperacion);
+		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, nombreFondo));
+		orden.setTipoMoneda(Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, orden.getFondo().getTpTipmoneda()));
+		if(contraparte!=null){
+			orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, contraparte));
+		}
+		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaIntermediario, selectedIntermediario));
+		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
+		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
+		orden.setStEstado(Constante.OrdenEstado.GENERADO);
+		orden.setFhFecCreacion(new Date());
+		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+		return orden;
+	}
+	
+	public boolean guardaOrden(Orden orden, boolean isDetalle){
 		try {
 			ordenManager.save(orden);
 			OrdenEstado ordenEstado = new OrdenEstado();
@@ -1095,12 +1602,14 @@ public class PortafolioController extends GenericController{
 			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
 			ordenManager.saveEstado(ordenEstado);
 			
-			DetalleOrden detalle = new DetalleOrden();
-			Utilitarios.copiaPropiedades(detalle, selectedInfo);
-			detalle.setCdIddetalle(null);
-			detalle.setOrden(orden);
-			
-			ordenManager.saveDetalle(detalle);
+			if(isDetalle){
+				DetalleOrden detalle = new DetalleOrden();
+				Utilitarios.copiaPropiedades(detalle, selectedInfo);
+				detalle.setCdIddetalle(null);
+				detalle.setOrden(orden);
+				
+				ordenManager.saveDetalle(detalle);
+			}
 			return true;
 		} catch (Exception e) {
 			return false;

@@ -40,7 +40,7 @@ public class NotificacionController extends GenericController implements Seriali
 	@PostConstruct
 	public void init() {
 		RequestContext context = RequestContext.getCurrentInstance();
-		if (loginController.isAdmin()) {
+		if (loginController.isInversionista()) {
 			if (!getRequest().getRequestURI().contains(Constante.ORDENES_PAGE)) {
 				Calendar cal = GregorianCalendar.getInstance();
 				cal.setTime(new Date());

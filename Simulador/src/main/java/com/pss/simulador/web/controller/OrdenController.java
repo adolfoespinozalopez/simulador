@@ -29,7 +29,7 @@ import com.pss.simulador.web.controller.generic.GenericController;
 * @since 1.0
 */
 @Component
-@Scope("request")
+@Scope("session")
 public class OrdenController extends GenericController{
 
 	private static final long serialVersionUID = 1L;
@@ -96,11 +96,8 @@ public class OrdenController extends GenericController{
     }
 	
 	public void ejecutarbusqueda(){
-		if(this.isAdmin()){
-			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
-		}else{
-			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
-		}
+		//listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
+		listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
 	}
 	
 	public void aprobarOrden(){

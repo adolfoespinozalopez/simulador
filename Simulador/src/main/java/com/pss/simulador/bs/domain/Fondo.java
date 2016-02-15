@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
 *
@@ -39,6 +40,9 @@ public class Fondo implements java.io.Serializable {
 	private List<LimFondoEspecie> limFondoEspecieList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<LimitesEmisor> limitesEmisorList;
+	
+	@Transient
+	private String monto;
 	
 	public Fondo() {
 	}
@@ -117,6 +121,14 @@ public class Fondo implements java.io.Serializable {
 
 	public void setLimitesEmisorList(List<LimitesEmisor> limitesEmisorList) {
 		this.limitesEmisorList = limitesEmisorList;
+	}
+
+	public String getMonto() {
+		return monto;
+	}
+
+	public void setMonto(String monto) {
+		this.monto = monto;
 	}
 
 }

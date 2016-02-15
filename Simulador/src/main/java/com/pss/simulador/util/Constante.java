@@ -49,6 +49,13 @@ public class Constante {
      */
     public static final String TIPOAPERTURA_COBERTURADO = "COBERTURADO";
     public static final String TIPOAPERTURA_NORMAL = "NORMAL";
+    
+    public static final String TIPOOPERACIONCUENTA_ABONO = "ABONO";
+    public static final String TIPOOPERACIONCUENTA_CARGO = "CARGO";
+    
+    public static final String MONEDAOPERACION_COMPRA = "COMPRA";
+    public static final String MONEDAOPERACION_VENTA = "VENTA";
+    
     public static final String VENCE_HOY = "VENCE HOY";
     
     public static final Double VALOR_CERO = 0.0;

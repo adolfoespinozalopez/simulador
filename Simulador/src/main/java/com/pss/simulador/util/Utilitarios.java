@@ -16,6 +16,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import com.pss.simulador.bs.domain.DetalleOrden;
+import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
@@ -103,6 +104,15 @@ public class Utilitarios {
     	for (Fondo f : lista) {
 			if(f.getNbNomFondo().toUpperCase().equals(item.toUpperCase())){
 				return f;
+			}
+		}
+    	return null;
+    }
+    
+    public static Emisor buscaEmisorEnLista(List<Emisor> lista, String item){
+    	for (Emisor e : lista) {
+			if(e.getNbNomEmisor().toUpperCase().equals(item.toUpperCase())){
+				return e;
 			}
 		}
     	return null;
