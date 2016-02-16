@@ -1,15 +1,21 @@
 package com.pss.simulador.web.controller;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
 
 import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
@@ -17,6 +23,7 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MimeType;
 
 import com.pss.simulador.bs.domain.ProcesoCarga;
 import com.pss.simulador.bs.domain.ProcesoLog;
@@ -115,17 +122,30 @@ public class ProcesoCargaController extends GenericController {
 	    return download;
 	}
 
-	public void prepDownload(Integer idProceso) throws Exception {
-		System.out.println("idProceso:"+idProceso);
+	public void prepDownload(Integer idProceso, Date fhFecImporta) throws Exception {
 		List<ProcesoLog> lstProcesoLog = procesoCargaManager.findProcesoLogByIdProceso(idProceso);
-	  String date = "G:\\test1.txt";
-	  File file = new File(date);
-	  InputStream input = new FileInputStream(file);
-	  ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-	  setDownload(new DefaultStreamedContent(input, externalContext.getMimeType(file.getName()), file.getName()));
-	  
-	  
-	  
+		ByteArrayOutputStream baos = null;
+		baos = new ByteArrayOutputStream();
+		PrintStream printStream = new PrintStream(baos);
+		for (ProcesoLog procesoLog : lstProcesoLog) {
+			printStream.println(procesoLog.getTpTipomensaje() + " - " + 
+								FechasUtil.formatFecha(procesoLog.getFhFecreg(), FechasUtil.FORMATO_FECHA_YYY_MM_DD_HH_mm_ss) + " - " +
+								procesoLog.getMsMensaje());
+		}
+		printStream.close();
+		
+		ByteArrayInputStream stream = new ByteArrayInputStream((baos).toByteArray());
+		ExternalContext externalContext2 = FacesContext.getCurrentInstance().getExternalContext();
+		this.setDownload(new DefaultStreamedContent(stream, externalContext2.getMimeType("text/plain"), "Log_"+FechasUtil.formatFecha(fhFecImporta,FechasUtil.FORMATO_FECHA_YYYMMDD_HHmmss)+".txt"));
+		
+		
+		
+//		ServletOutputStream ouputStream = this.getResponse().getOutputStream();
+//		ouputStream.write(datos);
+//	    ouputStream.flush();
+//	    ouputStream.close();
+		
+		
 	}
 	
 	public void eliminar() {

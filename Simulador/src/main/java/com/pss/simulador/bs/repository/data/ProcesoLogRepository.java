@@ -17,7 +17,7 @@ import com.pss.simulador.bs.domain.ProcesoLog;
  */
 public interface ProcesoLogRepository extends CrudRepository<ProcesoLog, Integer> {
 	
-	@Query(value = "SELECT g FROM ProcesoLog g WHERE g.procesoCarga.cdIdproceso = :cdIdproceso")	
+	@Query(value = "SELECT g FROM ProcesoLog g WHERE g.procesoCarga.cdIdproceso = :cdIdproceso order by g.cdIdlog asc")	
 	public abstract List<ProcesoLog> findByIdProceso(@Param("cdIdproceso") Integer cdIdproceso);
 
 }

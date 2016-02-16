@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 public class FechasUtil {
 	private static final Logger logger = Logger.getLogger(Utilitarios.class);
 	public static final String FORMATO_FECHA_YYYMMDD = "yyyyMMdd";
+	public static final String FORMATO_FECHA_YYY_MM_DD_HH_mm_ss = "yyyy/MM/dd HH:mm:ss";
+	public static final String FORMATO_FECHA_YYYMMDD_HHmmss = "yyyyMMdd_HHmmss";
 	public static Date parseFecha(String fecha, String formato) {
 		Date result = null;
 		SimpleDateFormat format = new SimpleDateFormat(formato.toString());

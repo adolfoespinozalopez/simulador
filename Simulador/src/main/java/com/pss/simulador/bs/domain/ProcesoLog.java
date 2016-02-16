@@ -2,7 +2,6 @@ package com.pss.simulador.bs.domain;
 // default package
 // Generated 31/01/2016 07:26:53 PM by Hibernate Tools 3.4.0.CR1
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -26,7 +25,7 @@ import javax.persistence.TemporalType;
 public class ProcesoLog implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private BigDecimal cdIdlog;
+	private Integer cdIdlog;
 	private ProcesoCarga procesoCarga;
 	private Date fhFecreg;
 	private String tpTipomensaje;
@@ -35,11 +34,11 @@ public class ProcesoLog implements java.io.Serializable {
 	public ProcesoLog() {
 	}
 
-	public ProcesoLog(BigDecimal cdIdlog) {
+	public ProcesoLog(Integer cdIdlog) {
 		this.cdIdlog = cdIdlog;
 	}
 
-	public ProcesoLog(BigDecimal cdIdlog,
+	public ProcesoLog(Integer cdIdlog,
 			ProcesoCarga procesoCarga, Date fhFecreg,
 			String tpTipomensaje, String msMensaje) {
 		this.cdIdlog = cdIdlog;
@@ -53,11 +52,11 @@ public class ProcesoLog implements java.io.Serializable {
 	@SequenceGenerator(name = "secProcesoLog", sequenceName = "BBVATESOR.SEQ_PROCESOLOG", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secProcesoLog")
 	@Column(name = "CD_IDLOG", unique = true, nullable = false, precision = 22, scale = 0)
-	public BigDecimal getCdIdlog() {
+	public Integer getCdIdlog() {
 		return this.cdIdlog;
 	}
 
-	public void setCdIdlog(BigDecimal cdIdlog) {
+	public void setCdIdlog(Integer cdIdlog) {
 		this.cdIdlog = cdIdlog;
 	}
 

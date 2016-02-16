@@ -111,6 +111,17 @@ public class ProcesoCargaRunnable implements Runnable {
 		}
 		return strEstado;
 	}
+	
+	private String obtenerEstadoLogs(List<ProcesoLog> lstProcesoLog2) {
+		String strEstado = "";
+		for (ProcesoLog procesoLog : lstProcesoLog2) {
+			if (procesoLog.getTpTipomensaje().equals(Constante.Log.TipoMensaje.ERROR)){
+				strEstado = Constante.Log.TipoMensaje.ERROR;
+				break;
+			}
+		}
+		return strEstado;
+	}
 
 	/**
 	 * @param convertirHojaToList
@@ -124,7 +135,7 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			CobranzaPago cobranzaPago = new CobranzaPago();
 			if (contaFila >= nroFilaData){
-				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "SALDOS");
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), new ArrayList<ProcesoLog>(), (contaFila+1), "SALDOS");
 				cobranzaPago.setCdCodFondo(helper.parseDoubleToString(hsObjCols.get(0),1));
 				cobranzaPago.setTipOperacion(helper.parseToString(hsObjCols.get(1)));
 				cobranzaPago.setFhFecIngreso(helper.parseToDate(hsObjCols.get(2),3));
@@ -136,8 +147,10 @@ public class ProcesoCargaRunnable implements Runnable {
 				cobranzaPago.setCdSigla(helper.parseToString(hsObjCols.get(8)));
 				cobranzaPago.setStEstado(Constante.ESTADO_ACTIVO);
 				cobranzaPago.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
-				lstResult.add(cobranzaPago);
-				this.setLstProcesoLog(helper.getLstLog());
+				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
+					lstResult.add(cobranzaPago);	
+				}
+				this.getLstProcesoLog().addAll(helper.getLstLog());
 			}
 			contaFila++;
 			
@@ -152,7 +165,7 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Saldo saldo = new Saldo();
 			if (contaFila >= nroFilaData){
-				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "SALDOS");
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), new ArrayList<ProcesoLog>(), (contaFila+1), "SALDOS");
 				saldo.setCdCodFondo(helper.parseToString(hsObjCols.get(0)));
 				saldo.setNbNomFondo(helper.parseToString(hsObjCols.get(1)));
 				saldo.setTpTipmoneda(helper.parseToString(hsObjCols.get(2)));
@@ -190,9 +203,10 @@ public class ProcesoCargaRunnable implements Runnable {
 				saldo.setImSaldoTmasn(helper.parseToDouble(hsObjCols.get(34),35));
 				saldo.setStEstado(Constante.ESTADO_ACTIVO);
 				saldo.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
-			
-				lstResult.add(saldo);
-				this.setLstProcesoLog(helper.getLstLog());
+				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
+					lstResult.add(saldo);	
+				}
+				this.getLstProcesoLog().addAll(helper.getLstLog());
 			}
 			contaFila++;
 			
@@ -208,7 +222,7 @@ public class ProcesoCargaRunnable implements Runnable {
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Infoport infoport = new Infoport();
 			if (contaFila >= nroFilaData){
-				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), this.getLstProcesoLog(), (contaFila+1), "INFOPORT");
+				CargaArchivoHelper helper = new CargaArchivoHelper(this.getProcesoCarga(), new ArrayList<ProcesoLog>(), (contaFila+1), "INFOPORT");
 				infoport.setNbNomFondo(helper.parseToString(hsObjCols.get(0)));
 				infoport.setTpTipfondo(helper.parseToString(hsObjCols.get(1)));
 				infoport.setNbNomEmisor(helper.parseToString(hsObjCols.get(2)));
@@ -265,9 +279,10 @@ public class ProcesoCargaRunnable implements Runnable {
 					}
 				}
 				infoport.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
-				
-				lstResult.add(infoport);
-				this.setLstProcesoLog(helper.getLstLog());
+				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
+					lstResult.add(infoport);
+				}
+				this.getLstProcesoLog().addAll(helper.getLstLog());
 			}
 			contaFila++;
 			
