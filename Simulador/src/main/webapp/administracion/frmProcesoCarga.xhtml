@@ -124,7 +124,7 @@
                 </p:dialog>
 
                 <p:dialog id="dlgProceso" modal="true" header="Carga de Archivo" widgetVar="cargaArchivo" resizable="false"
-                          width="530" height="485">
+                          width="530" height="180">
                     <ui:include src="frmCargaArchivo.xhtml" />
                     <p:ajax event="close" listener="#{procesoCargaController.cancelar()}" 
                             update=":frmProcesoCarga:grdProceso, :frmCargaArchivo" />

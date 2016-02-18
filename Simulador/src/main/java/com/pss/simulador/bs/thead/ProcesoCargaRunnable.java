@@ -60,11 +60,22 @@ public class ProcesoCargaRunnable implements Runnable {
 			XSSFSheet sheetInfoport = workbook.getSheetAt(0);
 			XSSFSheet sheetSaldos = workbook.getSheetAt(1);
 			XSSFSheet sheetCobPag = workbook.getSheetAt(2);
-
-			List<Infoport> lstInfoportLoad = this.parseToInfoport(this.convertirHojaToList(sheetInfoport));
-			List<Saldo> lstSaldos = this.parseToSaldo(this.convertirHojaToList(sheetSaldos));
-			List<CobranzaPago> lstCobPag = this.parseToCobranzaPago(this.convertirHojaToList(sheetCobPag));
 			
+			List<HashMap<Integer,Object>> lstObjSheetInfoPort = this.convertirHojaToList(sheetInfoport);
+			List<HashMap<Integer,Object>> lstObjSheetSaldos = this.convertirHojaToList(sheetSaldos);
+			List<HashMap<Integer,Object>> lstObjSheetCobPag = this.convertirHojaToList(sheetCobPag);
+			
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se leyeron "+(lstObjSheetInfoPort.size() - Constante.ArchivoCarga.INI_ROW_INFOPORT) +" registros de la pestaña INFOPORT." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se leyeron "+(lstObjSheetSaldos.size()- Constante.ArchivoCarga.INI_ROW_SALDOS)+" registros de la pestaña SALDOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se leyeron "+(lstObjSheetCobPag.size()- Constante.ArchivoCarga.INI_ROW_COBPAG)+" registros de la pestaña COBRANZAPAGOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
+			
+			List<Infoport> lstInfoportLoad = this.parseToInfoport(lstObjSheetInfoPort);
+			List<Saldo> lstSaldos = this.parseToSaldo(lstObjSheetSaldos);
+			List<CobranzaPago> lstCobPag = this.parseToCobranzaPago(lstObjSheetCobPag);
+			
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstInfoportLoad.size()+" registros de la pestaña INFOPORT." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstSaldos.size()+" registros de la pestaña SALDOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
+			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstCobPag.size()+" registros de la pestaña COBRANZAPAGOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
 			if(procesoCargaManager.saveLoadFile(lstInfoportLoad, lstSaldos, lstCobPag, this.getProcesoCarga().getFhFecImporta())){
 				procesoCargaManager.deleteAllOtherLoad(this.getProcesoCarga().getFhFecImporta());
 			}
@@ -130,7 +141,7 @@ public class ProcesoCargaRunnable implements Runnable {
 	private List<CobranzaPago> parseToCobranzaPago(
 			List<HashMap<Integer,Object>> lstObjRows) {
 		List<CobranzaPago> lstResult = new ArrayList<CobranzaPago>();
-		Integer nroFilaData = 1;
+		Integer nroFilaData = Constante.ArchivoCarga.INI_ROW_COBPAG;
 		Integer contaFila=0;
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			CobranzaPago cobranzaPago = new CobranzaPago();
@@ -160,7 +171,7 @@ public class ProcesoCargaRunnable implements Runnable {
 
 	private List<Saldo> parseToSaldo(List<HashMap<Integer,Object>> lstObjRows) {
 		List<Saldo> lstResult = new ArrayList<Saldo>();
-		Integer nroFilaData = 5;
+		Integer nroFilaData = Constante.ArchivoCarga.INI_ROW_SALDOS;
 		Integer contaFila=0;
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Saldo saldo = new Saldo();
@@ -217,7 +228,7 @@ public class ProcesoCargaRunnable implements Runnable {
 	private List<Infoport> parseToInfoport(
 			List<HashMap<Integer,Object>> lstObjRows) {
 		List<Infoport> lstResult = new ArrayList<Infoport>();
-		Integer nroFilaData = 4;
+		Integer nroFilaData = Constante.ArchivoCarga.INI_ROW_INFOPORT;
 		Integer contaFila=0;
 		for (HashMap<Integer,Object> hsObjCols : lstObjRows) {
 			Infoport infoport = new Infoport();

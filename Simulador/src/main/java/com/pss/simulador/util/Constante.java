@@ -160,4 +160,13 @@ public class Constante {
     		public static final String ERROR = "ERROR";
     	}
     }
+    
+    public static class ContentType{
+    	public static final String EXCEL_MACRO = "application/vnd.ms-excel.sheet.macroEnabled.12";
+    }
+    public static class ArchivoCarga{
+    	public static final Integer INI_ROW_INFOPORT = 4;
+    	public static final Integer INI_ROW_SALDOS = 5;
+    	public static final Integer INI_ROW_COBPAG = 1;
+    }
 }

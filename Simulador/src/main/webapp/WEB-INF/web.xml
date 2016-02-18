@@ -78,6 +78,20 @@
 		<param-value>false</param-value>
 	</context-param>
 
+
+<!-- filtro para sesion -->
+	<filter>
+		<filter-name>filterSession</filter-name>
+		<filter-class>com.pss.simulador.bs.filter.FilterSession</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>filterSession</filter-name>
+		<url-pattern>*.jsf</url-pattern>
+	</filter-mapping>
+	
+
+
 	<!-- Error page -->
 	<error-page>
 		<error-code>404</error-code>

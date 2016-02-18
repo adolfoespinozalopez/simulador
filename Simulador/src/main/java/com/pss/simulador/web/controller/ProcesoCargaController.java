@@ -4,15 +4,18 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
@@ -92,26 +95,33 @@ public class ProcesoCargaController extends GenericController {
 		logger.info("Inicio proceso Carga");
 		ProcesoCarga procesoCarga = new ProcesoCarga();
 		Date fhFecImporta = new Date();
-		// Carga Archivo
-		try {
-			if(procesoCargaManager.copyFileToLocal(filePlantilla.getInputstream())){
-				procesoCarga.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
-				procesoCarga.setFhFecIni(fhFecImporta);
-				procesoCarga.setFhFecImporta(fhFecImporta);
-				procesoCarga.setStEstadoProceso(Constante.EstadoProceso.EN_PROCESO);
-				procesoCarga.setStEstado(Constante.ESTADO_ACTIVO);
-				procesoCarga = procesoCargaManager.saveProcesoCarga(procesoCarga);
+		if(filePlantilla.getContentType().equals(Constante.ContentType.EXCEL_MACRO)){
+			// Carga Archivo
+			try {
+					if(procesoCargaManager.copyFileToLocal(filePlantilla.getInputstream())){
+						procesoCarga.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+						procesoCarga.setFhFecIni(fhFecImporta);
+						procesoCarga.setFhFecImporta(fhFecImporta);
+						procesoCarga.setStEstadoProceso(Constante.EstadoProceso.EN_PROCESO);
+						procesoCarga.setStEstado(Constante.ESTADO_ACTIVO);
+						procesoCarga = procesoCargaManager.saveProcesoCarga(procesoCarga);
+					}
+				
+			} catch (IOException e) {
+				logger.error(e,e);
 			}
-		} catch (IOException e) {
-			logger.error(e,e);
+			procesoCargaThread.setProcesoCarga(procesoCarga);
+			Thread t1 = new Thread(procesoCargaThread);
+			t1.start();
+			Utilitarios.mostrarMensajeInfo(null, filePlantilla.getFileName() + ". Se proceso de carga se ejecutó correctaente. ", null);
+			this.limpiarFormulario();
+			this.buscar();
+			
+		}else{
+			Utilitarios.mostrarMensajeError(null, filePlantilla.getFileName() + ". No cumple con la extensión correcta (.xlsm). ", null);
 		}
-		procesoCargaThread.setProcesoCarga(procesoCarga);
-		Thread t1 = new Thread(procesoCargaThread);
-		t1.start();
+	
 		
-		Utilitarios.mostrarMensajeInfo(null, filePlantilla.getFileName() + ". Se proceso de carga se ejecutó correctaente. ", null);
-		this.limpiarFormulario();
-		this.buscar();
 	}
 	
 	public void setDownload(DefaultStreamedContent download) {
