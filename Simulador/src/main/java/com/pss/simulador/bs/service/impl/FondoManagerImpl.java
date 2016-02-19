@@ -76,9 +76,5 @@ public class FondoManagerImpl implements FondoManager {
 	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo) {
 		return fondoRepository.obtenerExposicionDelFondo(idFondo);
 	}
-
-	public List<ExpoFondo> obtenerEmisoresDeExposicionDelFondo(Integer idFondo) {
-		return fondoRepository.obtenerEmisoresDeExposicionDelFondo(idFondo);
-	}
 	
 }

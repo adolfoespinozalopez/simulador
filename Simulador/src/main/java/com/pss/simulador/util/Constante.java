@@ -68,23 +68,31 @@ public class Constante {
     }
     
     /**
+     * Exposicion
+     */
+    public static final String EXPO_FONDO = "0";
+    public static final String EXPO_EMISOR = "1"; 
+    public static final String EXPO_LIQUIDEZ = "2";
+    public static final String EXPO_CAJA = "3";
+    
+    /**
      * Operaciones
      */
-    public static final Integer ID_OPERA_CANCELACION = 127;
-    public static final Integer ID_OPERA_APERTURA_DPF = 128;
-    public static final Integer ID_OPERA_APERTURA_DPF_COB = 129;
-    public static final Integer ID_OPERA_PRE_CANCELACION = 130;
-    public static final Integer ID_OPERA_RENOVACION = 131;
-    public static final Integer ID_OPERA_COMPRA_SPOT = 132;
-    public static final Integer ID_OPERA_VENTA_SPOT = 133;
-    public static final Integer ID_OPERA_COMPRA_FWD= 134;
-    public static final Integer ID_OPERA_VENTA_FWD = 135;
-    public static final Integer ID_OPERA_ABONO_CTA_AHORRO = 136;
-    public static final Integer ID_OPERA_RETIRO_CTA_AHORRO = 137;
-    public static final Integer ID_OPERA_COMPRA_FIJA = 138;
-    public static final Integer ID_OPERA_VENTA_FIJA = 139;
-    public static final Integer ID_OPERA_COMPRA_VARIABLE = 139;
-    public static final Integer ID_OPERA_VENTA_VARIABLE = 139;
+    public static final int ID_OPERA_CANCELACION = 127;
+    public static final int ID_OPERA_APERTURA_DPF = 128;
+    public static final int ID_OPERA_APERTURA_DPF_COB = 129;
+    public static final int ID_OPERA_PRE_CANCELACION = 130;
+    public static final int ID_OPERA_RENOVACION = 131;
+    public static final int ID_OPERA_COMPRA_SPOT = 132;
+    public static final int ID_OPERA_VENTA_SPOT = 133;
+    public static final int ID_OPERA_COMPRA_FWD= 134;
+    public static final int ID_OPERA_VENTA_FWD = 135;
+    public static final int ID_OPERA_ABONO_CTA_AHORRO = 136;
+    public static final int ID_OPERA_RETIRO_CTA_AHORRO = 137;
+    public static final int ID_OPERA_COMPRA_FIJA = 138;
+    public static final int ID_OPERA_VENTA_FIJA = 139;
+    public static final int ID_OPERA_COMPRA_VARIABLE = 140;
+    public static final int ID_OPERA_VENTA_VARIABLE = 141;
     /**
      * Combos
      */
@@ -98,7 +106,7 @@ public class Constante {
     public static final String PORTAFOLIO_PAGE = "frmPortafolio.jsf";
     
     public static final int HORA_MONEY_MARKET = 11;
-    public static final int HORA_RENTA_FIJA = 13;
+    public static final int HORA_RENTA_FIJA = 12;
     public static final int HORA_RENTA_VARIABLE = 15;
     public static final int MINUTO_ALERTA = 30;
     /**

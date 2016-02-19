@@ -167,6 +167,11 @@ public class PortafolioController extends GenericController{
 	private List<Orden> listaOrdenes = new ArrayList<Orden>();
 	private Orden selectedOrden;
 	
+	/**
+	 * Orden Anterior
+	 */
+	private Orden ordenAnterior;
+	
 	@PostConstruct
 	public void init() {
 		listaPortafolio = new ArrayList<Infoport>();
@@ -837,10 +842,10 @@ public class PortafolioController extends GenericController{
 	    	selectedInfo.setMontoIntereses(formato.format(intereses));
 	    	selectedInfo.setMontoTotal(formato.format(selectedInfo.getImValorSinInter() + intereses));
 	    	selectedInfo.setIdOperacion(Constante.ID_OPERA_CANCELACION);
+	    	setOrdenAnterior(null);
 		} catch (Exception e) {
 			LOG.error("Error obteniendo los calculos de cancelar deposito.", e);
 		}
-		
 	}
 	
 	public void validarPreCancelarDeposito(){
@@ -864,10 +869,11 @@ public class PortafolioController extends GenericController{
 			selectedInfo.setFhFecEfectividad(null);
 			selectedInfo.setMontoCapital(formato.format(selectedInfo.getImValorSinInter()));
 			selectedInfo.setMontoIntereses(formatoTasa.format(selectedInfo.getImCupon()));
-			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(new Date(), selectedInfo.getFhFecEmision()));
+			selectedInfo.setPlazo(FechasUtil.diferenciaEnDias(Constante.FECHA_ACTUAL, selectedInfo.getFhFecEmision()));
 			tasaPreCancelacion = formatoTasa.format(selectedInfo.getImCupon());
 			calcularMontoPreCancelacion();
 			selectedInfo.setIdOperacion(Constante.ID_OPERA_PRE_CANCELACION);
+			setOrdenAnterior(null);
 		} catch (Exception e) {
 			LOG.error("Error obteniendo los calculos de pre cancelar deposito.", e);
 		}
@@ -898,6 +904,7 @@ public class PortafolioController extends GenericController{
     	tasaAper = "";
     	plazoAper = "";
     	fechaVctoAper = null;
+    	setOrdenAnterior(null);
 	}
 	
 	public void validarRenovarDeposito(){
@@ -922,6 +929,7 @@ public class PortafolioController extends GenericController{
 		tasaRenova = "";
 		plazoRenova = "";
 		fechaVctoRenova = null;
+		setOrdenAnterior(null);
 	}
 	
 	public void validarSpot(){
@@ -940,6 +948,7 @@ public class PortafolioController extends GenericController{
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
 		}
+		setOrdenAnterior(null);
 	}
 	
 	public void validarFwd(){
@@ -963,6 +972,7 @@ public class PortafolioController extends GenericController{
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
 		}
+		setOrdenAnterior(null);
 	}
 	
 	public void validarAbonoCargo(){
@@ -977,6 +987,7 @@ public class PortafolioController extends GenericController{
 		selectedTipoAbono = Constante.NO_OPTION_SELECTED;
 		selectedContraAbono = Constante.NO_OPTION_SELECTED;
 		montoAbono = "";
+		setOrdenAnterior(null);
 	}
 	
 	public void validarRentaFija(){
@@ -999,6 +1010,7 @@ public class PortafolioController extends GenericController{
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
 		}
+		setOrdenAnterior(null);
 	}
 	
 	public void validarRentaVariable(){
@@ -1228,7 +1240,7 @@ public class PortafolioController extends GenericController{
 				Utilitarios.mostrarMensajeAdvertencia("msgSpot","Seleccione un Fondo de la Operación " + (i + 1) + ".", "Error en Fondo de Operación");
 				return false;
 			}
-			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isInteger(fondoSel.getMonto())) {
+			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isDouble(fondoSel.getMonto())) {
 				Utilitarios.mostrarMensajeAdvertencia("msgSpot","Ingrese un valor en el campo monto de la Operación " + (i + 1) + ".", "Error en Monto de Operación");
 				return false;
 			}
@@ -1237,7 +1249,7 @@ public class PortafolioController extends GenericController{
 			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Ingrese por lo menos una Operación.", "Error en Monto Total");
 			return false;
 		}
-		if(!Utilitarios.isInteger(montoTotal)){
+		if(!Utilitarios.isDouble(montoTotal)){
 			Utilitarios.mostrarMensajeAdvertencia("msgSpot", "Ingrese un número válido en cada Operación.", "Error en Monto Total");
 			return false;
 		}
@@ -1246,17 +1258,17 @@ public class PortafolioController extends GenericController{
 	
 	public void sumarMonto(){
 		montoTotal = "0";
-		Integer montoTo = 0;
+		Double montoTo = 0.0;
 		try {
 			for (Fondo fondoSel : listaFondoSelected) {
-				if(Utilitarios.isInteger(fondoSel.getMonto())){
-					montoTo += Utilitarios.parseToInteger(fondoSel.getMonto());
+				if(Utilitarios.isDouble(fondoSel.getMonto())){
+					montoTo += Utilitarios.parseToDouble(fondoSel.getMonto());
 				}else{
 					fondoSel.setMonto("");
 				}
 			}
 		} catch (Exception e) {
-			montoTo = 0;
+			montoTo = 0.0;
 		}
 		montoTotal = montoTo.toString();
 	}
@@ -1332,7 +1344,7 @@ public class PortafolioController extends GenericController{
 				Utilitarios.mostrarMensajeAdvertencia("msgFwd","Seleccione un Fondo de la Operación " + (i + 1) + ".", "Error en Fondo de Operación");
 				return false;
 			}
-			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isInteger(fondoSel.getMonto())) {
+			if (!fondoSel.getNbNomFondo().equals(Constante.NO_OPTION_SELECTED) && !Utilitarios.isDouble(fondoSel.getMonto())) {
 				Utilitarios.mostrarMensajeAdvertencia("msgFwd","Ingrese un valor en el campo monto de la Operación " + (i + 1) + ".", "Error en Monto de Operación");
 				return false;
 			}
@@ -1341,7 +1353,7 @@ public class PortafolioController extends GenericController{
 			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese por lo menos una Operación.", "Error en Monto Total");
 			return false;
 		}
-		if(!Utilitarios.isInteger(montoTotal)){
+		if(!Utilitarios.isDouble(montoTotal)){
 			Utilitarios.mostrarMensajeAdvertencia("msgFwd", "Ingrese un número válido en cada Operación.", "Error en Monto Total");
 			return false;
 		}
@@ -1430,7 +1442,7 @@ public class PortafolioController extends GenericController{
 				}else{
 					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_FIJA);
 				}
-				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEspecie);
+				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEmisorModal);
 				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
 				for (Fondo fondoSel : listaFondoSelected) {
 					if(fondoSel.getMonto()!=null){
@@ -1568,7 +1580,7 @@ public class PortafolioController extends GenericController{
 		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
 		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
 		orden.setStEstado(Constante.OrdenEstado.GENERADO);
-		orden.setFhFecCreacion(new Date());
+		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 		return orden;
 	}
@@ -1586,13 +1598,19 @@ public class PortafolioController extends GenericController{
 		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
 		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
 		orden.setStEstado(Constante.OrdenEstado.GENERADO);
-		orden.setFhFecCreacion(new Date());
+		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 		return orden;
 	}
 	
 	public boolean guardaOrden(Orden orden, boolean isDetalle){
 		try {
+			if(ordenAnterior != null){
+				//Se elimina la orden anterior
+				ordenAnterior.setFhFecElimina(Constante.FECHA_ACTUAL);
+				ordenAnterior.setCdUsuElimina(this.getUsuarioSession().getUsuario().getUID());
+				ordenManager.save(ordenAnterior);
+			}
 			ordenManager.save(orden);
 			OrdenEstado ordenEstado = new OrdenEstado();
 			
@@ -1615,4 +1633,13 @@ public class PortafolioController extends GenericController{
 			return false;
 		}
 	}
+
+	public Orden getOrdenAnterior() {
+		return ordenAnterior;
+	}
+
+	public void setOrdenAnterior(Orden ordenAnterior) {
+		this.ordenAnterior = ordenAnterior;
+	}
+	
 }

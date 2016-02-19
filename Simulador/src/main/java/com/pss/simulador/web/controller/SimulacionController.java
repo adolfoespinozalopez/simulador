@@ -1,7 +1,6 @@
 package com.pss.simulador.web.controller;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,11 +13,12 @@ import org.springframework.stereotype.Component;
 
 import com.pss.simulador.bs.domain.ExpoFondo;
 import com.pss.simulador.bs.domain.Fondo;
+import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.service.ExpoFondoManager;
 import com.pss.simulador.bs.service.FondoManager;
+import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
-import com.pss.simulador.web.bean.FlujoCaja;
 import com.pss.simulador.web.controller.generic.GenericController;
 
 /**
@@ -34,23 +34,32 @@ public class SimulacionController extends GenericController{
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOG = Logger.getLogger(SimulacionController.class);
 	
-	private List<FlujoCaja> listaCaja = new ArrayList<FlujoCaja>();
-	
-	private Fondo selectedFondo;
-	private List<Fondo> listaFondo = new ArrayList<Fondo>();
 	private String selectedNombreFondo = Constante.NO_OPTION_SELECTED;
+	private List<Fondo> listaFondo = new ArrayList<Fondo>();
+	private Fondo selectedFondo;
+	
+	private General selectedTipoMoneda;
+	List<General> listaMoneda = new ArrayList<General>();
 	
 	private List<ExpoFondo> listaExpoFondo = new ArrayList<ExpoFondo>();
 	private ExpoFondo selectedExpoFondo;
 	
+	private List<ExpoFondo> listaLiquidez = new ArrayList<ExpoFondo>();
+	
 	private List<ExpoFondo> listaEmisores = new ArrayList<ExpoFondo>();
 	private ExpoFondo selectedEmisor;
+	
+	private List<ExpoFondo> listaCaja = new ArrayList<ExpoFondo>();
+	private ExpoFondo selectedCaja;
 	
 	@Autowired
 	private ExpoFondoManager expoFondoManager;
 	
 	@Autowired
     private FondoManager fondoManager;
+	
+	@Autowired
+    private GeneralManager generalManager;
 	
 	public SimulacionController() {
 
@@ -59,7 +68,7 @@ public class SimulacionController extends GenericController{
 	@PostConstruct
 	public void init() {
 		listaFondo = fondoManager.findAll();
-		//listaFondo = fondoManager.findByIdPerfil(this.getUsuarioSession().getPerfil().getCdIdperfil());
+		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
 	}
 
 	public void realizarFiltroDeFondo(ValueChangeEvent event) {
@@ -67,70 +76,43 @@ public class SimulacionController extends GenericController{
         if (objNew != null) {
         	setSelectedNombreFondo(objNew.toString());
         	selectedFondo = Utilitarios.buscaFondoEnLista(listaFondo, selectedNombreFondo);
+        	selectedTipoMoneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, selectedFondo.getTpTipmoneda());
         }
         if(selectedNombreFondo.equals(Constante.NO_OPTION_SELECTED)){
-        	listaExpoFondo = new ArrayList<ExpoFondo>();
-        	listaCaja = new ArrayList<FlujoCaja>();
-        	listaEmisores = new ArrayList<ExpoFondo>();
+        	limpiarListas();
         }else{
         	ejecutaBusqueda();
         }
     }
 	
+	public void limpiarListas(){
+		listaExpoFondo.clear();
+		listaLiquidez.clear();
+    	listaEmisores.clear();
+    	listaCaja.clear();
+	}
+	
 	public void ejecutaBusqueda(){
 		obtieneExposicionFondo();
-		obtieneFlujoDeCaja();
 	}
 	
 	public void obtieneExposicionFondo(){
 		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo);
 		if(selectedFondo != null){
-			listaExpoFondo = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo());
-			listaEmisores = fondoManager.obtenerEmisoresDeExposicionDelFondo(selectedFondo.getCdIdfondo());
+			limpiarListas();
+			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo());
+			for (ExpoFondo expo : listaTemporal) {
+				if(expo.getTpEmisor().equals(Constante.EXPO_FONDO)){
+					listaExpoFondo.add(expo);
+				}else if(expo.getTpEmisor().equals(Constante.EXPO_EMISOR)){
+					listaEmisores.add(expo);
+				}else if(expo.getTpEmisor().equals(Constante.EXPO_LIQUIDEZ)){
+					listaLiquidez.add(expo);
+				}else{
+					listaCaja.add(expo);
+				}
+			}
 		}
-	}
-
-	public void obtieneFlujoDeCaja(){
-		Calendar cal = Calendar.getInstance();
-		listaCaja = new ArrayList<FlujoCaja>();
-		listaCaja.add(new FlujoCaja(cal.getTime(), 6912633.00, 0.00, 6912633.00, 570.00, 0.00, 570.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 10032799.00, 0.00, 16945432.00, 0.00, 0.00, 570.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 10063903.00, 0.00, 27009336.00, 0.00, 0.00, 570.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 10031740.00, 0.00, 65394155.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 65394155.00, 0.00, 0.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 16291673.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 81685828.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 5080448.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
-		listaCaja.add(new FlujoCaja(cal.getTime(), 0.00, 0.00, 86766276.00, 0.00, 0.00, 7125127.00));
-		cal.add(Calendar.DATE, 1);
 	}
 	
 	public String validaValorNegativo(String porcentaje){
@@ -149,12 +131,12 @@ public class SimulacionController extends GenericController{
 		this.selectedFondo = selectedFondo;
 	}
 
-	public List<FlujoCaja> getListaCaja() {
-		return listaCaja;
+	public General getSelectedTipoMoneda() {
+		return selectedTipoMoneda;
 	}
 
-	public void setListaCaja(List<FlujoCaja> listaCaja) {
-		this.listaCaja = listaCaja;
+	public void setSelectedTipoMoneda(General selectedTipoMoneda) {
+		this.selectedTipoMoneda = selectedTipoMoneda;
 	}
 
 	public List<Fondo> getListaFondo() {
@@ -221,6 +203,37 @@ public class SimulacionController extends GenericController{
 		this.selectedEmisor = selectedEmisor;
 	}
 
+	public List<ExpoFondo> getListaLiquidez() {
+		return listaLiquidez;
+	}
+
+	public void setListaLiquidez(List<ExpoFondo> listaLiquidez) {
+		this.listaLiquidez = listaLiquidez;
+	}
+
+	public List<ExpoFondo> getListaCaja() {
+		return listaCaja;
+	}
+
+	public void setListaCaja(List<ExpoFondo> listaCaja) {
+		this.listaCaja = listaCaja;
+	}
+
+	public ExpoFondo getSelectedCaja() {
+		return selectedCaja;
+	}
+
+	public void setSelectedCaja(ExpoFondo selectedCaja) {
+		this.selectedCaja = selectedCaja;
+	}
+
+	public GeneralManager getGeneralManager() {
+		return generalManager;
+	}
+
+	public void setGeneralManager(GeneralManager generalManager) {
+		this.generalManager = generalManager;
+	}
 	
 	
 }

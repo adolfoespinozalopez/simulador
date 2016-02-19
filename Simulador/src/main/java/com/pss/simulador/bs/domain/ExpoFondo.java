@@ -1,9 +1,13 @@
 package com.pss.simulador.bs.domain;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -58,6 +62,9 @@ public class ExpoFondo implements java.io.Serializable {
 	private String tpSubtitulo;
 	@Column(name = "TP_EMISOR")
 	private String tpEmisor;
+	@Column(name = "FH_FEC_CAJA")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date fhFecCaja;
 	
 	public ExpoFondo() {
 
@@ -221,6 +228,14 @@ public class ExpoFondo implements java.io.Serializable {
 
 	public void setTpEmisor(String tpEmisor) {
 		this.tpEmisor = tpEmisor;
+	}
+
+	public Date getFhFecCaja() {
+		return fhFecCaja;
+	}
+
+	public void setFhFecCaja(Date fhFecCaja) {
+		this.fhFecCaja = fhFecCaja;
 	}
 	
 }

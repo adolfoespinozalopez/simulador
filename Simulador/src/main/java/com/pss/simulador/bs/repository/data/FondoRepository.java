@@ -31,8 +31,7 @@ public interface FondoRepository extends CrudRepository<Fondo, Integer> {
 	
 	
 	//Exposicion del Fondo
-	@Query(value = "SELECT e FROM ExpoFondo e WHERE e.cdIdfondo = :idFondo AND e.tpEmisor = '0' ORDER BY e.cidExpo ")
+	@Query(value = "SELECT e FROM ExpoFondo e WHERE e.cdIdfondo = :idFondo ORDER BY e.cidExpo ")
 	public abstract List<ExpoFondo> obtenerExposicionDelFondo(@Param("idFondo") Integer idFondo);
-	@Query(value = "SELECT e FROM ExpoFondo e WHERE e.cdIdfondo = :idFondo AND e.tpEmisor = '1' ORDER BY e.cidExpo ")
-	public abstract List<ExpoFondo> obtenerEmisoresDeExposicionDelFondo(@Param("idFondo") Integer idFondo);
+	
 }

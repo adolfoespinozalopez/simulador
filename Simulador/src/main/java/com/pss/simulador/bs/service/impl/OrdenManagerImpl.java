@@ -1,5 +1,6 @@
 package com.pss.simulador.bs.service.impl;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -39,7 +40,7 @@ public class OrdenManagerImpl implements OrdenManager{
 	public List<Orden> findByFilter(String idOperacion, String strEstado, String strUserName) {
 		Calendar calendar = GregorianCalendar.getInstance();
 		calendar.setTime(Constante.FECHA_ACTUAL);
-		calendar.set(Calendar.DATE, -1);
+		calendar.set(Calendar.DAY_OF_YEAR, calendar.get(Calendar.DAY_OF_YEAR)-1);
 		if(idOperacion.equals(Constante.NO_OPTION_SELECTED)){
 			idOperacion = null;
 		}

@@ -24,6 +24,5 @@ public interface FondoManager {
 	public List<Fondo> findAll();
 	public List<Fondo> findByIdPerfil(Integer idPerfil);
 	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo);
-	public List<ExpoFondo> obtenerEmisoresDeExposicionDelFondo(Integer idFondo);
 	
 }
