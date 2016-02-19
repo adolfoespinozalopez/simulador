@@ -18,16 +18,14 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_home</from-outcome>
-			<to-view-id>home.jsf
-			</to-view-id>
+			<to-view-id>/home.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_sinacceso</from-outcome>
-			<to-view-id>sinAcceso.jsf
-			</to-view-id>
+			<to-view-id>/sinAcceso.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<!-- END GeneralAPP -->
@@ -36,40 +34,35 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_administracion_tipocambio</from-outcome>
-			<to-view-id>administracion/frmTipoCambio.jsf
-			</to-view-id>
+			<to-view-id>/administracion/frmTipoCambio.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_administracion_general</from-outcome>
-			<to-view-id>administracion/frmGenerales.jsf
-			</to-view-id>
+			<to-view-id>/administracion/frmGenerales.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_administracion_emisor</from-outcome>
-			<to-view-id>administracion/frmEmisores.jsf
-			</to-view-id>
+			<to-view-id>/administracion/frmEmisores.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_administracion_fondo</from-outcome>
-			<to-view-id>administracion/frmFondos.jsf
-			</to-view-id>
+			<to-view-id>/administracion/frmFondos.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_administracion_procesoCarga</from-outcome>
-			<to-view-id>administracion/frmProcesoCarga.jsf
-			</to-view-id>
+			<to-view-id>/administracion/frmProcesoCarga.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	
@@ -80,8 +73,7 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_seguridad_perfil</from-outcome>
-			<to-view-id>seguridad/frmPerfiles.jsf
-			</to-view-id>
+			<to-view-id>/seguridad/frmPerfiles.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<!-- END Seguridad -->
@@ -92,7 +84,7 @@
 		<from-view-id>*</from-view-id>
 		<navigation-case>
 			<from-outcome>to_ordenes</from-outcome>
-			<to-view-id>simulacion/frmOrdenes.jsf</to-view-id>
+			<to-view-id>/simulacion/frmOrdenes.jsf</to-view-id>
 		</navigation-case>
 	</navigation-rule>
 	<!-- END Simulacion -->

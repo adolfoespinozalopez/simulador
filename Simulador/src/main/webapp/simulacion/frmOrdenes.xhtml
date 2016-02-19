@@ -19,6 +19,9 @@
                 <h1 class="title-sh">Ordenes</h1>
                 <p:separator />
                 <h:form id="frmGestionarOrdenes" onkeypress="if (event.keyCode == 13) return false;">
+                	<style type="text/css">
+                        .content{height: 670px;}
+                    </style>
                     <p:panel id="panOrdenes">
                         <h:outputText value="Estado :" style="padding-right: 5px;" />
                         <p:selectOneMenu id="lstEstado" style="width: 160px;" 
@@ -42,9 +45,9 @@
                         </p:selectOneMenu>
                         <p:toolbar style="padding: 4px;margin: 4px 0px;" id="menuOpciones" >
                             <p:toolbarGroup align="left">  
-                                <p:commandButton process="@this" value="Enviar" icon="fa fa-send" 
-                                				 style="width: 90px;"
-                                				 disabled="#{(loginController.isRiesgo())?true:ordenController.isRowSelected()}">
+                                <p:commandButton process="@this" value="Enviar" icon="fa fa-send" style="width: 90px;" 
+                                				 actionListener="#{ordenController.enviarOrdenes}"  
+                                				 disabled="#{(loginController.isRiesgo())?true:false}">
                                 </p:commandButton>
                             </p:toolbarGroup>
                         </p:toolbar>
@@ -89,11 +92,11 @@
                         </table>
                         <p:dataTable id="grdOrdenes" value="#{ordenController.listaOrdenes}" var="item"  
                                      selection="#{ordenController.selectedOrdenes}" 
-                                     reflow="false" scrollable="true" scrollHeight="370" 
+                                     reflow="false" scrollable="true" scrollHeight="440" 
                                      disabledSelection="#{(item.stEstado == '2')?false:true}"
                                      rowIndexVar="index" rowKey="#{item.cdIdorden}" 
                                      emptyMessage="No se encontraron registros que coincidan con los criterios ingresados"
-                                     paginator="true" rows="12" 
+                                     paginator="true" rows="10" 
                                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                      rowStyleClass="#{(item.stEstado == '3')?'anul-grid':(item.stEstado == '1')?null:(item.stEstado == '2')?'ate-grid':'cer-grid'}">
                             <p:ajax event="rowSelect" update=":frmGestionarOrdenes:menuOpciones" />
@@ -135,13 +138,13 @@
                                     <f:convertDateTime pattern="dd/MM/yyy" locale="es_PE" type="date" timeZone="EST"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Opciones" style="width: 9%;text-align: center;" >
-                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionAprueba').show()" icon="ui-icon-check" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar">
-                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
-                                </p:commandButton>
-                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionRechaza').show()" icon="ui-icon-close" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Rechazar">
+                            <p:column headerText="Opciones" style="width: 7%;text-align: center;" >
+                            	<p:commandButton process="@this, grdOrdenes" icon="ui-icon-pencil" title="Editar"
+                                                 style="width: 20px; height: 20px;" onclick="PF('blkPanel').show()" oncomplete="PF('blkPanel').hide()"
+                                                 disabled="#{(item.stEstado =='1')?false:(item.stEstado =='2')?false:true}"
+                                                 actionListener="#{ordenController.editarOrden(item)}" 
+                                                 update=":dlgCancelarDeposito, :dlgPreCancelarDeposito, :dlgAperturaDeposito, :dlgRenuevaDeposito, 
+                                                 		 :dlgSpot, :dlgFwd, :dlgAbonoCargo, :dlgRentaFija, :dlgRentaVariable">
                                     <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdOrdenes"  icon="ui-icon-zoomin" 
@@ -149,6 +152,15 @@
                                 				 oncomplete="PF('verOrdenEstado').show()" update=":dlgVerOrdenEstado"
                                                  style="width: 20px; height: 20px;" title="Ver seguimiento">
                                 	<f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
+                                </p:commandButton>
+                                
+                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionAprueba').show()" icon="ui-icon-check" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
+                                </p:commandButton>
+                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionRechaza').show()" icon="ui-icon-close" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Rechazar">
+                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
@@ -240,6 +252,65 @@
                 		  widgetVar="verOrdenEstado" resizable="false" width="600" height="260">
                     <ui:include src="frmVerOrdenEstado.xhtml" />
                     <p:ajax event="close" update=":frmVerOrdenEstado" />
+                </p:dialog>
+                
+                <p:dialog id="dlgCancelarDeposito" modal="true" header="Cancelación de Depósitos a Plazo" 
+                		  widgetVar="manteCancelarDeposito" resizable="false" width="440" height="370">
+                    <ui:include src="frmCancelarDeposito.xhtml" />
+                    <p:ajax event="close" update=":frmCancelarDeposito" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgPreCancelarDeposito" modal="true" header="Pre - Cancelación de Depósitos a Plazo" 
+                		  widgetVar="mantePreCancelarDeposito" resizable="false" width="480" height="400">
+                    <ui:include src="frmPreCancelarDeposito.xhtml" />
+                    <p:ajax event="close" update=":frmPreCancelarDeposito" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgAperturaDeposito" modal="true" header="Apertura de Depósito a Plazo" 
+                		  widgetVar="manteAperturaDeposito" resizable="false" width="500" height="320">
+                    <ui:include src="frmAperturaDeposito.xhtml" />
+                    <p:ajax event="close" update=":frmAperturaDeposito" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgRenuevaDeposito" modal="true" header="Renovación de Depósito a Plazo" 
+                		  widgetVar="manteRenuevaDeposito" resizable="false" width="490" height="320">
+                	<ui:include src="frmRenuevaDeposito.xhtml" />
+                    <p:ajax event="close" update=":frmRenuevaDeposito" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgSpot" modal="true" header="Compra / Venta de Moneda Extranjera Spot" 
+                		  widgetVar="manteSpot" resizable="false" width="540" height="570">
+                    <ui:include src="frmSpot.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmSpot" resetValues="true" />
+                </p:dialog>
+                
+                <p:dialog id="dlgFwd" modal="true" header="Compra / Venta de Moneda Extranjera Forward" 
+                		  widgetVar="manteFwd" resizable="false" width="540" height="610">
+                    <ui:include src="frmFwd.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmFwd" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgAbonoCargo" modal="true" header="Abono / Cargo de Cuenta de Ahorros" 
+                		  widgetVar="manteAbonoCargo" resizable="false" width="430" height="270">
+                    <ui:include src="frmAbonoCargo.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmAbonoCargo" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgRentaFija" modal="true" header="Renta Fija - Pre Asignación" 
+                		  widgetVar="manteRentaFija" resizable="false" width="560" height="600">
+                    <ui:include src="frmRentaFija.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmRentaFija" resetValues="true"/>
+                </p:dialog>
+                
+                <p:dialog id="dlgRentaVariable" modal="true" header="Renta Variable - Pre Asignación" 
+                		  widgetVar="manteRentaVariable" resizable="false" width="560" height="600">
+                    <ui:include src="frmRentaVariable.xhtml" />
+                    <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
+                            update=":frmRentaVariable" />
                 </p:dialog>
                 
                 <p:growl id="growl" showDetail="true" showSummary="false" life="2000" />

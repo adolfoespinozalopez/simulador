@@ -39,7 +39,7 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <h:outputText value="Emisor :" style="padding-left: 20px;padding-right: 5px;"/>
-						<p:selectOneMenu id="lstEmisor" style="width: 250px;" filter="true" filterMatchMode="startsWith"
+						<p:selectOneMenu id="lstEmisor" style="width: 270px;" filter="true" filterMatchMode="startsWith"
 										 value="#{portafolioController.selectedEmisor}"
 										 valueChangeListener="#{portafolioController.realizarFiltroDeEmisor}">
 							<f:selectItem itemLabel="Todos" itemValue="-1" />
@@ -57,7 +57,7 @@
                             <p:ajax event="change" update=":frmPortafolio:panelGrilla, :frmPortafolio:menuOpciones"/>
                         </p:selectOneMenu>
                         <h:outputText value="Tipo Operacion :" style="padding-left: 20px;padding-right: 5px;"/>
-						<p:selectOneMenu id="lstOperacion" style="width: 140px;" 
+						<p:selectOneMenu id="lstOperacion" style="width: 130px;" 
                                          value="#{portafolioController.selectedTipoOperacion}" 
                                          valueChangeListener="#{portafolioController.realizarFiltroDeOperacion}">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />                            
@@ -367,7 +367,7 @@
                 		  widgetVar="manteRentaVariable" resizable="false" width="560" height="600">
                     <ui:include src="frmRentaVariable.xhtml" />
                     <p:ajax event="close" listener="#{portafolioController.cancelar()}" 
-                            update=" :frmRentaVariable" />
+                            update=":frmRentaVariable" />
                 </p:dialog>
                 
                 <p:dialog id="dlgVerOrdenes" modal="true" header="Ordenes" 

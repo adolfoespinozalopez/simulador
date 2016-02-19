@@ -533,7 +533,7 @@ h1.title-sh {
     background: #f4f6f3;
 }
 .ui-datatable tbody td{
-    padding: 1px 10px;
+    padding: 1px 8px;
 }
 .ui-message-icon-only {
     width: 16px;
@@ -569,7 +569,7 @@ h1.title-sh {
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#59c000', endColorstr='#499900', GradientType=0) !important;
     border: 1px solid #499900 !important;
     color: #fff !important;
-    margin-left: 16px;
+    margin-left: 10px;
     margin-right: 0px;
     padding: 3px 5px;
 }

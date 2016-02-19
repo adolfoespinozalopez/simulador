@@ -35,18 +35,18 @@
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{simulacionController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
-                            <p:ajax event="change" update=":frmSimulacion:btnActualizar, :frmSimulacion:grdFondo, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"/>
+                            <p:ajax event="change" update=":frmSimulacion:btnActualizar, :frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"/>
                         </p:selectOneMenu>
                         <p:commandButton id="btnActualizar" process="@this" icon="fa fa-refresh" actionListener="#{simulacionController.ejecutaBusqueda}"
                         				 styleClass="actualizar ui-state-active" value="Actualizar" title="Actualizar"
                         				 onclick="PF('blkPanel').show();PF('blkPanelCaja').show();" oncomplete="PF('blkPanel').hide();PF('blkPanelCaja').hide();"
-                        				 update=":frmSimulacion:grdFondo, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor" 
+                        				 update=":frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor" 
                         				 disabled="#{(simulacionController.selectedNombreFondo =='-1')}" />
                         <p:layout style="min-width:400px;max-height:550px;height:550px;" fullPage="false">
                             <p:layoutUnit position="center" resizable="true" size="600" minSize="700"  
                                           header="Exposición del Fondo" id="lytExpoFondo">
                                 <p:dataTable id="grdFondo" value="#{simulacionController.listaExpoFondo}" var="item" 
-                                             scrollable="true" scrollHeight="390" resizableColumns="true" 
+                                             resizableColumns="true" 
                                      		 emptyMessage="No se encontraron registros del fondo seleccionado"
                                      		 selectionMode="single" selection="#{simulacionController.selectedExpoFondo}"
                                      		 rowKey="#{item.cidExpo}"
@@ -87,14 +87,52 @@
                                         <h:outputText value="#{item.pcYtm} #{(item.pcYtm==null)?'':'%'}" style="text-align: right;display: block;"/>
                                     </p:column>
                                 </p:dataTable>
-                                
+                               	<br/>
+                               	<p:dataTable id="grdLiquidez" value="#{simulacionController.listaLiquidez}" var="item" 
+                                             scrollable="true" scrollHeight="140" resizableColumns="true" 
+                                     		 emptyMessage="No se encontraron registros del fondo seleccionado"
+                                     		 rowKey="#{item.cidExpo}" style="width:100%;"
+                                     		 rowStyleClass="#{(item.tpTotal == '1')?'total-grid':null}">
+                                	<p:column headerText="" style="width: 21%;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.nbEspecie}" style="#{(item.tpSubtitulo == '1')?'font-weight:bold':''}"/>
+                                    </p:column>
+                                    <p:column headerText="" style="width: 13%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.imMonto}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="" style="white-space:normal;width: 9%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.pcPartic} #{(item.pcPartic==null)?'':'%'}" style="text-align: right;display: block;"/>
+                                    </p:column>
+                                    <p:column headerText="" style="white-space:normal;width: 13%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{(item.pcExposicion ne selectedTipoMoneda.nbValorGeneral)?'Pos. Cubiert.':''}" style="text-align: right;display: block;"/>
+                                    </p:column>
+                                    <p:column headerText="YTM" style="white-space:normal;width: 10%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.pcParticPen} #{(item.pcParticPen==null)?'':'%'}" style="text-align: right;display: block;"/>
+                                    </p:column>
+                                    <p:column headerText="" style="width: 13%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{(item.pcExposicion ne selectedTipoMoneda.nbValorGeneral)?'Pos. Descub.':item.imMontoPen}" style="text-align: right;display: block;">
+                                            <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="" style="white-space:normal;width: 9%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="#{item.pcParticUsd} #{(item.pcParticUsd==null)?'':'%'}" style="text-align: right;display: block;"/>
+                                    </p:column> 
+                                    <p:column headerText="" style="white-space:normal;width: 10%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="" style="text-align: right;display: block;font-weight:bold;"/>
+                                    </p:column>
+                                    <p:column headerText="" style="white-space:normal;width: 8%;text-align: center;" styleClass="columnaCel">
+                                        <h:outputText value="" style="text-align: right;display: block;font-weight:bold;"/>
+                                    </p:column>
+                                </p:dataTable>
+                                		 
                                 <p:dataTable id="grdEmisor" value="#{simulacionController.listaEmisores}" var="item" 
                                              resizableColumns="true" 
                                      		 emptyMessage="No se encontraron registros del fondo seleccionado"
                                      		 selectionMode="single" selection="#{simulacionController.selectedEmisor}"
                                      		 rowKey="#{item.cidExpo}"
                                      		 rowStyleClass="#{(item.tpTotal == '1')?'total-grid':(item.tpSubtitulo == '1')?'subtitle':null}">
-                                    <p:column headerText="Emisores" style="width: 20%;" styleClass="columnaCel">
+                                    <p:column headerText="Emisores" style="width: 27%;" styleClass="columnaCel">
                                         <h:outputText value="#{item.nbEspecie}" />
                                     </p:column>
                                     <p:column headerText="Ahorros" style="width: 13%;text-align: center;">
@@ -122,7 +160,7 @@
                                             <f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0"/>
                                         </h:outputText>
                                     </p:column>
-                                    <p:column headerText="Exposición" style="width: 13%;">
+                                    <p:column headerText="Exposición" style="width: 12%;">
                                         <h:outputText value="#{item.pcExposicion} #{(item.pcExposicion==null)?'':'%'}" />
                                     </p:column>
                                     <p:column headerText="Límite" style="width: 11%;">
@@ -142,56 +180,58 @@
                             			  header="Flujo de Caja" maxSize="500" size="400" id="lytFlujoCaja">
                             	<p:dataTable id="grdCaja" value="#{simulacionController.listaCaja}" var="item" 
                                              resizableColumns="true" style="width:100%;" 
+                                             selectionMode="single" selection="#{simulacionController.selectedCaja}"
+                                     		 rowKey="#{item.cidExpo}"
                                      		 emptyMessage="No se encontraron registros del fondo seleccionado">
                                      <p:columnGroup type="header">
 							            <p:row>
-							                <p:column colspan="1" headerText="11" />
+							                <p:column colspan="1" headerText="#{simulacionController.selectedFondo.cdCodFondo}" />
 							                <p:column colspan="3" headerText="PEN" />
 							                <p:column colspan="3" headerText="USD" />
 							            </p:row>
 							            <p:row>
-							            	<p:column headerText="Fecha" />
+							            	<p:column headerText="FECHA" />
 							            	<p:column headerText="Entrada" />
 							                <p:column headerText="Salida" />
 							                <p:column headerText="Saldo" />
-							                <p:column headerText="Entrada" />
+							                <p:column headerText="Entrada" /> 
 							                <p:column headerText="Salida" />
 							                <p:column headerText="Saldo" />
 							            </p:row>
 							        </p:columnGroup>
 							        <p:column headerText="Feha" style="text-align: center;">
-		                                <h:outputText value="#{item.fecha}">
+		                                <h:outputText value="#{item.fhFecCaja}">
 		                                    <f:convertDateTime pattern="EEE d MMM" locale="es_PE" type="date" timeZone="EST"/>
 		                                </h:outputText>
 		                            </p:column>
                             		<p:column headerText="Entrada" style="text-align: center;">
-										<h:outputText value="#{item.entradaSoles}">
+										<h:outputText value="#{item.imMonto}">
 											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
 									<p:column headerText="Salida" style="text-align: center;">
-										<h:outputText value="#{item.salidaSoles}">
+										<h:outputText value="#{item.imMontoPen}">
 											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
 									<p:column headerText="Saldo" style="text-align: center;">
-										<h:outputText value="#{item.saldoSoles}">
+										<h:outputText value="#{item.imMontoUsd}">
 											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
 									<p:column headerText="Entrada" style="text-align: center;">
-										<h:outputText value="#{item.entradaDolar}">
+										<h:outputText value="#{item.imDuration}">
 											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
 									<p:column headerText="Salida" style="text-align: center;">
-										<h:outputText value="#{item.salidaDolar}">
+										<h:outputText value="#{item.toTotalEmi}">
 											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
 									<p:column headerText="Saldo" style="text-align: center;">
-										<h:outputText value="#{item.saldoDolar}">
-											<f:convertNumber groupingUsed="true" pattern="#,###,###" maxFractionDigits="0" />
+										<h:outputText value="#{item.imEspacio}">
+											<f:convertNumber pattern="#,###,###" maxFractionDigits="0" />
 										</h:outputText>
 									</p:column>
                                  </p:dataTable>
