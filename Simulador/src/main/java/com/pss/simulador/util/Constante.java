@@ -65,6 +65,7 @@ public class Constante {
     	public static final String APROBADO = "2";
     	public static final String RECHAZADO = "3";
     	public static final String ENVIADO = "4";
+    	public static final String ELIMINADO = "5";
     }
     
     /**
