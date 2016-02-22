@@ -35,8 +35,6 @@ public class Fondo implements java.io.Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
     private List<Orden> ordenList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
-	private List<PerfilFondo> perfilFondoList;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<LimFondoEspecie> limFondoEspecieList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<LimitesEmisor> limitesEmisorList;
@@ -89,14 +87,6 @@ public class Fondo implements java.io.Serializable {
 
 	public void setTpTipfondo(String tpTipfondo) {
 		this.tpTipfondo = tpTipfondo;
-	}
-
-	public List<PerfilFondo> getPerfilFondoList() {
-		return perfilFondoList;
-	}
-
-	public void setPerfilFondoList(List<PerfilFondo> perfilFondoList) {
-		this.perfilFondoList = perfilFondoList;
 	}
 
 	public List<LimFondoEspecie> getLimFondoEspecieList() {

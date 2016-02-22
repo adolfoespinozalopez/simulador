@@ -22,7 +22,6 @@ public interface FondoManager {
 	public Fondo findFondoByName(String strNombName);
 	public LimFondoEspecie findLimFondoEspecieByFondoAndEmisorAndEspecie(LimFondoEspecie limFondoEspecie);
 	public List<Fondo> findAll();
-	public List<Fondo> findByIdPerfil(Integer idPerfil);
 	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo);
 	
 }

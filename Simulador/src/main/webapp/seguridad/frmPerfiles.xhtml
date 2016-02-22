@@ -57,10 +57,10 @@
                             <p:column headerText="Tipo Perfil" style="text-align: center;">
                                 <h:outputText value="#{(item.tpTipperfil==1)?'Administrador':(item.tpTipperfil==3)?'Riesgo':'Inversionista'}"/>
                             </p:column>
-                            <p:column headerText="Activo" style="text-align: center;">
+                            <p:column headerText="Activo" style="width: 5%;text-align: center;">
                                 <p:selectBooleanCheckbox value="#{(item.stEstado=='1')?true:false}" disabled="true"/>
                             </p:column>
-                            <p:column headerText="Opciones" style="text-align: center;">
+                            <p:column headerText="Opciones" style="width: 10%;text-align: center;">
                                 <p:commandButton icon="ui-icon-pencil" actionListener="#{perfilController.verDetalles(item)}" 
                                                  oncomplete="PF('mantePerfiles').show()" update=":dlgPerfil"
                                                  style="width: 20px; height: 20px;" title="Ver detalles">
@@ -102,10 +102,8 @@
                 </p:dialog>
 
                 <p:dialog id="dlgPerfil" modal="true" header="Mantenimiento Perfil" widgetVar="mantePerfiles" resizable="false"
-                          width="530" height="485">
+                          width="480" height="200">
                     <ui:include src="frmDetallePerfil.xhtml" />
-                    <p:ajax event="close" listener="#{perfilController.cancelar()}" 
-                            update=":frmGestionarPerfiles:grdPerfiles, :frmDetallePerfil" />
                     <p:ajax event="close"  
                             update=":frmGestionarPerfiles:grdPerfiles, :frmDetallePerfil, dlgPerfil" resetValues="true" >
                     </p:ajax>

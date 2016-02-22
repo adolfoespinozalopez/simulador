@@ -24,11 +24,7 @@ public interface FondoRepository extends CrudRepository<Fondo, Integer> {
 	public abstract Fondo findByName(@Param("nombFondo") String nombFondo);
 
 	@Query(value = "SELECT g FROM Fondo g ORDER BY g.nbNomFondo ")
-	public abstract List<Fondo> findAll();
-	
-	@Query(value = "SELECT DISTINCT g.fondo FROM PerfilFondo g WHERE g.stEstado = 1 AND g.perfil.cdIdperfil = :idPerfil ORDER BY g.fondo.nbNomFondo ")
-	public abstract List<Fondo> findByIdPerfil(@Param("idPerfil") Integer idPerfil);
-	
+	public abstract List<Fondo> findAll();	
 	
 	//Exposicion del Fondo
 	@Query(value = "SELECT e FROM ExpoFondo e WHERE e.cdIdfondo = :idFondo ORDER BY e.cidExpo ")

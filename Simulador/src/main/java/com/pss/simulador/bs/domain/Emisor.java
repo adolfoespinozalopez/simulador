@@ -37,6 +37,10 @@ public class Emisor implements java.io.Serializable {
 	private String tpRating;
 	@Column(name = "IM_PASIVO")
 	private Double imPasivo;
+	@Column(name = "TP_MICROFINA")
+	private String tpMicroFina;
+	@Column(name = "TP_GRUPOBBVA")
+	private String tpGrupoBbva;
 	@Column(name = "TP_TIPEMISOR")
 	private Integer tpTipemisor;
 	@Column(name = "ST_ESTADO")
@@ -100,6 +104,22 @@ public class Emisor implements java.io.Serializable {
 
 	public void setImPasivo(Double imPasivo) {
 		this.imPasivo = imPasivo;
+	}
+
+	public String getTpMicroFina() {
+		return tpMicroFina;
+	}
+
+	public void setTpMicroFina(String tpMicroFina) {
+		this.tpMicroFina = tpMicroFina;
+	}
+
+	public String getTpGrupoBbva() {
+		return tpGrupoBbva;
+	}
+
+	public void setTpGrupoBbva(String tpGrupoBbva) {
+		this.tpGrupoBbva = tpGrupoBbva;
 	}
 
 	public Integer getTpTipemisor() {

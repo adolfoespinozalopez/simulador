@@ -68,10 +68,6 @@ public class FondoManagerImpl implements FondoManager {
 	public List<Fondo> findAll() {
 		return fondoRepository.findAll();
 	}
-
-	public List<Fondo> findByIdPerfil(Integer idPerfil) {
-		return fondoRepository.findByIdPerfil(idPerfil);
-	}
 	
 	public List<ExpoFondo> obtenerExposicionDelFondo(Integer idFondo) {
 		return fondoRepository.obtenerExposicionDelFondo(idFondo);

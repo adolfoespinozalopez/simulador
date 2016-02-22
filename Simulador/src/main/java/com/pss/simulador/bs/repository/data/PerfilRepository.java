@@ -20,7 +20,7 @@ import com.pss.simulador.bs.domain.Perfil;
 public interface PerfilRepository extends CrudRepository<Perfil, Integer> {
 
 	@Query(value = "SELECT g FROM Perfil g "
-			+ " WHERE g.nbMonPerfil LIKE CONCAT('%', :strNombre,'%') AND g.stEstado = :stEstado")	
-	public abstract List<Perfil> findPerfilByName(@Param("strNombre") String strNombre, @Param("stEstado") String stEstado);
+			+ " WHERE g.nbMonPerfil LIKE CONCAT('%', :strNombre,'%') ORDER BY g.stEstado DESC")	
+	public abstract List<Perfil> findPerfilByName(@Param("strNombre") String strNombre);
 
 }

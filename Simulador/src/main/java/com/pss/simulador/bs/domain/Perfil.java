@@ -60,8 +60,6 @@ public class Perfil implements java.io.Serializable {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "perfil")
 	private List<Usuario> usuarioList;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "perfil")
-	private List<PerfilFondo> perfilFondoList;
 
 	public Perfil() {
 	}
@@ -174,12 +172,5 @@ public class Perfil implements java.io.Serializable {
 		this.usuarioList = usuarioList;
 	}
 
-	public List<PerfilFondo> getPerfilFondoList() {
-		return perfilFondoList;
-	}
-
-	public void setPerfilFondoList(List<PerfilFondo> perfilFondoList) {
-		this.perfilFondoList = perfilFondoList;
-	}
 
 }
