@@ -8,14 +8,11 @@ import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.Perfil;
-import com.pss.simulador.bs.domain.PerfilFondo;
 import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.PerfilManager;
 import com.pss.simulador.util.Constante;
@@ -39,7 +36,6 @@ public class PerfilController extends GenericController {
 	private String perfilNombreBus = "";
 	private Perfil selectedPerfil;
 	private List<Perfil> listaPerfiles = new ArrayList<Perfil>();
-	private DualListModel<Fondo> fondos;
 	
 	@Autowired
 	PerfilManager perfilManager;
@@ -54,30 +50,20 @@ public class PerfilController extends GenericController {
 	public void init() {
 		buscarPerfiles();
 		selectedPerfil = null;
-		this.resetFormulario();
-	}
-	
-	public void resetFormulario(){
-		List<Fondo> fondoOrigen = fondoManager.findFondoAll();
-		List<Fondo> fondoDestino = new ArrayList<Fondo>();
-		fondos = new DualListModel<Fondo>(fondoOrigen, fondoDestino);
 	}
 
 	public void buscarPerfiles() {
-		listaPerfiles = perfilManager.findPerfilByName(perfilNombreBus, Constante.ESTADO_ACTIVO);
+		listaPerfiles = perfilManager.findPerfilByName(perfilNombreBus);
 	}
 
 	public void crear() {
 		selectedPerfil = new Perfil();
 		selectedPerfil.setTpTipperfil(Constante.Perfil.TIPO_INVERSIONISTA);
-		this.resetFormulario();
 	}
 	
 	public void guardarPerfil() {
 		try {
 			if(selectedPerfil!=null){
-				if (selectedPerfil!=null)
-				selectedPerfil.setStEstado(Constante.ESTADO_ACTIVO);
 				if (selectedPerfil.getCdIdperfil()!=null){//Actualizacion
 					selectedPerfil.setFhFecModifica(new Date());
 					selectedPerfil.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
@@ -85,7 +71,7 @@ public class PerfilController extends GenericController {
 					selectedPerfil.setFhFecCreacion(new Date());
 					selectedPerfil.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				}
-				selectedPerfil=perfilManager.savePerfilAndDetail(selectedPerfil, fondos, this.getUsuarioSession());
+				selectedPerfil=perfilManager.savePerfil(selectedPerfil);
 			}
 			Utilitarios.mostrarMensajeInfo(null, Constante.Mensajes.MSJ_REGISTRO_OK, null);	
 		} catch (Exception e) {
@@ -97,24 +83,6 @@ public class PerfilController extends GenericController {
 
 	public void verDetalles(Perfil perfil) {
 		selectedPerfil = perfil;
-		List<Fondo> fondoOrigen = new ArrayList<Fondo>();
-		List<Fondo> fondoDestino = new ArrayList<Fondo>();
-		List<Fondo> fondoAll = fondoManager.findFondoAll();
-		for (Fondo fondo : fondoAll) {
-			boolean isSelected = false; 
-			for (PerfilFondo perfilFondoIter : selectedPerfil.getPerfilFondoList()) {
-				if(fondo.getCdIdfondo() == perfilFondoIter.getPerfilFondoPK().getCdIdfondo() &&
-						perfilFondoIter.getStEstado().equals(Constante.ESTADO_ACTIVO)){
-					fondoDestino.add(fondo);
-					isSelected = true;
-					break;
-				}
-			}
-			if (!isSelected){
-				fondoOrigen.add(fondo);
-			}
-		}
-		fondos = new DualListModel<Fondo>(fondoOrigen, fondoDestino);
 	}
 
 	public void eliminar() {
@@ -171,14 +139,6 @@ public class PerfilController extends GenericController {
 
 	public void setListaPerfiles(List<Perfil> listaPerfiles) {
 		this.listaPerfiles = listaPerfiles;
-	}
-
-	public DualListModel<Fondo> getFondos() {
-		return fondos;
-	}
-
-	public void setFondos(DualListModel<Fondo> fondos) {
-		this.fondos = fondos;
 	}
 
 	
