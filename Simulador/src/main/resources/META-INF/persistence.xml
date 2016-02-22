@@ -17,8 +17,6 @@
 		<class>com.pss.simulador.bs.domain.Usuario</class>
 		<class>com.pss.simulador.bs.domain.Fondo</class>
 		<class>com.pss.simulador.bs.domain.General</class>
-		<class>com.pss.simulador.bs.domain.PerfilFondo</class>
-		<class>com.pss.simulador.bs.domain.PerfilfondoPK</class>
 		<class>com.pss.simulador.bs.domain.Emisor</class>
 		<class>com.pss.simulador.bs.domain.LimitesEmisor</class>
 		<class>com.pss.simulador.bs.domain.LimFondoEspecie</class>
