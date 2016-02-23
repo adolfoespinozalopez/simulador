@@ -48,7 +48,7 @@ public class FilterSession implements Filter {
 		session = httpRequest.getSession();
 		String contextPath = ((HttpServletRequest) req).getContextPath();
 		String requestUri = ((HttpServletRequest) req).getRequestURI();
-		System.out.println(FechasUtil.formatFecha(new Date(),"yyyy-MM-dd HH:mm:ss") + " - " + requestUri);
+		logger.debug(FechasUtil.formatFecha(new Date(),"yyyy-MM-dd HH:mm:ss") + " - " + requestUri);
 		boolean isURLWithSecurity = containsURLforSecurity(requestUri,contextPath,modulesWithSecurity);
 		boolean isURLExption = containsURLforSecurity(requestUri,contextPath,resourcesOfModulesExceptionSecurity);
 		boolean isSessionActive = authorize(session, httpRequest);
@@ -58,7 +58,7 @@ public class FilterSession implements Filter {
 			session.setAttribute("strMensaje","Finalizó su Sessión. Ingrese nuevamente.");
 			((HttpServletRequest) req).getRequestDispatcher("/sinAcceso.xhtml").forward(req, res);
 		} else {
-			logger.debug("authorization succeeded");
+//			logger.debug("authorization succeeded");
 			chain.doFilter(req, res);
 		}
 
