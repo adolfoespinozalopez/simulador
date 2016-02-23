@@ -5,10 +5,7 @@
     		xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
     						    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="simuladorData" transaction-type="JTA">
-		<!-- WAS8  
-		<jta-data-source>jdbc/simbbva</jta-data-source>
-		-->
-		<!-- <jta-data-source>java:/comp/env/jdbc/simbbva</jta-data-source> -->
+	
 		<class>com.pss.simulador.bs.domain.Saldo</class>
 		<class>com.pss.simulador.bs.domain.Infoport</class>
 		<class>com.pss.simulador.bs.domain.CobranzaPago</class>
