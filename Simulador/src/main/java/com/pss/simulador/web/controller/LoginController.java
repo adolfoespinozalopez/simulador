@@ -45,7 +45,7 @@ public class LoginController extends GenericController implements Serializable  
     	} catch (Exception e) {
 			logger.error(e, e);
 		}
-    	if (codigoUsuario == null || codigoUsuario.isEmpty() || codigoUsuario.equals("No Autenticado")){
+    	if (codigoUsuario == null || codigoUsuario.isEmpty() || codigoUsuario.toUpperCase().equals("NO AUTENTICADO")){
 			codigoUsuario = this.getRequest().getParameter("frmLoginCuadro:codUsuarioLocal");	
 		}
 		IILDPeUsuario usuarioLdap = null;
