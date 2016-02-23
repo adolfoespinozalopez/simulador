@@ -19,8 +19,8 @@ public class ExpoFondoManagerImpl implements ExpoFondoManager{
 	@Autowired
 	ExpoFondoRepository expoFondoRepository;
 
-	public boolean executeExposicionDelFondo(String nbFondo) {
-		return expoFondoRepository.executeExposicionDelFondo(nbFondo);
+	public boolean executeExposicionDelFondo(String nbFondo, String stestado) {
+		return expoFondoRepository.executeExposicionDelFondo(nbFondo, stestado);
 	}
 	
 }

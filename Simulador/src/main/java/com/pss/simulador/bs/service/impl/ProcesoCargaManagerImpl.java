@@ -121,9 +121,5 @@ public class ProcesoCargaManagerImpl implements ProcesoCargaManager {
 	public List<ProcesoLog> findProcesoLogByIdProceso(Integer cdIdproceso) {
 		return procesoLogRepository.findByIdProceso(cdIdproceso);
 	}
-	
-
-	
-	
 
 }

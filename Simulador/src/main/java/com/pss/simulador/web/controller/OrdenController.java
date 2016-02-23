@@ -117,13 +117,16 @@ public class OrdenController extends GenericController{
 			portafolioController.setFechaEfectividad(orden.getFhFecEfectividad());
 			selectedInfo.setFhFecEfectividad(orden.getFhFecEfectividad());
 			selectedInfo.setNbNomFondo(orden.getFondo().getNbNomFondo());
-			selectedInfo.setNbNomEmisor(orden.getContraparte().getNbDescGeneral());
+			if(orden.getContraparte()!=null){
+				selectedInfo.setNbNomEmisor(orden.getContraparte().getNbDescGeneral());
+			}
 			selectedInfo.setTpAbrevMoneda(orden.getTipoMoneda().getNbDescGeneral());
 			selectedInfo.setTipoApertura(orden.getTpApertura());
 			selectedInfo.setImCupon(orden.getImTasa());
 			selectedInfo.setPlazo(orden.getNuPlazoDia());
 			selectedInfo.setFhFecEmision(orden.getFhFecInicio());
 			selectedInfo.setFhFecVencimiento(orden.getFhFecVencimiento());
+			portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
 			switch (orden.getOperacion().getCdIdgeneral()) {
 			case Constante.ID_OPERA_CANCELACION:
 				selectedInfo.setMontoCapital(formato.format(orden.getImCapital()));
@@ -173,7 +176,7 @@ public class OrdenController extends GenericController{
 				portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
 				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
 				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
+				
 				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
 				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
@@ -183,7 +186,6 @@ public class OrdenController extends GenericController{
 				portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
 				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
 				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
 				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
 				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
@@ -198,7 +200,6 @@ public class OrdenController extends GenericController{
 				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
 				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
 				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
 				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
 				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
@@ -213,7 +214,6 @@ public class OrdenController extends GenericController{
 				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
 				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
 				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
 				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
 				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
@@ -234,15 +234,59 @@ public class OrdenController extends GenericController{
 				context.execute("PF('manteAbonoCargo').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_FIJA:
+				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+				portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+				portafolioController.setMonto(orden.getImMontoFinal().toString());
+				portafolioController.setMnemonico(orden.getNbMnemonico());
+				if(orden.getImPrecioLimpio() != null){
+					portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
+				}
+				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
+				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteRentaFija').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_FIJA:
+				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+				if(orden.getEmisor() !=null){
+					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+				}
+				portafolioController.setMonto(orden.getImMontoFinal().toString());
+				portafolioController.setMnemonico(orden.getNbMnemonico());
+				portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
+				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
+				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteRentaFija').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_VARIABLE:
+				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+				if(orden.getEmisor() !=null){
+					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+				}
+				portafolioController.setMonto(orden.getImMontoFinal().toString());
+				portafolioController.setMnemonico(orden.getNbMnemonico());
+				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
+				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_VARIABLE:
+				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+				if(orden.getEmisor() !=null){
+					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+				}
+				portafolioController.setMonto(orden.getImMontoFinal().toString());
+				portafolioController.setMnemonico(orden.getNbMnemonico());
+				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
+				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				portafolioController.getListaFondoSelected().add(orden.getFondo());
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			default:

@@ -97,10 +97,10 @@ public class SimulacionController extends GenericController{
 	}
 	
 	public void obtieneExposicionFondo(){
-		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo);
+		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo, Constante.ESTADO_ACTIVO);
 		if(selectedFondo != null){
 			limpiarListas();
-			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo());
+			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo(), Constante.ESTADO_ACTIVO);
 			for (ExpoFondo expo : listaTemporal) {
 				if(expo.getTpEmisor().equals(Constante.EXPO_FONDO)){
 					listaExpoFondo.add(expo);

@@ -113,8 +113,8 @@
                             <p:column headerText="Moneda" style="width: 6%;text-align: left;">
                             	<h:outputText value="#{item.tipoMoneda.nbDescGeneral}" />
                             </p:column>
-                            <p:column headerText="Contraparte" style="width: 15%;text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
-                                <h:outputText value="#{item.contraparte.nbDescGeneral}"/>
+                            <p:column headerText="Contrapar. / Emisor" style="width: 15%;text-align: left;" sortBy="#{item.contraparte.nbDescGeneral}">
+                                <h:outputText value="#{(item.emisor==null)?item.contraparte.nbDescGeneral:item.emisor.nbNomEmisor}"/>
                             </p:column>
                             <p:column headerText="Especie" style="width: 12%;text-align: left;" sortBy="#{item.especie.nbDescGeneral}">
                                 <h:outputText value="#{item.especie.nbDescGeneral}"/>

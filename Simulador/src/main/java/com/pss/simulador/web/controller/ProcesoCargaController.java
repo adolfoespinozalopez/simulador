@@ -1,24 +1,15 @@
 package com.pss.simulador.web.controller;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
 
 import org.apache.log4j.Logger;
 import org.primefaces.model.DefaultStreamedContent;
@@ -26,7 +17,6 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MimeType;
 
 import com.pss.simulador.bs.domain.ProcesoCarga;
 import com.pss.simulador.bs.domain.ProcesoLog;

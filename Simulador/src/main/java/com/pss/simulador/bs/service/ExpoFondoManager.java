@@ -8,5 +8,5 @@ package com.pss.simulador.bs.service;
 */
 public interface ExpoFondoManager {
 
-	public boolean executeExposicionDelFondo(String nbFondo);
+	public boolean executeExposicionDelFondo(String nbFondo, String stestado);
 }

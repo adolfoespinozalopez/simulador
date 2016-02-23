@@ -26,13 +26,14 @@ public class ExpoFondoRepository {
 	public void setDataSource(DataSource dataSource)
 	{
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		this.spEjecutarData = new SimpleJdbcCall(this.jdbcTemplate).withCatalogName("BBVATESOR.PKG_GENERAEXPOSICION").withProcedureName("SP_ACTUALIZA_FONDO").withoutProcedureColumnMetaDataAccess().declareParameters(new SqlParameter[] { new SqlParameter("PNOM_FONDO", 12) });
+		this.spEjecutarData = new SimpleJdbcCall(this.jdbcTemplate).withCatalogName("BBVATESOR.PKG_GENERAEXPOSICION").withProcedureName("SP_ACTUALIZA_FONDO").withoutProcedureColumnMetaDataAccess().declareParameters(new SqlParameter[] { new SqlParameter("PNOM_FONDO", 12), new SqlParameter("P_ESTADO", 12) });
 	}
 	
-	public boolean executeExposicionDelFondo(String nbFondo){
+	public boolean executeExposicionDelFondo(String nbFondo, String stestado){
 		try {
 			Map<String, Object> parametros = new HashMap<String, Object>();	
 			parametros.put("PNOM_FONDO", nbFondo);
+			parametros.put("P_ESTADO", stestado);
 			this.spEjecutarData.execute(parametros);
 			return true;
 		} catch (Exception e) {

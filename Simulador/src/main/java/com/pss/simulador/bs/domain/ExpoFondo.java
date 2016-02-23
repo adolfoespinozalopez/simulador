@@ -65,6 +65,8 @@ public class ExpoFondo implements java.io.Serializable {
 	@Column(name = "FH_FEC_CAJA")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fhFecCaja;
+	@Column(name = "ST_ESTADO")
+	private String stEstado;
 	
 	public ExpoFondo() {
 
@@ -236,6 +238,14 @@ public class ExpoFondo implements java.io.Serializable {
 
 	public void setFhFecCaja(Date fhFecCaja) {
 		this.fhFecCaja = fhFecCaja;
+	}
+
+	public String getStEstado() {
+		return stEstado;
+	}
+
+	public void setStEstado(String stEstado) {
+		this.stEstado = stEstado;
 	}
 	
 }

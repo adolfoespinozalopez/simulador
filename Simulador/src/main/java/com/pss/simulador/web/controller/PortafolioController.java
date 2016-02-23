@@ -1539,11 +1539,11 @@ public class PortafolioController extends GenericController{
 				}else{
 					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_VARIABLE);
 				}
-				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEspecie);
+				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEmisorModal);
 				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
 				for (Fondo fondoSel : listaFondoSelected) {
 					if(fondoSel.getMonto()!=null){
-						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_F, fondoSel.getNbNomFondo(), null);
+						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_V, fondoSel.getNbNomFondo(), null);
 						orden.setOperacion(operacion);
 						orden.setTpMonedaOperacion(selectedTipo);
 						orden.setEmisor(emisorSel);
