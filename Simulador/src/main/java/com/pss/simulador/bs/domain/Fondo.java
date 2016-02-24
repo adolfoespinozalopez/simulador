@@ -33,14 +33,17 @@ public class Fondo implements java.io.Serializable {
 	@Column(name = "TP_TIPFONDO")
 	private String tpTipfondo;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
-    private List<Orden> ordenList;
+	private List<LimitesEmisor> limitesEmisorList;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
+    private List<OrdenFondo> ordenFondoList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
 	private List<LimFondoEspecie> limFondoEspecieList;
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "fondo")
-	private List<LimitesEmisor> limitesEmisorList;
+	
 	
 	@Transient
 	private String monto;
+	@Transient
+	private String porcentaje;
 	
 	public Fondo() {
 	}
@@ -97,12 +100,12 @@ public class Fondo implements java.io.Serializable {
 		this.limFondoEspecieList = limFondoEspecieList;
 	}
 
-	public List<Orden> getOrdenList() {
-		return ordenList;
+	public List<OrdenFondo> getOrdenFondoList() {
+		return ordenFondoList;
 	}
 
-	public void setOrdenList(List<Orden> ordenList) {
-		this.ordenList = ordenList;
+	public void setOrdenFondoList(List<OrdenFondo> ordenFondoList) {
+		this.ordenFondoList = ordenFondoList;
 	}
 
 	public List<LimitesEmisor> getLimitesEmisorList() {
@@ -121,4 +124,12 @@ public class Fondo implements java.io.Serializable {
 		this.monto = monto;
 	}
 
+	public String getPorcentaje() {
+		return porcentaje;
+	}
+
+	public void setPorcentaje(String porcentaje) {
+		this.porcentaje = porcentaje;
+	}
+	
 }

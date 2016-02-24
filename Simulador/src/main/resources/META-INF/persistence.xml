@@ -5,7 +5,7 @@
     		xsi:schemaLocation="http://java.sun.com/xml/ns/persistence 
     						    http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="simuladorData" transaction-type="JTA">
-	
+	 
 		<class>com.pss.simulador.bs.domain.Saldo</class>
 		<class>com.pss.simulador.bs.domain.Infoport</class>
 		<class>com.pss.simulador.bs.domain.CobranzaPago</class>
@@ -23,6 +23,7 @@
 		<class>com.pss.simulador.bs.domain.ExpoFondo</class>
 		<class>com.pss.simulador.bs.domain.ProcesoCarga</class>
 		<class>com.pss.simulador.bs.domain.ProcesoLog</class>
+		<class>com.pss.simulador.bs.domain.OrdenFondo</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 		
 		<properties>

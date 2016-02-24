@@ -5,6 +5,7 @@ import java.util.List;
 import com.pss.simulador.bs.domain.DetalleOrden;
 import com.pss.simulador.bs.domain.Orden;
 import com.pss.simulador.bs.domain.OrdenEstado;
+import com.pss.simulador.bs.domain.OrdenFondo;
 
 /**
 *
@@ -20,4 +21,6 @@ public interface OrdenManager {
 	public Orden save(Orden orden);
 	public OrdenEstado saveEstado(OrdenEstado ordenEstado);
 	public DetalleOrden saveDetalle(DetalleOrden detalleOrden);
+	public OrdenFondo saveOrdenFondo(OrdenFondo ordenFondo);
+	
 }

@@ -79,6 +79,8 @@ public class Orden implements Serializable {
     private Double imPrecioSucio;
     @Column(name = "IM_PRECIO_REFERENCIA")
     private Double imPrecioReferencia;
+    @Column(name = "CD_IDORDEN_ANTE")
+    private Integer cdIdordenAnte;
     @Column(name = "ST_ESTADO")
     private String stEstado;
     @Column(name = "FH_FEC_CREACION")
@@ -96,9 +98,6 @@ public class Orden implements Serializable {
     private Date fhFecElimina;
     @Column(name = "CD_USU_ELIMINA", length = 10)
     private String cdUsuElimina;
-    @JoinColumn(name = "CD_IDFONDO", referencedColumnName = "CD_IDFONDO")
-    @ManyToOne(optional = false)
-    private Fondo fondo;
     @JoinColumn(name = "CD_IDEMISOR", referencedColumnName = "CD_IDEMISOR")
     @ManyToOne(optional = false)
     private Emisor emisor;
@@ -127,6 +126,8 @@ public class Orden implements Serializable {
     private List<OrdenEstado> ordenEstadoList;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
     private List<DetalleOrden> detalleordenList;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "orden")
+    private List<OrdenFondo> ordenFondoList;
     
     public Orden() {
     }
@@ -307,6 +308,14 @@ public class Orden implements Serializable {
 		this.imPrecioReferencia = imPrecioReferencia;
 	}
 
+	public Integer getCdIdordenAnte() {
+		return cdIdordenAnte;
+	}
+
+	public void setCdIdordenAnte(Integer cdIdordenAnte) {
+		this.cdIdordenAnte = cdIdordenAnte;
+	}
+
 	public String getStEstado() {
 		return stEstado;
 	}
@@ -361,14 +370,6 @@ public class Orden implements Serializable {
 
 	public void setCdUsuElimina(String cdUsuElimina) {
 		this.cdUsuElimina = cdUsuElimina;
-	}
-
-	public Fondo getFondo() {
-		return fondo;
-	}
-
-	public void setFondo(Fondo fondo) {
-		this.fondo = fondo;
 	}
 
 	public Emisor getEmisor() {
@@ -449,6 +450,14 @@ public class Orden implements Serializable {
 
 	public void setDetalleordenList(List<DetalleOrden> detalleordenList) {
 		this.detalleordenList = detalleordenList;
+	}
+
+	public List<OrdenFondo> getOrdenFondoList() {
+		return ordenFondoList;
+	}
+
+	public void setOrdenFondoList(List<OrdenFondo> ordenFondoList) {
+		this.ordenFondoList = ordenFondoList;
 	}
     
 }

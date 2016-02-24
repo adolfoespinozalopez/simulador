@@ -24,6 +24,7 @@ import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.Orden;
 import com.pss.simulador.bs.domain.OrdenEstado;
+import com.pss.simulador.bs.domain.OrdenFondo;
 import com.pss.simulador.bs.service.EmisorManager;
 import com.pss.simulador.bs.service.FondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
@@ -234,6 +235,7 @@ public class PortafolioController extends GenericController{
 	
 	public void ejecutarbusqueda(){
 		listaPortafolio = infoportManager.findByFilter(selectedFondo, selectedEmisor, selectedCondicion, selectedTipoOperacion);
+		selectedInfo = null;
 	}
 	
 	public List<Infoport> getListaPortafolio() {
@@ -1030,6 +1032,7 @@ public class PortafolioController extends GenericController{
 			orden.setImInteres(Utilitarios.parseToDouble(monto));
 			monto = selectedInfo.getMontoTotal().replace(".", "").replace(",", ".");
 			orden.setImMontoFinal(Utilitarios.parseToDouble(monto));
+			orden.getOrdenFondoList().get(0).setImMontoFinal(Utilitarios.parseToDouble(monto));
 			
 			if(selectedInfo.getFhFecEfectividad().compareTo(Constante.FECHA_ACTUAL)==0){
 				selectedInfo.setImValorMonLocal(Constante.VALOR_CERO);
@@ -1061,6 +1064,7 @@ public class PortafolioController extends GenericController{
 			orden.setImCapital(Utilitarios.parseToDouble(monto));
 			montoPreCancelacion = montoPreCancelacion.replace(".", "").replace(",", ".");
 			orden.setImMontoFinal(Utilitarios.parseToDouble(montoPreCancelacion));
+			orden.getOrdenFondoList().get(0).setImMontoFinal(Utilitarios.parseToDouble(montoPreCancelacion));
 			guardaOrden(orden, true);
 			
 			context.execute("PF('mantePreCancelarDeposito').hide()");
@@ -1086,6 +1090,7 @@ public class PortafolioController extends GenericController{
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoAper));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeAper));
 				orden.setFhFecVencimiento(fechaVctoAper);
+				orden.getOrdenFondoList().get(0).setImMontoFinal(Utilitarios.parseToDouble(importeAper));
 				guardaOrden(orden, false);
 				
 				context.execute("PF('manteAperturaDeposito').hide()");
@@ -1151,6 +1156,7 @@ public class PortafolioController extends GenericController{
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoRenova));
 				orden.setImMontoFinal(Utilitarios.parseToDouble(importeRenova));
 				orden.setFhFecVencimiento(fechaVctoRenova);
+				orden.getOrdenFondoList().get(0).setImMontoFinal(Utilitarios.parseToDouble(importeRenova));
 				guardaOrden(orden, true);
 				
 				context.execute("PF('manteRenuevaDeposito').hide()");
@@ -1201,16 +1207,12 @@ public class PortafolioController extends GenericController{
 				}else{
 					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_SPOT);
 				}
-				for (Fondo fondoSel : listaFondoSelected) {
-					if(fondoSel.getMonto()!=null){
-						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, fondoSel.getNbNomFondo(), selectedContraSpot);
-						orden.setOperacion(operacion);
-						orden.setTpMonedaOperacion(selectedTipoSpot);
-						orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
-						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
-						guardaOrden(orden, false);
-					}
-				}
+				orden = generaOrdenConDetalle(Constante.InfoPortTipoOperacion.CODIGO_M, operacion);
+				orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedContraSpot));
+				orden.setTpMonedaOperacion(selectedTipoSpot);
+				orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
+				guardaOrden(orden, false);
+				
 				context.execute("PF('manteSpot').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1284,21 +1286,17 @@ public class PortafolioController extends GenericController{
 				}else{
 					operacion = Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_VENTA_FWD);
 				}
-				for (Fondo fondoSel : listaFondoSelected) {
-					if(fondoSel.getMonto()!=null){
-						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_M, fondoSel.getNbNomFondo(), selectedContraFwd);
-						orden.setOperacion(operacion);
-						orden.setTpMonedaOperacion(selectedTipoFwd);
-						orden.setTpForward(selectedSettleFwd);
-						orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
-						orden.setNuPuntofwd(Utilitarios.parseToInteger(puntosFwd));
-						orden.setImTipocambiofwd(Utilitarios.parseToDouble(tipoCambioFwd));
-						orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoFwd));
-						orden.setFhFecVencimiento(fechaVctoFwd);
-						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
-						guardaOrden(orden, false);
-					}
-				}
+				orden = generaOrdenConDetalle(Constante.InfoPortTipoOperacion.CODIGO_M, operacion);
+				orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedContraFwd));
+				orden.setTpMonedaOperacion(selectedTipoFwd);
+				orden.setTpForward(selectedSettleFwd);
+				orden.setImTipocambiospot(Utilitarios.parseToDouble(tipoCambioSpot));
+				orden.setNuPuntofwd(Utilitarios.parseToInteger(puntosFwd));
+				orden.setImTipocambiofwd(Utilitarios.parseToDouble(tipoCambioFwd));
+				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoFwd));
+				orden.setFhFecVencimiento(fechaVctoFwd);
+				
+				guardaOrden(orden, false);
 				
 				context.execute("PF('manteFwd').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
@@ -1444,20 +1442,17 @@ public class PortafolioController extends GenericController{
 				}
 				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEmisorModal);
 				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
-				for (Fondo fondoSel : listaFondoSelected) {
-					if(fondoSel.getMonto()!=null){
-						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_F, fondoSel.getNbNomFondo(), null);
-						orden.setOperacion(operacion);
-						orden.setTpMonedaOperacion(selectedTipo);
-						orden.setEmisor(emisorSel);
-						orden.setEspecie(especie);
-						orden.setNbMnemonico(mnemonico);
-						orden.setImPrecioLimpio(Utilitarios.parseToDouble(precioLimpio));
-						orden.setImPrecioSucio(Utilitarios.parseToDouble(precioSucio));
-						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
-						guardaOrden(orden, false);
-					}
-				}
+
+				orden = generaOrdenConDetalle(Constante.InfoPortTipoOperacion.CODIGO_F, operacion);
+				orden.setTpMonedaOperacion(selectedTipo);
+				orden.setEmisor(emisorSel);
+				orden.setEspecie(especie);
+				orden.setNbMnemonico(mnemonico);
+				orden.setImPrecioLimpio(Utilitarios.parseToDouble(precioLimpio));
+				orden.setImPrecioSucio(Utilitarios.parseToDouble(precioSucio));
+				
+				guardaOrden(orden, false);
+
 				context.execute("PF('manteRentaFija').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1541,19 +1536,16 @@ public class PortafolioController extends GenericController{
 				}
 				Emisor emisorSel = Utilitarios.buscaEmisorEnLista(listaEmisor, selectedEmisorModal);
 				General especie = Utilitarios.buscaGeneralEnLista(listaEspecie, selectedEspecie);
-				for (Fondo fondoSel : listaFondoSelected) {
-					if(fondoSel.getMonto()!=null){
-						orden = generaOrdenBasica(Constante.InfoPortTipoOperacion.CODIGO_V, fondoSel.getNbNomFondo(), null);
-						orden.setOperacion(operacion);
-						orden.setTpMonedaOperacion(selectedTipo);
-						orden.setEmisor(emisorSel);
-						orden.setEspecie(especie);
-						orden.setNbMnemonico(mnemonico);
-						orden.setImPrecioReferencia(Utilitarios.parseToDouble(precioReferencial));
-						orden.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
-						guardaOrden(orden, false);
-					}
-				}
+
+				orden = generaOrdenConDetalle(Constante.InfoPortTipoOperacion.CODIGO_V, operacion);
+				orden.setTpMonedaOperacion(selectedTipo);
+				orden.setEmisor(emisorSel);
+				orden.setEspecie(especie);
+				orden.setNbMnemonico(mnemonico);
+				orden.setImPrecioReferencia(Utilitarios.parseToDouble(precioReferencial));
+				
+				guardaOrden(orden, false);
+
 				context.execute("PF('manteRentaVariable').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1571,7 +1563,6 @@ public class PortafolioController extends GenericController{
 		orden.setFhFecInicio(selectedInfo.getFhFecEmision());
 		orden.setFhFecVencimiento(selectedInfo.getFhFecVencimiento());
 		orden.setNbMnemonico(selectedInfo.getNbMnemonico());
-		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
 		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedInfo.getNbNomEmisor()));
 		orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, selectedInfo.getIdOperacion()));
 		orden.setTipoMoneda(Utilitarios.buscaGeneralEnLista(listaMoneda, selectedInfo.getTpAbrevMoneda()));
@@ -1582,6 +1573,9 @@ public class PortafolioController extends GenericController{
 		orden.setStEstado(Constante.OrdenEstado.GENERADO);
 		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+		orden.setOrdenFondoList(new ArrayList<OrdenFondo>());
+		orden.getOrdenFondoList().get(0).setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+		
 		return orden;
 	}
 	
@@ -1589,11 +1583,10 @@ public class PortafolioController extends GenericController{
 		Orden orden = new Orden();
 		orden.setFhFecEfectividad(fechaEfectividad);
 		orden.setTpTipoOperacion(tipoOperacion);
-		orden.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, nombreFondo));
-		orden.setTipoMoneda(Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, orden.getFondo().getTpTipmoneda()));
-		if(contraparte!=null){
-			orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, contraparte));
-		}
+		orden.setOrdenFondoList(new ArrayList<OrdenFondo>());
+		orden.getOrdenFondoList().get(0).setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+		orden.setTipoMoneda(Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, orden.getOrdenFondoList().get(0).getFondo().getTpTipmoneda()));
+		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, contraparte));
 		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaIntermediario, selectedIntermediario));
 		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
 		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
@@ -1603,21 +1596,52 @@ public class PortafolioController extends GenericController{
 		return orden;
 	}
 	
+	public Orden generaOrdenConDetalle(String tipoOperacion, General operacion){
+		Orden orden = new Orden();
+		orden.setFhFecEfectividad(fechaEfectividad);
+		orden.setTpTipoOperacion(tipoOperacion);
+		orden.setOperacion(operacion);
+		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaIntermediario, selectedIntermediario));
+		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
+		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
+		orden.setImMontoFinal(Utilitarios.parseToDouble(montoTotal));
+		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
+		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+		List<OrdenFondo> listaOrdenFondo = new ArrayList<OrdenFondo>();
+		OrdenFondo ordenFondo = null;
+		for (Fondo fondoSel : listaFondoSelected) {
+			if(fondoSel.getMonto()!=null){
+				ordenFondo = new OrdenFondo();
+				ordenFondo.setFondo(fondoSel);
+				ordenFondo.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
+				ordenFondo.setPcParticipa(Utilitarios.parseToDouble(fondoSel.getPorcentaje()));
+				listaOrdenFondo.add(ordenFondo);
+			}
+		}
+		orden.setOrdenFondoList(listaOrdenFondo);
+		return orden;
+	}
+	
 	public boolean guardaOrden(Orden orden, boolean isDetalle){
 		try {
-			if(ordenAnterior != null){
-				//Se elimina la orden anterior
-				ordenAnterior.setFhFecElimina(Constante.FECHA_ACTUAL);
-				ordenAnterior.setCdUsuElimina(this.getUsuarioSession().getUsuario().getUID());
-				ordenManager.save(ordenAnterior);
-			}
-			ordenManager.save(orden);
 			OrdenEstado ordenEstado = new OrdenEstado();
-			
 			ordenEstado.setOrden(orden);
 			ordenEstado.setFhFecCreacion(new Date());
 			ordenEstado.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 			ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, Constante.OrdenEstado.GENERADO));
+			if(ordenAnterior != null){
+				//Se elimina la orden anterior
+				ordenAnterior.setStEstado(Constante.OrdenEstado.ELIMINADO);
+				ordenAnterior.setFhFecElimina(Constante.FECHA_ACTUAL);
+				ordenAnterior.setCdUsuElimina(this.getUsuarioSession().getUsuario().getUID());
+				ordenManager.save(ordenAnterior);
+				ordenEstado.setCdIdgeneral(Utilitarios.buscaGeneralPorValorEnLista(listaOrdenEstado, ordenAnterior.getStEstado()));
+				orden.setCdIdordenAnte(ordenAnterior.getCdIdorden());
+			}
+			List<OrdenFondo> listaOrdenFondo = orden.getOrdenFondoList();
+			orden.setOrdenFondoList(null);
+			
+			ordenManager.save(orden);
 			ordenManager.saveEstado(ordenEstado);
 			
 			if(isDetalle){
@@ -1625,8 +1649,13 @@ public class PortafolioController extends GenericController{
 				Utilitarios.copiaPropiedades(detalle, selectedInfo);
 				detalle.setCdIddetalle(null);
 				detalle.setOrden(orden);
-				
 				ordenManager.saveDetalle(detalle);
+			}
+			for (OrdenFondo ordenFondo : listaOrdenFondo) {
+				ordenFondo.setOrden(orden);
+				ordenFondo.setFhFecCreacion(Constante.FECHA_ACTUAL);
+				ordenFondo.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
+				ordenManager.saveOrdenFondo(ordenFondo);
 			}
 			return true;
 		} catch (Exception e) {

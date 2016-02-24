@@ -116,7 +116,7 @@ public class OrdenController extends GenericController{
 			Infoport selectedInfo = new Infoport();
 			portafolioController.setFechaEfectividad(orden.getFhFecEfectividad());
 			selectedInfo.setFhFecEfectividad(orden.getFhFecEfectividad());
-			selectedInfo.setNbNomFondo(orden.getFondo().getNbNomFondo());
+			//selectedInfo.setNbNomFondo(orden.getFondo().getNbNomFondo());
 			if(orden.getContraparte()!=null){
 				selectedInfo.setNbNomEmisor(orden.getContraparte().getNbDescGeneral());
 			}
@@ -177,8 +177,9 @@ public class OrdenController extends GenericController{
 				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
 				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
 				
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteSpot').show()");
 				break;
@@ -186,8 +187,8 @@ public class OrdenController extends GenericController{
 				portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
 				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
 				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteSpot').show()");
 				break;
@@ -200,8 +201,10 @@ public class OrdenController extends GenericController{
 				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
 				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
 				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteFwd').show()");
 				break;
@@ -214,8 +217,10 @@ public class OrdenController extends GenericController{
 				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
 				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
 				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteFwd').show()");
 				break;
@@ -243,8 +248,10 @@ public class OrdenController extends GenericController{
 					portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
 				}
 				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteRentaFija').show()");
 				break;
@@ -258,8 +265,10 @@ public class OrdenController extends GenericController{
 				portafolioController.setMnemonico(orden.getNbMnemonico());
 				portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
 				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
 				context.execute("PF('manteRentaFija').show()");
 				break;
@@ -272,8 +281,10 @@ public class OrdenController extends GenericController{
 				portafolioController.setMonto(orden.getImMontoFinal().toString());
 				portafolioController.setMnemonico(orden.getNbMnemonico());
 				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_VARIABLE:
@@ -285,8 +296,10 @@ public class OrdenController extends GenericController{
 				portafolioController.setMonto(orden.getImMontoFinal().toString());
 				portafolioController.setMnemonico(orden.getNbMnemonico());
 				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
-				orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
+				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
+				//portafolioController.getListaFondoSelected().add(orden.getFondo());
+				
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			default:

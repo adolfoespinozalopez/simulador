@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pss.simulador.bs.domain.DetalleOrden;
 import com.pss.simulador.bs.domain.Orden;
 import com.pss.simulador.bs.domain.OrdenEstado;
+import com.pss.simulador.bs.domain.OrdenFondo;
 import com.pss.simulador.bs.repository.data.OrdenDetalleRepository;
 import com.pss.simulador.bs.repository.data.OrdenEstadoRepository;
+import com.pss.simulador.bs.repository.data.OrdenFondoRepository;
 import com.pss.simulador.bs.repository.data.OrdenRepository;
 import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
@@ -35,6 +37,9 @@ public class OrdenManagerImpl implements OrdenManager{
 	
 	@Autowired
 	OrdenDetalleRepository ordenDetalleRepository;
+	
+	@Autowired
+	OrdenFondoRepository ordenFondoRepository;
 	
 	public List<Orden> findByFilter(String idOperacion, String strEstado, String strUserName) {
 		Calendar calendar = GregorianCalendar.getInstance();
@@ -70,6 +75,11 @@ public class OrdenManagerImpl implements OrdenManager{
 
 	public List<DetalleOrden> findDetalleByOrden(Integer idOrden) {
 		return ordenDetalleRepository.findDetalleByOrden(idOrden);
+	}
+
+	@Transactional
+	public OrdenFondo saveOrdenFondo(OrdenFondo ordenFondo) {
+		return ordenFondoRepository.save(ordenFondo);
 	}
 
 	
