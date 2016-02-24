@@ -1612,7 +1612,7 @@ public class PortafolioController extends GenericController{
 		for (Fondo fondoSel : listaFondoSelected) {
 			if(fondoSel.getMonto()!=null){
 				ordenFondo = new OrdenFondo();
-				ordenFondo.setFondo(fondoSel);
+				ordenFondo.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, fondoSel.getNbNomFondo()));
 				ordenFondo.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
 				ordenFondo.setPcParticipa(Utilitarios.parseToDouble(fondoSel.getPorcentaje()));
 				listaOrdenFondo.add(ordenFondo);
