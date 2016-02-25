@@ -9,8 +9,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.pss.simulador.bs.domain.CobranzaPago;
+import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
 import com.pss.simulador.bs.domain.ProcesoLog;
+import com.pss.simulador.bs.domain.Saldo;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
 
@@ -104,6 +107,27 @@ public class CargaArchivoHelper {
 		return null;
 	}
 
+	public void validarCamposObligatoriosInfoport(Infoport infoport) {
+		if(infoport.getNbNomFondo()==null || infoport.getNbNomFondo().trim().isEmpty()){
+			this.addLog(Constante.Log.TipoMensaje.ERROR, "Campo Obligatorio", null, Constante.ArchivoCarga.Columnas.INFOPORT_POS_1_NOMBREFONDO);
+		}
+	}
+	
+	public void validarCamposObligatoriosSaldos(Saldo saldo) {
+		if(saldo.getCdCodFondo()==null || saldo.getCdCodFondo().trim().isEmpty()){
+			this.addLog(Constante.Log.TipoMensaje.ERROR, "Campo Obligatorio", null, Constante.ArchivoCarga.Columnas.SALDOS_POS_1_CODIGO);
+		}
+		if(saldo.getNbNomFondo()==null || saldo.getNbNomFondo().trim().isEmpty()){
+			this.addLog(Constante.Log.TipoMensaje.ERROR, "Campo Obligatorio", null, Constante.ArchivoCarga.Columnas.SALDOS_POS_2_FONDO);
+		}
+	}
+	
+	public void validarCamposObligatoriosCobPag(CobranzaPago cobranzaPago) {
+		if(cobranzaPago.getCdCodFondo()==null || cobranzaPago.getCdCodFondo().trim().isEmpty()){
+			this.addLog(Constante.Log.TipoMensaje.ERROR, "Campo Obligatorio", null, Constante.ArchivoCarga.Columnas.INFOPORT_POS_1_NOMBREFONDO);
+		}
+	}
+	
 	/**
 	 * @return the procesoCarga
 	 */
@@ -161,5 +185,7 @@ public class CargaArchivoHelper {
 	public void setNombreHoja(String nombreHoja) {
 		this.nombreHoja = nombreHoja;
 	}
+
+	
 
 }

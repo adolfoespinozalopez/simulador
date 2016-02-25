@@ -158,6 +158,8 @@ public class ProcesoCargaRunnable implements Runnable {
 				cobranzaPago.setCdSigla(helper.parseToString(hsObjCols.get(8)));
 				cobranzaPago.setStEstado(Constante.ESTADO_ACTIVO);
 				cobranzaPago.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
+				// Validaciones Campos Obligatorios
+				helper.validarCamposObligatoriosCobPag(cobranzaPago);
 				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
 					lstResult.add(cobranzaPago);	
 				}
@@ -214,6 +216,9 @@ public class ProcesoCargaRunnable implements Runnable {
 				saldo.setImSaldoTmasn(helper.parseToDouble(hsObjCols.get(34),35));
 				saldo.setStEstado(Constante.ESTADO_ACTIVO);
 				saldo.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
+				// Validaciones Campos Obligatorios
+				helper.validarCamposObligatoriosSaldos(saldo);
+				
 				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
 					lstResult.add(saldo);	
 				}
@@ -290,6 +295,9 @@ public class ProcesoCargaRunnable implements Runnable {
 					}
 				}
 				infoport.setFhFecImporta(this.getProcesoCarga().getFhFecImporta());
+				// Validaciones Campos Obligatorios
+				helper.validarCamposObligatoriosInfoport(infoport);
+				
 				if (!this.obtenerEstadoLogs(helper.getLstLog()).equals(Constante.Log.TipoMensaje.ERROR)){
 					lstResult.add(infoport);
 				}

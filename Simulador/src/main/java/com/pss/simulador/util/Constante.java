@@ -162,6 +162,7 @@ public class Constante {
     		public static final String MSJ_ERROR_PARSE_INTEGER = "Error de lectura del campo. Error al convertir el valor a Numérico Entero.";
     		public static final String MSJ_ERROR_PARSE_DATE = "Error de lectura del campo. Error al convertir el valor a Fecha.";
     		public static final String MSJ_ERROR_PARSE_DOUBLE_TO_STRING_ENTERO = "Error de lectura del campo. Error al convertir el valor entero a texto.";
+    		public static final String MSJ_ERROR_OBLIGATORIO = "Campo Obligatorio.";
     	}
     	public static class TipoMensaje{
     		public static final String INFO = "INFO";
@@ -177,5 +178,16 @@ public class Constante {
     	public static final Integer INI_ROW_INFOPORT = 4;
     	public static final Integer INI_ROW_SALDOS = 5;
     	public static final Integer INI_ROW_COBPAG = 1;
+    	
+    	public static class Columnas{
+    		public static final Integer INFOPORT_POS_1_NOMBREFONDO = 1;
+    		
+    		public static final Integer SALDOS_POS_1_CODIGO = 1;
+    		public static final Integer SALDOS_POS_2_FONDO = 2;
+    		
+    		public static final Integer COBPAG_POS_1_FONDO = 1;
+    		
+    		
+    	}
     }
 }
