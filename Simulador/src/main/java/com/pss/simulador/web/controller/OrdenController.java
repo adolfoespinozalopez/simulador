@@ -1,8 +1,11 @@
 package com.pss.simulador.web.controller;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,8 +66,11 @@ public class OrdenController extends GenericController{
 	@Autowired
 	private PortafolioController portafolioController;
 	
+	private String mensajeValida;
+	
 	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
+	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	
 	public OrdenController(){
 		
@@ -120,7 +126,9 @@ public class OrdenController extends GenericController{
 			if(orden.getContraparte()!=null){
 				selectedInfo.setNbNomEmisor(orden.getContraparte().getNbDescGeneral());
 			}
-			selectedInfo.setTpAbrevMoneda(orden.getTipoMoneda().getNbDescGeneral());
+			if(orden.getTipoMoneda() != null){
+				selectedInfo.setTpAbrevMoneda(orden.getTipoMoneda().getNbDescGeneral());
+			}
 			selectedInfo.setTipoApertura(orden.getTpApertura());
 			selectedInfo.setImCupon(orden.getImTasa());
 			selectedInfo.setPlazo(orden.getNuPlazoDia());
@@ -310,6 +318,19 @@ public class OrdenController extends GenericController{
 		}
 	}
 	
+	public void validarAprobarOrden(Orden orden){
+		RequestContext context = RequestContext.getCurrentInstance();
+		selectedOrden = orden;
+		if(selectedOrden != null){
+			if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL))){
+				context.execute("PF('msjConfirmacionAprueba').show()");
+			}else{
+				mensajeValida = "No se puede aprobar la orden. Verifique la fecha de efectividad.";
+				context.execute("PF('msjVal').show()");
+			}
+		}
+	}
+	
 	public void aprobarOrden(){
 		if(selectedOrden != null){
 			actualizarEstado(Constante.OrdenEstado.APROBADO);
@@ -460,6 +481,14 @@ public class OrdenController extends GenericController{
 
 	public void setPortafolioController(PortafolioController portafolioController) {
 		this.portafolioController = portafolioController;
+	}
+
+	public String getMensajeValida() {
+		return mensajeValida;
+	}
+
+	public void setMensajeValida(String mensajeValida) {
+		this.mensajeValida = mensajeValida;
 	}
 	
 }

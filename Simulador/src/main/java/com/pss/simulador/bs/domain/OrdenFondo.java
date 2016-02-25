@@ -36,7 +36,7 @@ public class OrdenFondo  implements Serializable{
     @Column(name = "PC_PARTICIPA")
     private Double pcParticipa;
     @Column(name = "ST_ESTADO")
-    private Character stEstado;
+    private String stEstado;
     @Column(name = "FH_FEC_CREACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fhFecCreacion;
@@ -59,6 +59,14 @@ public class OrdenFondo  implements Serializable{
     @ManyToOne
     private Fondo fondo;
 	
+	public OrdenFondo(){
+		
+	}
+	
+	public OrdenFondo(Fondo fondo){
+		this.fondo = fondo;
+	}
+	
 	public Integer getCdIddetalle() {
 		return cdIddetalle;
 	}
@@ -77,10 +85,10 @@ public class OrdenFondo  implements Serializable{
 	public void setPcParticipa(Double pcParticipa) {
 		this.pcParticipa = pcParticipa;
 	}
-	public Character getStEstado() {
+	public String getStEstado() {
 		return stEstado;
 	}
-	public void setStEstado(Character stEstado) {
+	public void setStEstado(String stEstado) {
 		this.stEstado = stEstado;
 	}
 	public Date getFhFecCreacion() {

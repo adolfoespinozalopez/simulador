@@ -4,7 +4,9 @@
 package com.pss.simulador.util;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 
@@ -62,7 +64,15 @@ public class FechasUtil {
 	
 	public static Integer diferenciaEnDias(Date fecMayor, Date fecMenor) {
     	try {
-    		long dias = (fecMayor.getTime() - fecMenor.getTime()) / (1000 * 60 * 60 * 24);
+    		long dias = 0;
+    		if(fecMenor == null){
+    			Calendar calendar = GregorianCalendar.getInstance();
+    			calendar.setTime(fecMayor);
+    			calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH)-calendar.get(Calendar.DAY_OF_MONTH));
+    			dias = (fecMayor.getTime() - calendar.getTime().getTime()) / (1000 * 60 * 60 * 24);
+    		}else{
+    			dias = (fecMayor.getTime() - fecMenor.getTime()) / (1000 * 60 * 60 * 24);
+    		}
         	return (int) dias;
 		} catch (Exception e) {
 			return 0;

@@ -71,6 +71,7 @@ public class PortafolioController extends GenericController{
 	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
+	private DecimalFormat formatoPorcentaje = new DecimalFormat("##0.0");
 	
 	@Autowired
 	private NotificacionController notificacionController;
@@ -131,6 +132,7 @@ public class PortafolioController extends GenericController{
 	private String tipoCambioSpot;
 	
 	private String montoTotal;
+	private String porcentajeTotal;
 	
 	private String selectedTipoFwd = Constante.NO_OPTION_SELECTED;
 	private String selectedContraFwd = Constante.NO_OPTION_SELECTED;
@@ -452,6 +454,14 @@ public class PortafolioController extends GenericController{
 
 	public void setMontoTotal(String montoTotal) {
 		this.montoTotal = montoTotal;
+	}
+
+	public String getPorcentajeTotal() {
+		return porcentajeTotal;
+	}
+
+	public void setPorcentajeTotal(String porcentajeTotal) {
+		this.porcentajeTotal = porcentajeTotal;
 	}
 
 	public String getSelectedTipoFwd() {
@@ -856,7 +866,7 @@ public class PortafolioController extends GenericController{
             mensajeValida = "Debe seleccionar un registro.";
             context.execute("PF('msjVal').show()");
         }else{
-        	if(selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL) == 0){
+        	if(selectedInfo.getFhFecVencimiento() != null && selectedInfo.getFhFecVencimiento().compareTo(Constante.FECHA_ACTUAL) == 0){
         		mensajeValida = "La fecha de vencimiento es igual a la actual.";
         		context.execute("PF('msjVal').show()");
         	}else{
@@ -946,6 +956,7 @@ public class PortafolioController extends GenericController{
 		selectedContraSpot = Constante.NO_OPTION_SELECTED;
 		tipoCambioSpot = "";
 		montoTotal = "";
+		porcentajeTotal = "";
 		listaFondoSelected = new ArrayList<Fondo>();
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
@@ -970,6 +981,7 @@ public class PortafolioController extends GenericController{
 		plazoFwd = "";
 		fechaVctoFwd = null;
 		montoTotal = "";
+		porcentajeTotal = "";
 		listaFondoSelected = new ArrayList<Fondo>();
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
@@ -1008,6 +1020,8 @@ public class PortafolioController extends GenericController{
 		precioLimpio = "";
 		precioSucio = "";
 		precioReferencial = "";
+		montoTotal = "";
+		porcentajeTotal = "";
 		listaFondoSelected = new ArrayList<Fondo>();
 		for (int i = 0; i < 10; i++) {
 			listaFondoSelected.add(new Fondo());
@@ -1260,7 +1274,8 @@ public class PortafolioController extends GenericController{
 	
 	public void sumarMonto(){
 		montoTotal = "0";
-		Double montoTo = 0.0;
+		Double montoTo = Constante.VALOR_CERO;
+		Double porcentaje = Constante.VALOR_CERO;
 		try {
 			for (Fondo fondoSel : listaFondoSelected) {
 				if(Utilitarios.isDouble(fondoSel.getMonto())){
@@ -1270,9 +1285,24 @@ public class PortafolioController extends GenericController{
 				}
 			}
 		} catch (Exception e) {
-			montoTo = 0.0;
+			montoTo = Constante.VALOR_CERO;
+		}
+		if(montoTo != Constante.VALOR_CERO){
+			try {
+				for (Fondo fondoSel : listaFondoSelected) {
+					if(!fondoSel.getMonto().isEmpty()){
+						fondoSel.setPorcentaje(formatoPorcentaje.format((Utilitarios.parseToDouble(fondoSel.getMonto())/montoTo)*100)+"%");
+						porcentaje += formatoPorcentaje.parse(fondoSel.getPorcentaje()).doubleValue();
+					}else{
+						fondoSel.setPorcentaje("");
+					}
+				}
+			} catch (Exception e) {
+				porcentaje = Constante.VALOR_CERO;
+			}
 		}
 		montoTotal = montoTo.toString();
+		porcentajeTotal = formatoPorcentaje.format(porcentaje) +"%";
 	}
 	
 	public void guardaOpCompraVentaForward(){
@@ -1573,9 +1603,10 @@ public class PortafolioController extends GenericController{
 		orden.setStEstado(Constante.OrdenEstado.GENERADO);
 		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
-		orden.setOrdenFondoList(new ArrayList<OrdenFondo>());
-		orden.getOrdenFondoList().get(0).setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
-		
+		List<OrdenFondo> listaOrdenFondo = new ArrayList<OrdenFondo>();
+		OrdenFondo ordenFondo = new OrdenFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
+		listaOrdenFondo.add(ordenFondo);
+		orden.setOrdenFondoList(listaOrdenFondo);		
 		return orden;
 	}
 	
@@ -1583,9 +1614,11 @@ public class PortafolioController extends GenericController{
 		Orden orden = new Orden();
 		orden.setFhFecEfectividad(fechaEfectividad);
 		orden.setTpTipoOperacion(tipoOperacion);
-		orden.setOrdenFondoList(new ArrayList<OrdenFondo>());
-		orden.getOrdenFondoList().get(0).setFondo(Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo()));
-		orden.setTipoMoneda(Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, orden.getOrdenFondoList().get(0).getFondo().getTpTipmoneda()));
+		List<OrdenFondo> listaOrdenFondo = new ArrayList<OrdenFondo>();
+		OrdenFondo ordenFondo = new OrdenFondo(Utilitarios.buscaFondoEnLista(listaFondo, nombreFondo));
+		listaOrdenFondo.add(ordenFondo);
+		orden.setOrdenFondoList(listaOrdenFondo);
+		orden.setTipoMoneda(Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, ordenFondo.getFondo().getTpTipmoneda()));
 		orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, contraparte));
 		orden.setIntermediario(Utilitarios.buscaGeneralPorIDEnLista(listaIntermediario, selectedIntermediario));
 		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
@@ -1605,14 +1638,14 @@ public class PortafolioController extends GenericController{
 		orden.setLugar(Utilitarios.buscaGeneralPorIDEnLista(listaLugar, selectedLugar));
 		orden.setPais(Utilitarios.buscaGeneralPorIDEnLista(listaPais, selectedPais));
 		orden.setImMontoFinal(Utilitarios.parseToDouble(montoTotal));
+		orden.setStEstado(Constante.OrdenEstado.GENERADO);
 		orden.setFhFecCreacion(Constante.FECHA_ACTUAL);
 		orden.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 		List<OrdenFondo> listaOrdenFondo = new ArrayList<OrdenFondo>();
 		OrdenFondo ordenFondo = null;
 		for (Fondo fondoSel : listaFondoSelected) {
 			if(fondoSel.getMonto()!=null){
-				ordenFondo = new OrdenFondo();
-				ordenFondo.setFondo(Utilitarios.buscaFondoEnLista(listaFondo, fondoSel.getNbNomFondo()));
+				ordenFondo = new OrdenFondo(Utilitarios.buscaFondoEnLista(listaFondo, fondoSel.getNbNomFondo()));
 				ordenFondo.setImMontoFinal(Utilitarios.parseToDouble(fondoSel.getMonto()));
 				ordenFondo.setPcParticipa(Utilitarios.parseToDouble(fondoSel.getPorcentaje()));
 				listaOrdenFondo.add(ordenFondo);
@@ -1653,6 +1686,7 @@ public class PortafolioController extends GenericController{
 			}
 			for (OrdenFondo ordenFondo : listaOrdenFondo) {
 				ordenFondo.setOrden(orden);
+				ordenFondo.setStEstado(Constante.ESTADO_ACTIVO);
 				ordenFondo.setFhFecCreacion(Constante.FECHA_ACTUAL);
 				ordenFondo.setCdUsuCreacion(this.getUsuarioSession().getUsuario().getUID());
 				ordenManager.saveOrdenFondo(ordenFondo);
