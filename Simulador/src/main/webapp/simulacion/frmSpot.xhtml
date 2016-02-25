@@ -73,7 +73,7 @@
             				<tr>
 	            				<td><h:outputLabel value="Operación ${idx.count}:" style="font-weight: bold;"/></td>
 	            				<td>
-	            					<p:selectOneMenu id="lstFondoSpot${idx.count}" style="width: 210px;" 
+	            					<p:selectOneMenu id="lstFondoSpot${idx.count}" style="width: 190px;" 
 		                                         	 value="#{var.nbNomFondo}" >
 			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 			                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
@@ -83,20 +83,21 @@
 	                            <td><p:inputText id="txtMontoSpot${idx.count}" style="width: 80px;" maxlength="10"  
 	                             				 value="#{var.monto}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
-	                             		<p:ajax event="blur" listener="#{portafolioController.sumarMonto}" update="@this, :frmSpot:txtTotalSpot, msgSpot, growl" />
 	                             	</p:inputText>
 	                            </td>
-	                            <td><p:message for="txtMontoSpot${idx.count}" display="icon" /></td>
+	                            <td><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	            			</tr>
             			</c:forEach>
                     	<tr>
-            			    <td style="width: 90px;"></td>
+            			    <td style="width: 80px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total Operar USD :</td>
             			    <td style="width: 80px;text-align: center;">
             			    	<p:inputText id="txtTotalSpot" style="width: 80px;" maxlength="10"  
                              				 value="#{portafolioController.montoTotal}" />
             			    </td>
-            			    <td style="width: 40px;"></td>
+            			    <td style="width: 50px;">
+            			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
+            			    </td>
             			</tr>
             		</tbody>
             	</table>
@@ -107,6 +108,8 @@
                 <p:commandButton process="@form" value="Confirmar Spot" icon="ui-icon-disk" update="panelSpot, msgSpot, growl" validateClient="true" 
                                  actionListener="#{portafolioController.guardaOpCompraVentaSpot}" style="margin-right:10px" 
                                  disabled="#{portafolioController.isRiesgo()}"/>
+                <p:commandButton value="Calcular" icon="ui-icon-refresh" actionListener="#{portafolioController.sumarMonto}"
+                				 update="panelSpot, msgSpot, growl, fldSpot" style="margin-right:10px"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteSpot').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

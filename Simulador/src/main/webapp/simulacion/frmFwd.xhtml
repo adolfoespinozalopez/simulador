@@ -133,10 +133,9 @@
 	                            <td><p:inputText id="txtMontoFwd${idx.count}" style="width: 80px;" maxlength="10"  
 	                             				 value="#{var.monto}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
-	                             		<p:ajax event="blur" listener="#{portafolioController.sumarMonto}" update="@this, :frmFwd:txtTotalFwd, msgFwd, growl" />
 	                             	</p:inputText>
 	                            </td>
-	                            <td><p:message for="txtMontoFwd${idx.count}" display="icon" /></td>
+	                            <td><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	            			</tr>
             			</c:forEach>
             			
@@ -147,7 +146,9 @@
             			    	<p:inputText id="txtTotalFwd" style="width: 80px;" maxlength="10"  
                              				 value="#{portafolioController.montoTotal}" />
             			    </td>
-            			    <td style="width: 40px;"></td>
+            			    <td style="width: 40px;">
+            			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
+            			    </td>
             			</tr>
             		</tbody>
             	</table>
@@ -159,6 +160,8 @@
                 <p:commandButton process="@form" value="Confirmar Fwd" icon="ui-icon-disk" update="panelFwd, msgFwd, growl" validateClient="true" 
                                  actionListener="#{portafolioController.guardaOpCompraVentaForward}" style="margin-right:10px" 
                                  disabled="#{portafolioController.isRiesgo()}"/>
+                <p:commandButton value="Calcular" icon="ui-icon-refresh" actionListener="#{portafolioController.sumarMonto}"
+                				 update="panelFwd, msgFwd, growl, fldFwd" style="margin-right:10px"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteFwd').hide()" />
             </p:toolbarGroup>
         </p:toolbar>

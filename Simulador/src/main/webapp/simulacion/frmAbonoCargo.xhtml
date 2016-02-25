@@ -25,7 +25,7 @@
                 	<tr>
                         <td style="width: 100px;"><h:outputLabel value="Fondo:"/></td>
                         <td colspan="2">
-                            <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 210px;" 
+                            <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 240px;" 
                                          	value="#{portafolioController.selectedFondoAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
@@ -36,7 +36,7 @@
                     <tr>
                     	<td><h:outputLabel value="Tipo Operación:"/></td>
                     	<td colspan="2">
-	                        <p:selectOneMenu id="lstTipoAbono" required="true" style="width: 210px;" 
+	                        <p:selectOneMenu id="lstTipoAbono" required="true" style="width: 240px;" 
                                          	value="#{portafolioController.selectedTipoAbono}" >
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItem itemLabel="ABONO" itemValue="ABONO" />
@@ -47,7 +47,7 @@
                     <tr>
                         <td><h:outputLabel value="Contraparte:"/></td>
                         <td colspan="2">
-                            <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 210px;" 
+                            <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 240px;" 
                                          	value="#{portafolioController.selectedContraAbono}" filter="true" filterMatchMode="startsWith">
 	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
 	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
@@ -58,7 +58,7 @@
                     <tr>
                         <td><p:outputLabel value="Monto en USD:" for="txtMontoAbono"/></td>
                         <td>
-	                        <p:inputText id="txtMontoAbono" style="width: 200px;" maxlength="30" required="true"
+	                        <p:inputText id="txtMontoAbono" style="width: 230px;" maxlength="30" required="true"
                                          value="#{portafolioController.montoAbono}">
                             	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 						    </p:inputText>

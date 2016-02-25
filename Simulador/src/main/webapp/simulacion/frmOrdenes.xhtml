@@ -105,7 +105,7 @@
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
                             <p:column headerText="Fondo" style="width: 8%;text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
-                                <h:outputText value="#{item.fondo.nbNomFondo}"/>
+                                <h:outputText value=""/>
                             </p:column>
                             <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.operacion.nbDescGeneral}">
                                 <h:outputText value="#{item.operacion.nbDescGeneral}"/>
@@ -154,9 +154,9 @@
                                 	<f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
                                 </p:commandButton>
                                 
-                                <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionAprueba').show()" icon="ui-icon-check" 
-                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar">
-                                    <f:setPropertyActionListener value="#{item}" target="#{ordenController.selectedOrden}" />
+                                <p:commandButton process="@this, grdOrdenes" actionListener="#{ordenController.validarAprobarOrden(item)}" icon="ui-icon-check" 
+                                                 style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Aprobar"
+                                                 update=":dlgMensajeVal, :dlgMensajeAprueba">
                                 </p:commandButton>
                                 <p:commandButton process="@this, grdOrdenes" oncomplete="PF('dlgConfirmacionRechaza').show()" icon="ui-icon-close" 
                                                  style="width: 20px; height: 20px;" disabled="#{item.stEstado!='1'}" title="Rechazar">
@@ -194,7 +194,27 @@
                     <p:ajax event="close" update="frmGestionarOrdenes:grdOrdenes"/> 
                 </p:dialog>
 
-				<p:dialog modal="true" header="Confirmación de Aprobación" widgetVar="dlgConfirmacionAprueba" 
+				<p:dialog id="dlgMensajeVal" modal="true" header="Mensaje" widgetVar="msjVal" resizable="false"
+                    width="200" height="110"  >
+                    <p:panel id="pnlMensajeVal" style="border: 0px">
+                    <table>
+                        <tbody>
+                            <tr>
+                            	<td><h:outputLabel value="#{ordenController.mensajeValida}"/><br/><br/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>                           
+                            <tr>
+                            	<td style="text-align: center">
+                                    <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('msjVal').hide()"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                   </p:panel>
+                </p:dialog>
+                
+				<p:dialog modal="true" header="Confirmación de Aprobación" widgetVar="msjConfirmacionAprueba" 
                           resizable="false" width="380" height="100" id="dlgMensajeAprueba">
                     <h:form id="frmConfirmacionAprueba">
                         <p:panel>
@@ -210,8 +230,8 @@
                                     <tr>
                                         <td>
                                             <p:commandButton process="@this" value="Sí" action="#{ordenController.aprobarOrden()}" 
-                                                             oncomplete="PF('dlgConfirmacionAprueba').hide()" update="growl"/>  
-                                            <p:commandButton process="@this" value="No" onclick="PF('dlgConfirmacionAprueba').hide()"/>   
+                                                             oncomplete="PF('msjConfirmacionAprueba').hide()" update="growl"/>  
+                                            <p:commandButton process="@this" value="No" onclick="PF('msjConfirmacionAprueba').hide()"/>   
                                         </td>
                                     </tr>
                                 </tfoot>

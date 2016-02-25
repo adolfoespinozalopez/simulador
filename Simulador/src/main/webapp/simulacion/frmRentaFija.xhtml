@@ -123,10 +123,9 @@
 	                            <td><p:inputText id="txtMontoFija${idx.count}" style="width: 80px;" maxlength="10"  
 	                             				 value="#{var.monto}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
-	                             		<p:ajax event="blur" listener="#{portafolioController.sumarMonto}" update="@this, :frmRentaFija:txtTotalFija, msgRentaFija, growl" />
 	                             	</p:inputText>
 	                            </td>
-	                            <td><p:message for="txtMontoFija${idx.count}" display="icon" /></td>
+	                            <td><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	            			</tr>
             			</c:forEach>
             			
@@ -137,7 +136,9 @@
             			    	<p:inputText id="txtTotalFija" style="width: 80px;" maxlength="10"  
                              				 value="#{portafolioController.montoTotal}" />
             			    </td>
-            			    <td style="width: 40px;"></td>
+            			    <td style="width: 40px;">
+            			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
+            			    </td>
             			</tr>
             		</tbody>
             	</table>
@@ -148,6 +149,8 @@
                 <p:commandButton process="@form" value="Confirmar" icon="ui-icon-disk" update="panelRentaFija, msgRentaFija, growl" validateClient="true" 
                                  actionListener="#{portafolioController.guardaOpRentaFija}" style="margin-right:10px" 
                                  disabled="#{portafolioController.isRiesgo()}"/>
+				<p:commandButton value="Calcular" icon="ui-icon-refresh" actionListener="#{portafolioController.sumarMonto}"
+                				 update="panelRentaFija, msgRentaFija, growl, fldFija" style="margin-right:10px"/>
                 <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" onclick="PF('manteRentaFija').hide()" />
             </p:toolbarGroup>
         </p:toolbar>
