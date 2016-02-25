@@ -9,10 +9,12 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.util.SystemOutLogger;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.util.SocketUtils;
 
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.Fondo;
@@ -54,9 +56,27 @@ public class EmisorController extends GenericController {
 
 	// Limites
 	private LimitesEmisor selectedlimiteEmisor = new LimitesEmisor();
+	public boolean value1;
+	public boolean value2;
 
 	public EmisorController() {
 
+	}
+
+	public boolean isValue1() {
+		return value1;
+	}
+
+	public void setValue1(boolean value1) {
+		this.value1 = value1;
+	}
+
+	public boolean isValue2() {
+		return value2;
+	}
+
+	public void setValue2(boolean value2) {
+		this.value2 = value2;
 	}
 
 	@PostConstruct
@@ -82,13 +102,16 @@ public class EmisorController extends GenericController {
 
 	public void crear() {
 		selectedEmisor = new Emisor();
+		value1=false;
+		value2=false;
 	}
 
 	public void guardarEmisor() {
 		try {
-			if (selectedEmisor != null) {
-				if (selectedEmisor != null)
-					selectedEmisor.setStEstado(Constante.ESTADO_ACTIVO);
+			if (selectedEmisor != null) {	
+				selectedEmisor.setTpMicroFina((value1)?"1":"0");
+				selectedEmisor.setTpGrupoBbva((value2)?"1":"0");
+				
 				if (selectedEmisor.getCdIdemisor() != null) {// Actualizacion
 					selectedEmisor.setFhFecModifica(new Date());
 					selectedEmisor.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
@@ -152,6 +175,11 @@ public class EmisorController extends GenericController {
 
 	public void verDetalles(Emisor emisor) {
 		selectedEmisor = emisor;
+		setValue1((selectedEmisor.getTpMicroFina().equals("1"))?true:false);
+		setValue2((selectedEmisor.getTpGrupoBbva().equals("1"))?true:false);
+		System.out.println(value1);
+
+		
 	}
 
 	public void eliminar() {
