@@ -1,80 +1,96 @@
-<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
-    xmlns:ui="http://java.sun.com/jsf/facelets"
-    xmlns:f="http://java.sun.com/jsf/core"
-    xmlns:p="http://primefaces.org/ui"
-    xmlns:h="http://java.sun.com/jsf/html">
-    <h:form id="frmDetalleEmisor">
-    	<p:focus context="panelEmisorDetalle"/>
-        <p:panel id="panelEmisorDetalle" header="Detalle Emisor" 
-                 rendered="#{(emisorController.selectedEmisor != null)?true:false}">
-            <table style="width: 100%;">
-                <tbody>
-                	<tr>
-                        <td style="width: 60px;"><h:outputLabel value="Nombre:" for="nombreEmisor" /></td>
-                        <td colspan="2">
-                            <p:inputText id="nombreEmisor" style="width: 280px;" readonly="#{emisorController.selectedEmisor.cdIdemisor!=null}"
-                                         value="#{emisorController.selectedEmisor.nbNomEmisor}" maxlength="55" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Rating:" for="lstRating" /></td>
-                        <td>
-	                        <p:selectOneMenu id="lstRating" style="width: 105px;" disabled="#{emisorController.selectedEmisor.cdIdemisor!=null}" 
-	                                         value="#{emisorController.selectedEmisor.tpRating}" >
-	                            <f:selectItem itemLabel="I" itemValue="I" />
-	                            <f:selectItem itemLabel="II" itemValue="II" />
-	                            <f:selectItem itemLabel="III" itemValue="III" />
-                                <f:selectItem itemLabel="S.C." itemValue="S.C." />
-	                        </p:selectOneMenu>
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Tipo:" for="lstTipo" /></td>
-                        <td>
-	                        <p:selectOneMenu id="lstTipo" required="true" style="width: 190px;" 
-	                        				 requiredMessage="El campo Tipo es necesario." 
-	                                         value="#{emisorController.selectedEmisor.tpTipemisor}" >
-	                            <f:selectItems value="#{emisorController.lstGeneralDominio}" var="dominioGen" 
-	                                           itemValue="#{dominioGen.cdIdgeneral}" itemLabel="#{dominioGen.nbValorGeneral}"/>
-	                        </p:selectOneMenu>
-                        </td>
-                        <td><p:message for="lstTipo" display="icon" /></td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Pasivo:" for="pasivoEmisor" /></td>
-                        <td>
-                            <p:inputText id="pasivoEmisor" style="width: 100px;" maxlength="30" required="true"
-                                         value="#{emisorController.selectedEmisor.imPasivo}" />
-                        </td>
-                        <td><p:message for="pasivoEmisor" display="icon" /></td>
-                    </tr>
-                    
-                    <tr>
-                    	<td><h:outputLabel value="Estado:" for="lstEstado" /></td>
-                        <td>
-                        	<p:selectOneMenu id="lstEstado" required="true" style="width: 105px;" 
-                                             requiredMessage="El campo Estado es necesario." 
-                                             value="#{emisorController.selectedEmisor.stEstado}" >
-                                <f:selectItem itemLabel="Activo" itemValue="1" />
-                                <f:selectItem itemLabel="Inactivo" itemValue="0" />
-                            </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                    	<td colspan="3"><BR/></td>
-                    </tr>
-                </tbody>
-            </table>
-        </p:panel>
-        <p:toolbar>
-            <p:toolbarGroup align="right">
-                <p:commandButton process="@form" value="Grabar" icon="ui-icon-disk" update="panelEmisorDetalle, growl" validateClient="true" actionListener="#{emisorController.guardarEmisor}"
-                                 ajax="true" style="margin-right:10px" action="to_administracion_emisor" />
-                <p:commandButton process="@this" value="Cerrar" icon="ui-icon-close" >
-                	<p:ajax update="dlgEmisor" resetValues="true" />
-                </p:commandButton>
-            </p:toolbarGroup>
-        </p:toolbar>
-    </h:form>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://java.sun.com/jsf/html">
+	<h:form id="frmDetalleEmisor">
+		<p:focus context="panelEmisorDetalle" />
+		<p:panel id="panelEmisorDetalle" header="Detalle Emisor"
+			rendered="#{(emisorController.selectedEmisor != null)?true:false}">
+			<table style="width: 100%;">
+				<tbody>
+					<tr>
+						<td style="width: 60px;"><p:outputLabel value="Nombre:"
+								for="nombreEmisor" /></td>
+						<td colspan="2"><p:inputText id="nombreEmisor"
+								style="width: 280px;" required="true"
+								readonly="#{emisorController.selectedEmisor.cdIdemisor!=null}"
+								value="#{emisorController.selectedEmisor.nbNomEmisor}"
+								maxlength="55" /></td>
+					</tr>
+					<tr>
+						<td><h:outputLabel value="Rating:" for="lstRating" /></td>
+						<td><p:selectOneMenu id="lstRating" style="width: 105px;"
+								disabled="#{emisorController.selectedEmisor.cdIdemisor!=null}"
+								value="#{emisorController.selectedEmisor.tpRating}">
+								<f:selectItem itemLabel="I" itemValue="I" />
+								<f:selectItem itemLabel="II" itemValue="II" />
+								<f:selectItem itemLabel="III" itemValue="III" />
+								<f:selectItem itemLabel="S.C." itemValue="S.C." />
+							</p:selectOneMenu></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="Tipo:" for="lstTipo" /></td>
+						<td><p:selectOneMenu id="lstTipo" required="true"
+								style="width: 190px;"
+								requiredMessage="El campo Tipo es necesario."
+								value="#{emisorController.selectedEmisor.tpTipemisor}">
+								<f:selectItems value="#{emisorController.lstGeneralDominio}"
+									var="dominioGen" itemValue="#{dominioGen.cdIdgeneral}"
+									itemLabel="#{dominioGen.nbValorGeneral}" />
+							</p:selectOneMenu></td>
+						<td><p:message for="lstTipo" display="icon" /></td>
+					</tr>
+					<tr>
+						<td><p:outputLabel value="Pasivo:" for="pasivoEmisor" /></td>
+						<td><p:inputText id="pasivoEmisor" style="width: 100px;"
+								maxlength="30" required="true"
+								value="#{emisorController.selectedEmisor.imPasivo}" /></td>
+						<td><p:message for="pasivoEmisor" display="icon" /></td>
+					</tr>
+
+					<tr>
+						<td><h:outputLabel value="Estado:" for="lstEstado" /></td>
+						<td><p:selectOneMenu id="lstEstado" required="true"
+								style="width: 105px;"
+								requiredMessage="El campo Estado es necesario."
+								value="#{emisorController.selectedEmisor.stEstado}">
+								<f:selectItem itemLabel="Activo" itemValue="1" />
+								<f:selectItem itemLabel="Inactivo" itemValue="0" />
+							</p:selectOneMenu></td>
+					</tr>
+
+
+					<tr>
+						<td><h:outputLabel value="Microfina:" for="tpMicroFina" /></td>
+						<td> <p:selectBooleanCheckbox value="#{emisorController.value1}">
+							</p:selectBooleanCheckbox></td>
+					</tr>
+					<tr>
+
+						<td><h:outputLabel value="Grupo BBA:" for="tpGrupobbva" /></td>
+						<td> <p:selectBooleanCheckbox value="#{emisorController.value2}">				
+							</p:selectBooleanCheckbox></td>
+					</tr>
+
+
+					<tr>
+						<td colspan="3"><BR /></td>
+					</tr>
+				</tbody>
+			</table>
+		</p:panel>
+		<p:toolbar>
+			<p:toolbarGroup align="right">
+				<p:commandButton process="@form" value="Grabar" icon="ui-icon-disk"
+					update="panelEmisorDetalle, growl" validateClient="true"
+					actionListener="#{emisorController.guardarEmisor}" ajax="true"
+					style="margin-right:10px" action="to_administracion_emisor" />
+				<p:commandButton process="@this" value="Cerrar" icon="ui-icon-close">
+					<p:ajax update="dlgEmisor" resetValues="true" />
+				</p:commandButton>
+			</p:toolbarGroup>
+		</p:toolbar>
+	</h:form>
 </ui:composition>
