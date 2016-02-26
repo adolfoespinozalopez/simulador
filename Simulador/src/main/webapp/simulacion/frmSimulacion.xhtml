@@ -36,15 +36,29 @@
                             <f:selectItems value="#{simulacionController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
                             <p:ajax event="change" update=":frmSimulacion:btnActualizar, :frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"/>
-                        </p:selectOneMenu>
+                       	</p:selectOneMenu>
+                       	 	
+                       		                     
+  
                         <p:commandButton id="btnActualizar" process="@this" icon="fa fa-refresh" actionListener="#{simulacionController.ejecutaBusqueda}"
                         				 styleClass="actualizar ui-state-active" value="Actualizar" title="Actualizar"
                         				 onclick="PF('blkPanel').show();PF('blkPanelCaja').show();" oncomplete="PF('blkPanel').hide();PF('blkPanelCaja').hide();"
                         				 update=":frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor" 
                         				 disabled="#{(simulacionController.selectedNombreFondo =='-1')}" />
+                      
+                       <h:outputText value="Estado Inicial :" style="padding-right: 5px; margin-left: 130px"/>		 
+                       
+                       <p:selectBooleanButton id="btnEstadoIni" value="#{simulacionController.valorEstado}" onLabel="Si" offLabel="No" style="width:60px; position:absolute"> 
+                          <p:ajax onstart="PF('blkPanel').show();PF('blkPanelCaja').show();" oncomplete="PF('blkPanel').hide();PF('blkPanelCaja').hide();"
+                          update=":frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"  listener="#{simulacionController.ejecutaBusqueda}" />
+        			   </p:selectBooleanButton> 
+
+                       
                         <p:layout style="min-width:400px;max-height:550px;height:550px;" fullPage="false">
+
                             <p:layoutUnit position="center" resizable="true" size="600" minSize="700"  
                                           header="Exposición del Fondo" id="lytExpoFondo">
+                                                  
                                 <p:dataTable id="grdFondo" value="#{simulacionController.listaExpoFondo}" var="item" 
                                              resizableColumns="true" 
                                      		 emptyMessage="No se encontraron registros del fondo seleccionado"
