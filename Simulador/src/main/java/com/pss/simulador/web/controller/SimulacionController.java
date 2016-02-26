@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -61,6 +62,26 @@ public class SimulacionController extends GenericController{
 	@Autowired
     private GeneralManager generalManager;
 	
+	public boolean valorEstado;
+	
+	public boolean isValorEstado() {
+		return valorEstado;
+	}
+
+	public void setValorEstado(boolean valorEstado) {
+		this.valorEstado = valorEstado;
+	}
+
+	private String estadoInicial;
+	
+	public String getEstadoInicial() {
+		return estadoInicial;
+	}
+
+	public void setEstadoInicial(String estadoInicial) {
+		this.estadoInicial = estadoInicial;
+	}
+	
 	public SimulacionController() {
 
 	}
@@ -93,14 +114,18 @@ public class SimulacionController extends GenericController{
 	}
 	
 	public void ejecutaBusqueda(){
+
+		setEstadoInicial((isValorEstado())?"0":"1");
+		System.out.println(getEstadoInicial());
 		obtieneExposicionFondo();
 	}
 	
+
 	public void obtieneExposicionFondo(){
-		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo, Constante.ESTADO_ACTIVO);
+		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo, Constante.ESTADO_ACTIVO); /*Constante.ESTADO_ACTIVO*/
 		if(selectedFondo != null){
 			limpiarListas();
-			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo(), Constante.ESTADO_ACTIVO);
+			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo(), getEstadoInicial());
 			for (ExpoFondo expo : listaTemporal) {
 				if(expo.getTpEmisor().equals(Constante.EXPO_FONDO)){
 					listaExpoFondo.add(expo);
