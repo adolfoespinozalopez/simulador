@@ -6,6 +6,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
+	<name>Simulador</name>
+	<organization>
+        <name>PSS TI</name>
+        <url>http://www.pss-ti.com/</url>
+    </organization>
+    <developers>
+        <developer>
+            <id>aespinoza</id>
+            <name>Adolfo Espinoza</name>
+            <organization>PSS TI</organization>
+        </developer>
+    </developers>
 	<repositories>
 		<repository>
 			<id>jvnet-nexus-snapshots</id>
@@ -41,6 +53,11 @@
 			<artifactId>ldapLocal</artifactId>
 			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<version>11.2.0.3</version>
+		</dependency>
 		<!-- END-Local TOMCAT -->
 		<!-- -->
 
@@ -65,11 +82,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${javax.servlet.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>11.2.0.3</version>
 		</dependency>
 
 		<dependency>
@@ -204,4 +216,22 @@
 		</dependency>
 
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>2.0</version>
+				<executions>
+	          		<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>sonar</goal>	
+						</goals>	          			
+	          		</execution>
+	          	</executions>
+          	</plugin>
+		</plugins>
+	</build>
 </project>
