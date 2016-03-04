@@ -1462,7 +1462,29 @@ comment on column BBVATESOR.TSI017_PROCESOLOG.ms_mensaje
 alter table BBVATESOR.TSI017_PROCESOLOG
   add constraint PK_PROCESOLOG primary key (CD_IDLOG);
 
-  
+/*
+ *******************************************
+ *FUNCTION FN_OBTENER_FECHA
+ *******************************************
+ */
+  CREATE OR REPLACE FUNCTION FN_OBTENER_FECHA(V_FECHA IN DATE)
+RETURN DATE is
+  V_DIA VARCHAR(20);
+  V_TEMP_DATE DATE;
+BEGIN
+  SELECT RTRIM(LTRIM(to_char(V_FECHA, 'DAY', 'NLS_DATE_LANGUAGE=SPANISH'))) 
+  INTO V_DIA
+  FROM DUAL;
+  V_TEMP_DATE := V_FECHA;
+  IF V_DIA = 'SÁBADO' THEN
+     V_TEMP_DATE := V_FECHA+2;
+  END IF;
+  IF V_DIA = 'DOMINGO' THEN
+    V_TEMP_DATE := V_FECHA+1;
+  END IF;
+  return(V_TEMP_DATE);
+end FN_OBTENER_FECHA;
+
 /*
  *******************************************
  *PACKAGE PKG_GENERAEXPOSICION

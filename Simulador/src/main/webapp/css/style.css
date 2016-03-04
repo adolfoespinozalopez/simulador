@@ -657,3 +657,10 @@ h1.title-sh {
     font-size: 17px;
     color: #C71D5E;
 }
+.adicional .ui-widget-header{
+	background: #0079c1 !important;
+    background: linear-gradient(to bottom,#0079c1 0,#00559d 100%) !important;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0079c1', endColorstr='#00559d', GradientType=0) !important;
+    border: 1px solid #00559d !important;
+    color: #fff !important;    
+}

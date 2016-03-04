@@ -7,71 +7,130 @@
     xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:form id="frmSpot">
     	<p:focus context="panelSpot"/>
-        <p:panel id="panelSpot" >
-            <table style="width: 100%;">
-                <tbody>
-                	<tr>
-                		<td style="width: 110px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
-                        <td>
-                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
-                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
-                                        showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaEfectividad}" required="true"
-                                        mindate="#{portafolioController.fechaInicial}"
-                                        maxdate="#{portafolioController.fechaFinal}">
-                            </p:calendar>
-                        </td>
-                        <td><p:message for="txtEfectividad" display="icon" /></td>
-                    </tr>
-                	<tr>
-                    	<td><h:outputLabel value="Tipo Operación:"/></td>
-                    	<td colspan="2">
-	                        <p:selectOneMenu id="lstTipoOperacionSpot" required="true" style="width: 110px;" 
-                                         	value="#{portafolioController.selectedTipoSpot}" >
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="COMPRA" itemValue="COMPRA" />
-	                            <f:selectItem itemLabel="VENTA" itemValue="VENTA" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Contraparte:"/></td>
-                        <td colspan="2">
-                            <p:selectOneMenu id="lstContraparteSpot" required="true" style="width: 250px;" 
-                                         	value="#{portafolioController.selectedContraSpot}" filter="true" filterMatchMode="startsWith">
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
-										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Tipo de Cambio Spot:" for="txtCambioSpot"/></td>
-                        <td>
-	                        <p:inputText id="txtCambioSpot" style="width: 100px;" maxlength="15" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td style="width: 50px;"><p:message for="txtCambioSpot" display="icon" /></td>
-                    </tr>
-                    <tr>
-                    	<td colspan="3"><BR/></td>
-                    </tr>
-                </tbody>
-            </table>
+        <p:panel id="panelSpot">
+        	<div style="float:left;width: 300px;">
+        		<table style="width: 100%;">
+	                <tbody>
+	                	<tr>
+	                		<td style="width: 110px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+	                        <td>
+	                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
+	                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+	                                        showOn="button" readonlyInput="true"
+	                                        value="#{portafolioController.fechaEfectividad}" required="true"
+	                                        mindate="#{portafolioController.fechaInicial}"
+	                                        maxdate="#{portafolioController.fechaFinal}">
+	                            </p:calendar>
+	                        </td>
+	                        <td><p:message for="txtEfectividad" display="icon" /></td>
+	                    </tr>
+	                	<tr>
+	                    	<td><h:outputLabel value="Tipo Operación:"/></td>
+	                    	<td colspan="2">
+		                        <p:selectOneMenu id="lstTipoOperacionSpot" required="true" style="width: 110px;" 
+	                                         	value="#{portafolioController.selectedTipoSpot}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="COMPRA" itemValue="COMPRA" />
+		                            <f:selectItem itemLabel="VENTA" itemValue="VENTA" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Contraparte:"/></td>
+	                        <td colspan="2">
+	                            <p:selectOneMenu id="lstContraparteSpot" required="true" style="width: 200px;" 
+	                                         	value="#{portafolioController.selectedContraSpot}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+											   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><p:outputLabel value="Tipo de Cambio Spot:" for="txtCambioSpot"/></td>
+	                        <td>
+		                        <p:inputText id="txtCambioSpot" style="width: 100px;" maxlength="15" required="true"
+	                                         value="#{portafolioController.tipoCambioSpot}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 50px;"><p:message for="txtCambioSpot" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                    	<td colspan="3"><BR/></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+        	</div>
+            <div style="float:right;width: 250px;">
+            	<p:panel id="panelDatosAdicionalesSpot" header="Datos Adicionales" styleClass="adicional"
+                 		 rendered="#{(portafolioController.ordenAnterior)!=null}" >
+	            	<table style="width: 100%;">
+		        		<tbody>
+		            		<tr>
+		            			<td><h:outputLabel value="País:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstPaisSpot" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedPais}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaPais}" var="pais" 
+												   	   itemValue="#{pais.cdIdgeneral}" itemLabel="#{pais.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><br/><h:outputLabel value="Mecanismo:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstMecanismoSpot" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedLugar}">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaLugar}" var="lugar" 
+												   	   itemValue="#{lugar.cdIdgeneral}" itemLabel="#{lugar.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><br/><h:outputLabel value="Intermediario:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstIntermediarioSpot" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedIntermediario}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaIntermediario}" var="inter" 
+												   	   itemValue="#{inter.cdIdgeneral}" itemLabel="#{inter.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2"><br/><h:outputLabel value="Observación:"/></td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2">
+		            				<p:inputTextarea id="obsSpot" counter="counterSpot" maxlength="120" cols="32" 
+		                            				 value="#{portafolioController.observacion}" 
+		                            				 style="font-size: 11px;width:210px; height:30px; min-height: 30px; max-height: 30px;overflow-y: auto;" counterTemplate="{0} caracteres faltantes."/>
+		                            <br/>
+		                            <h:outputText id="counterSpot" />
+		            			</td>
+		            		</tr>
+						</tbody>
+		        	</table>
+	        	</p:panel>
+            </div>
+            <div style="clear: both;"></div>
             <p:fieldset legend="Compra / Venta" id="fldSpot">
             	<table style="width: 100%;">
             		<tbody>
             			<tr>
-            			    <td style="width: 90px;"></td>
+            				<td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: center;font-weight: bold;">Fondos</td>
             			    <td style="width: 80px;text-align: center;font-weight: bold;">Monto en USD</td>
-            			    <td style="width: 40px;"></td>
+            			    <td style="width: 40px;text-align: center;font-weight: bold;">%</td>
+            			    <td style="text-align: center;"><h:outputLabel value="Monto en USD" style="width: 80px;font-weight: bold;" rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>
+            			    <td style="text-align: center;"><h:outputLabel value="%" style="width: 40px;font-weight: bold;" rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>
             			</tr>
             			<c:forEach var="var" items="#{portafolioController.listaFondoSelected}" varStatus="idx">
             				<tr>
-	            				<td><h:outputLabel value="Operación ${idx.count}:" style="font-weight: bold;"/></td>
+            					<td><h:outputLabel value="Operación ${idx.count}:" style="font-weight: bold;"/></td>
 	            				<td>
 	            					<p:selectOneMenu id="lstFondoSpot${idx.count}" style="width: 190px;" 
 		                                         	 value="#{var.nbNomFondo}" >
@@ -81,22 +140,38 @@
 			                        </p:selectOneMenu>
 	                            </td>
 	                            <td><p:inputText id="txtMontoSpot${idx.count}" style="width: 80px;" maxlength="10"  
-	                             				 value="#{var.monto}">
+	                             				 value="#{var.monto}" readonly="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
 	                            </td>
-	                            <td><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
+	                            <td style="text-align: center;"><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
+	                            
+	                            <td><p:inputText id="txtMontoSpot2${idx.count}" style="width: 80px;" maxlength="10"  
+	                             				 value="#{var.montoNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}">
+	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
+	                             	</p:inputText>
+	                            </td>
+	                            <td><h:outputLabel value="${var.porcentajeNuevo}" style="font-weight: bold;color: #499900;" 
+	                            				   rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>
 	            			</tr>
             			</c:forEach>
                     	<tr>
-            			    <td style="width: 80px;"></td>
+                    		<td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total Operar USD :</td>
             			    <td style="width: 80px;text-align: center;">
-            			    	<p:inputText id="txtTotalSpot" style="width: 80px;" maxlength="10"  
+            			    	<p:inputText id="txtTotalSpot" style="width: 80px;" readonly="true"   
                              				 value="#{portafolioController.montoTotal}" />
             			    </td>
-            			    <td style="width: 50px;">
+            			    <td style="text-align: center;width: 40px;">
             			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
+            			    </td>
+            			    <td style="text-align: center;">
+            			    	<p:inputText id="txtTotalSpotNuevo" style="width: 80px;" readonly="true"   
+                             				 value="#{portafolioController.montoTotalNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
+            			    </td>
+            			    <td style="text-align: center;">
+            			    	<h:outputLabel id="lblPorcTotalSpotNuevo" value="${portafolioController.porcentajeTotalNuevo}" 
+            			    				   style="font-weight: bold;color: #499900;" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
             			    </td>
             			</tr>
             		</tbody>

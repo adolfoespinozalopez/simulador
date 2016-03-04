@@ -8,91 +8,148 @@
     	<p:focus context="panelRenuevaDeposito"/>
         <p:panel id="panelRenuevaDeposito" header="Detalle Renovación" 
                  rendered="#{(portafolioController.selectedInfo != null)?true:false}">
-            <table style="width: 100%;">
-                <tbody>
-                	<tr>
-                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
-                        <td colspan="4">
-                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
-                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
-                                        showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
-                                        mindate="#{portafolioController.fechaInicial}"
-                                        maxdate="#{portafolioController.fechaFinal}">
-                            </p:calendar>
-                        </td>
-                        <td><p:message for="txtEfectividad" display="icon" /></td>
-                    </tr>
-                	<tr>
-                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
-                        <td colspan="5">
-                            <p:inputText id="txtFondoRen" style="width: 315px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.nbNomFondo}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Contraparte:"/></td>
-                        <td colspan="5">
-                            <p:inputText id="txtContraparteRen" style="width: 315px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.nbNomEmisor}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Moneda:"/></td>
-                        <td colspan="2">
-	                        <p:inputText id="txtmonedaRen" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
-                        </td>
-                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
-                        <td colspan="2">
-	                        <p:inputText id="txtTipoRen" style="width: 100px;" readonly="true" 
-                                         value="#{portafolioController.selectedInfo.tipoApertura}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Importe:" for="txtImpRen"/></td>
-                        <td colspan="4">
-	                        <p:inputText id="txtImpRen" style="width: 315px;" maxlength="30" required="true"
-                                         value="#{portafolioController.importeRenova}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td><p:message for="txtImpRen" display="icon" /></td>
-                    </tr>
-                    <tr>
-                    	<td><p:outputLabel value="Tasa:" for="txtTasaRen"/></td>
-                        <td>
-	                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="12" required="true"
-                                         value="#{portafolioController.tasaRenova}" >
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td style="width: 40px;"><p:message for="txtTasaRen" display="icon" /></td>
-                        <td><p:outputLabel value="Plazo:" for="txtPlazoRen"/></td>
-                        <td>
-	                        <p:inputText id="txtPlazoRen" style="width: 100px;" maxlength="10" required="true" 
-                                         value="#{portafolioController.plazoRenova}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVctoRenueva}" update="@this, :frmRenuevaDeposito:fecVctoRen, msgRenovar, growl" />
-						    </p:inputText>
-                        </td>
-                        <td style="width: 40px;"><p:message for="txtPlazoRen" display="icon" /></td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Fecha Vcto:"/></td>
-                        <td colspan="5">
-                            <p:calendar maxlength="10" id="fecVctoRen" size="13" effect="fadeIn" 
-                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
-                                        value="#{portafolioController.fechaVctoRenova}"
-                                        styleClass="disabled">
-                            </p:calendar>
-                        </td>
-                    </tr>
-                    <tr>
-                    	<td colspan="6"><BR/></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="float:left;width: 350px;">
+	            <table style="width: 100%;">
+	                <tbody>
+	                	<tr>
+	                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+	                        <td colspan="4">
+	                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
+	                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+	                                        showOn="button" readonlyInput="true"
+	                                        value="#{portafolioController.selectedInfo.fhFecEfectividad}" required="true"
+	                                        mindate="#{portafolioController.fechaInicial}"
+	                                        maxdate="#{portafolioController.fechaFinal}">
+	                            </p:calendar>
+	                        </td>
+	                        <td><p:message for="txtEfectividad" display="icon" /></td>
+	                    </tr>
+	                	<tr>
+	                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
+	                        <td colspan="5">
+	                            <p:inputText id="txtFondoRen" style="width: 315px;" readonly="true" 
+	                                         value="#{portafolioController.selectedInfo.nbNomFondo}" />
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Contraparte:"/></td>
+	                        <td colspan="5">
+	                            <p:inputText id="txtContraparteRen" style="width: 315px;" readonly="true" 
+	                                         value="#{portafolioController.selectedInfo.nbNomEmisor}" />
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Moneda:"/></td>
+	                        <td colspan="2">
+		                        <p:inputText id="txtmonedaRen" style="width: 100px;" readonly="true" 
+	                                         value="#{portafolioController.selectedInfo.tpAbrevMoneda}" />
+	                        </td>
+	                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
+	                        <td colspan="2">
+		                        <p:inputText id="txtTipoRen" style="width: 100px;" readonly="true" 
+	                                         value="#{portafolioController.selectedInfo.tipoApertura}" />
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><p:outputLabel value="Importe:" for="txtImpRen"/></td>
+	                        <td colspan="4">
+		                        <p:inputText id="txtImpRen" style="width: 315px;" maxlength="30" required="true"
+	                                         value="#{portafolioController.importeRenova}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td><p:message for="txtImpRen" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                    	<td><p:outputLabel value="Tasa:" for="txtTasaRen"/></td>
+	                        <td>
+		                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="12" required="true"
+	                                         value="#{portafolioController.tasaRenova}" >
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 40px;"><p:message for="txtTasaRen" display="icon" /></td>
+	                        <td><p:outputLabel value="Plazo:" for="txtPlazoRen"/></td>
+	                        <td>
+		                        <p:inputText id="txtPlazoRen" style="width: 100px;" maxlength="10" required="true" 
+	                                         value="#{portafolioController.plazoRenova}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+	                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVctoRenueva}" update="@this, :frmRenuevaDeposito:fecVctoRen, msgRenovar, growl" />
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 40px;"><p:message for="txtPlazoRen" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Fecha Vcto:"/></td>
+	                        <td colspan="5">
+	                            <p:calendar maxlength="10" id="fecVctoRen" size="13" effect="fadeIn" 
+	                        				locale="es" navigator="true" pattern="dd/MM/yyyy" disabled="true"
+	                                        value="#{portafolioController.fechaVctoRenova}"
+	                                        styleClass="disabled">
+	                            </p:calendar>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                    	<td colspan="6"><BR/></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+            </div>
+            <div style="float:right;width: 250px;">
+            	<p:panel id="panelDatosAdicionalesRen" header="Datos Adicionales" styleClass="adicional"
+                 		 rendered="#{(portafolioController.ordenAnterior)!=null}" style="float:right;">
+	           	<table style="width: 100%;">
+	        		<tbody>
+	            		<tr>
+	            			<td><h:outputLabel value="País:"/></td>
+	                        <td>
+	                            <p:selectOneMenu id="lstPaisRen" required="true" style="width: 150px;" 
+	                                         	value="#{portafolioController.selectedPais}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaPais}" var="pais" 
+											   	   itemValue="#{pais.cdIdgeneral}" itemLabel="#{pais.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	            		</tr>
+	            		<tr>
+	            			<td><h:outputLabel value="Mecanismo:"/></td>
+	                        <td>
+	                            <p:selectOneMenu id="lstMecanismoRen" required="true" style="width: 150px;" 
+	                                         	value="#{portafolioController.selectedLugar}">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaLugar}" var="lugar" 
+											   	   itemValue="#{lugar.cdIdgeneral}" itemLabel="#{lugar.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	            		</tr>
+	            		<tr>
+	            			<td><h:outputLabel value="Intermediario:"/></td>
+	                        <td>
+	                            <p:selectOneMenu id="lstIntermediarioRen" required="true" style="width: 150px;" 
+	                                         	value="#{portafolioController.selectedIntermediario}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaIntermediario}" var="inter" 
+											   	   itemValue="#{inter.cdIdgeneral}" itemLabel="#{inter.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	            		</tr>
+	            		<tr>
+	            			<td colspan="2"><br></br><h:outputLabel value="Observación:"/></td>
+	            		</tr>
+	            		<tr>
+	            			<td colspan="2">
+	            				<p:inputTextarea id="obsRen" counter="counterRen" maxlength="120" cols="32" 
+	                            				 value="#{portafolioController.observacion}" 
+	                            				 style="font-size: 11px;width:210px; height:60px; min-height: 60px; max-height: 60px;overflow-y: auto;" counterTemplate="{0} caracteres faltantes."/>
+	                            <br/>
+	                            <h:outputText id="counterRen" />
+	            			</td>
+	            		</tr>
+					</tbody>
+	        	</table>
+	        </p:panel>
+            </div>
+            <div style="clear: both;"></div>
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">

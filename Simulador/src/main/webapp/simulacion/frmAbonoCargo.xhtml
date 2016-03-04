@@ -6,70 +6,127 @@
     xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAbonoCargo">
     	<p:focus context="panelAbonoCargo"/>
-        <p:panel id="panelAbonoCargo" header="Detalle Abono / Cargo" >
-            <table style="width: 100%;">
-                <tbody>
-                	<tr>
-                		<td style="width: 100px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
-                        <td>
-                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
-                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
-                                        showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaEfectividad}" required="true"
-                                        mindate="#{portafolioController.fechaInicial}"
-                                        maxdate="#{portafolioController.fechaFinal}">
-                            </p:calendar>
-                        </td>
-                        <td><p:message for="txtEfectividad" display="icon" /></td>
-                    </tr>
-                	<tr>
-                        <td style="width: 100px;"><h:outputLabel value="Fondo:"/></td>
-                        <td colspan="2">
-                            <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 240px;" 
-                                         	value="#{portafolioController.selectedFondoAbono}" filter="true" filterMatchMode="startsWith">
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
-										   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                    	<td><h:outputLabel value="Tipo Operación:"/></td>
-                    	<td colspan="2">
-	                        <p:selectOneMenu id="lstTipoAbono" required="true" style="width: 240px;" 
-                                         	value="#{portafolioController.selectedTipoAbono}" >
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="ABONO" itemValue="ABONO" />
-	                            <f:selectItem itemLabel="CARGO" itemValue="CARGO" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Contraparte:"/></td>
-                        <td colspan="2">
-                            <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 240px;" 
-                                         	value="#{portafolioController.selectedContraAbono}" filter="true" filterMatchMode="startsWith">
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
-										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Monto en USD:" for="txtMontoAbono"/></td>
-                        <td>
-	                        <p:inputText id="txtMontoAbono" style="width: 230px;" maxlength="30" required="true"
-                                         value="#{portafolioController.montoAbono}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td style="width: 50px;"><p:message for="txtMontoAbono" display="icon" /></td>
-                    </tr>
-                    <tr>
-                    	<td colspan="3"><BR/></td>
-                    </tr>
-                </tbody>
-            </table>
+        <p:panel id="panelAbonoCargo" header="Detalle Abono / Cargo">
+	        <div style="float:left;width: 350px;">
+	        	<table style="width: 100%;">
+	                <tbody>
+	                	<tr>
+	                		<td style="width: 100px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+	                        <td>
+	                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="12" 
+	                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+	                                        showOn="button" readonlyInput="true"
+	                                        value="#{portafolioController.fechaEfectividad}" required="true"
+	                                        mindate="#{portafolioController.fechaInicial}"
+	                                        maxdate="#{portafolioController.fechaFinal}">
+	                            </p:calendar>
+	                        </td>
+	                        <td><p:message for="txtEfectividad" display="icon" /></td>
+	                    </tr>
+	                	<tr>
+	                        <td style="width: 100px;"><h:outputLabel value="Fondo:"/></td>
+	                        <td colspan="2">
+	                            <p:selectOneMenu id="lstFondoAbono" required="true" style="width: 240px;" 
+	                                         	value="#{portafolioController.selectedFondoAbono}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
+											   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                    	<td><h:outputLabel value="Tipo Operación:"/></td>
+	                    	<td colspan="2">
+		                        <p:selectOneMenu id="lstTipoAbono" required="true" style="width: 240px;" 
+	                                         	value="#{portafolioController.selectedTipoAbono}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="ABONO" itemValue="ABONO" />
+		                            <f:selectItem itemLabel="CARGO" itemValue="CARGO" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Contraparte:"/></td>
+	                        <td colspan="2">
+	                            <p:selectOneMenu id="lstContraparteAbono" required="true" style="width: 240px;" 
+	                                         	value="#{portafolioController.selectedContraAbono}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+											   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><p:outputLabel value="Monto en USD:" for="txtMontoAbono"/></td>
+	                        <td>
+		                        <p:inputText id="txtMontoAbono" style="width: 230px;" maxlength="30" required="true"
+	                                         value="#{portafolioController.montoAbono}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 50px;"><p:message for="txtMontoAbono" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                    	<td colspan="3"><BR/></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	        <div style="float:right;width: 250px;">
+	        	<p:panel id="panelDatosAdicionalesAbono" header="Datos Adicionales" styleClass="adicional"
+		                 rendered="#{(portafolioController.ordenAnterior)!=null}" style="float:right;">
+		        	<table style="width: 100%;">
+		        		<tbody>
+		            		<tr>
+		            			<td><h:outputLabel value="País:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstPaisAbono" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedPais}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaPais}" var="pais" 
+												   	   itemValue="#{pais.cdIdgeneral}" itemLabel="#{pais.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Mecanismo:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstMecanismoAbono" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedLugar}">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaLugar}" var="lugar" 
+												   	   itemValue="#{lugar.cdIdgeneral}" itemLabel="#{lugar.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Intermediario:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstIntermediarioAbono" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedIntermediario}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaIntermediario}" var="inter" 
+												   	   itemValue="#{inter.cdIdgeneral}" itemLabel="#{inter.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2"><br></br><h:outputLabel value="Observación:"/></td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2">
+		            				<p:inputTextarea id="obsAbono" counter="counterAbono" maxlength="120" cols="32" 
+		                            				 value="#{portafolioController.observacion}" 
+		                            				 style="font-size: 11px;width:210px; height:50px; min-height: 50px; max-height: 50px;overflow-y: auto;" counterTemplate="{0} caracteres faltantes."/>
+		                            <br/>
+		                            <h:outputText id="counterAbono" />
+		            			</td>
+		            		</tr>
+						</tbody>
+		        	</table>
+		        </p:panel>
+	        </div>
+            <div style="clear: both;"></div>
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">

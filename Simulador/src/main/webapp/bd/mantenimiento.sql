@@ -35,7 +35,7 @@ CREATE  UNIQUE INDEX ISI019P1_Sede ON bbvatesor.TSI019_Sede (cd_idsede);
  *******************************************
  */
 
-
+/*
  *******************************************
  *PERMISOS APP
  *******************************************
@@ -63,7 +63,7 @@ CREATE or replace SYNONYM TSI019_Sede  FOR bbvatesor.TSI019_Sede;
  */
 CREATE SEQUENCE bbvatesor.SEQ_SEDE;
 
-
+/*
  *******************************************
  * INSERTS TSI005_GENERAL
  *******************************************

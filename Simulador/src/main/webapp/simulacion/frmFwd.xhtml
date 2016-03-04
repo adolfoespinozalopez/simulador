@@ -8,6 +8,7 @@
     <h:form id="frmFwd">
     	<p:focus context="panelFwd"/>
         <p:panel id="panelFwd" >
+        	<div style="float:left;width: 350px;">
             <table style="width: 100%;">
                 <tbody>
                 	<tr>
@@ -108,20 +109,76 @@
                     </tr>
                 </tbody>
             </table>
-            
-            
+            </div>
+            <div style="float:right;width: 250px;">
+            	<p:panel id="panelDatosAdicionalesFwd" header="Datos Adicionales" styleClass="adicional"
+                 		 rendered="#{(portafolioController.ordenAnterior)!=null}">
+		        	<table style="width: 100%;">
+		        		<tbody>
+		            		<tr>
+		            			<td><h:outputLabel value="País:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstPaisFwd" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedPais}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaPais}" var="pais" 
+												   	   itemValue="#{pais.cdIdgeneral}" itemLabel="#{pais.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Mecanismo:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstMecanismoFwd" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedLugar}">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaLugar}" var="lugar" 
+												   	   itemValue="#{lugar.cdIdgeneral}" itemLabel="#{lugar.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Intermediario:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstIntermediarioFwd" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedIntermediario}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaIntermediario}" var="inter" 
+												   	   itemValue="#{inter.cdIdgeneral}" itemLabel="#{inter.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2"><br/><h:outputLabel value="Observación:"/></td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2">
+		            				<p:inputTextarea id="obsFwd" counter="counterFwd" maxlength="120" cols="32" 
+		                            				 value="#{portafolioController.observacion}" 
+		                            				 style="font-size: 11px;width:210px; height:40px; min-height: 40px; max-height: 40px;overflow-y: auto;" counterTemplate="{0} caracteres faltantes."/>
+		                            <br/>
+		                            <h:outputText id="counterFwd" />
+		            			</td>
+		            		</tr>
+						</tbody>
+		        	</table> 
+		        </p:panel>
+            </div>
+            <div style="clear: both;"></div>
             <p:fieldset legend="Compra / Venta" id="fldFwd">
             	<table style="width: 100%;">
             		<tbody>
             			<tr>
-            			    <td style="width: 90px;"></td>
+            				<td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: center;font-weight: bold;">Fondos</td>
             			    <td style="width: 80px;text-align: center;font-weight: bold;">Monto en USD</td>
-            			    <td style="width: 40px;"></td>
+            			    <td style="width: 40px;text-align: center;font-weight: bold;">%</td>
+            			    <td style="text-align: center;"><h:outputLabel value="Monto en USD" style="width: 80px;font-weight: bold;" rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>
+            			    <td style="text-align: center;"><h:outputLabel value="%" style="width: 40px;font-weight: bold;" rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>
             			</tr>
             			<c:forEach var="var" items="#{portafolioController.listaFondoSelected}" varStatus="idx">
             				<tr>
-	            				<td><h:outputLabel value="Operación ${idx.count}:" style="font-weight: bold;"/></td>
+            					<td><h:outputLabel value="Operación ${idx.count}:" style="font-weight: bold;"/></td>
 	            				<td>
 	            					<p:selectOneMenu id="lstFondoFwd${idx.count}" style="width: 210px;" 
 		                                         	 value="#{var.nbNomFondo}" >
@@ -131,23 +188,38 @@
 			                        </p:selectOneMenu>
 	                            </td>
 	                            <td><p:inputText id="txtMontoFwd${idx.count}" style="width: 80px;" maxlength="10"  
-	                             				 value="#{var.monto}">
+	                             				 value="#{var.monto}" disabled="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
 	                            </td>
-	                            <td><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
+	                            <td style="text-align: center;"><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
+	                            
+	                            <td><p:inputText id="txtMontoFwd2${idx.count}" style="width: 80px;" maxlength="10"  
+	                             				 value="#{var.montoNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}">
+	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
+	                             	</p:inputText>
+	                            </td>
+	                            <td><h:outputLabel value="${var.porcentajeNuevo}" style="font-weight: bold;color: #499900;" 
+	                            				   rendered="#{(portafolioController.ordenAnterior)!=null}"/></td>                            				   
 	            			</tr>
             			</c:forEach>
-            			
                     	<tr>
-            			    <td style="width: 90px;"></td>
+                    		<td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total Operar USD :</td>
-            			    <td style="width: 80px;text-align: center;">
-            			    	<p:inputText id="txtTotalFwd" style="width: 80px;" maxlength="10"  
+            			    <td style="width: 80px;">
+            			    	<p:inputText id="txtTotalFwd" style="width: 80px;" readonly="true" 
                              				 value="#{portafolioController.montoTotal}" />
             			    </td>
             			    <td style="width: 40px;">
             			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
+            			    </td>
+            			    <td>
+            			    	<p:inputText id="txtTotalFwdNuevo" style="width: 80px;" readonly="true"   
+                             				 value="#{portafolioController.montoTotalNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
+            			    </td>
+            			    <td style="text-align: center;">
+            			    	<h:outputLabel id="lblPorcTotalFwdNuevo" value="${portafolioController.porcentajeTotalNuevo}" 
+            			    				   style="font-weight: bold;color: #499900;" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
             			    </td>
             			</tr>
             		</tbody>

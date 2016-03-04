@@ -6,108 +6,165 @@
     xmlns:pe="http://primefaces.org/ui/extensions">
     <h:form id="frmAperturaDeposito">
     	<p:focus context="panelAperturaDeposito"/>
-        <p:panel id="panelAperturaDeposito" header="Detalle Apertura" >
-            <table style="width: 100%;">
-                <tbody>
-                	<tr>
-                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
-                        <td colspan="4">
-                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
-                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
-                                        showOn="button" readonlyInput="true"
-                                        value="#{portafolioController.fechaEfectividad}" required="true"
-                                        mindate="#{portafolioController.fechaInicial}"
-                                        maxdate="#{portafolioController.fechaFinal}">
-                            </p:calendar>
-                        </td>
-                        <td><p:message for="txtEfectividad" display="icon" /></td>
-                    </tr>
-                	<tr>
-                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
-                        <td colspan="5">
-                            <p:selectOneMenu id="lstFondoAper" required="true" style="width: 325px;" 
-                                         	value="#{portafolioController.selectedFondoAper}" filter="true" filterMatchMode="startsWith">
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
-										   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Contraparte:"/></td>
-                        <td colspan="5">
-                            <p:selectOneMenu id="lstContraAper" required="true" style="width: 325px;" 
-                                         	value="#{portafolioController.selectedContraAper}" filter="true" filterMatchMode="startsWith">
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
-										   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Moneda:"/></td>
-                        <td colspan="2">
-	                        <p:selectOneMenu id="lstMonedaAper" required="true" style="width: 110px;" 
-                                         	value="#{portafolioController.selectedMonedaAper}" >
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItems value="#{portafolioController.listaMoneda}" var="moneda" 
-										   	   itemValue="#{moneda.nbValorGeneral}" itemLabel="#{moneda.nbDescGeneral}" />
-	                        </p:selectOneMenu>
-                        </td>
-                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
-                        <td colspan="2">
-	                        <p:selectOneMenu id="lstTipoAper" required="true" style="width: 112px;" 
-                                         	value="#{portafolioController.selectedTipoAper}" >
-	                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
-	                            <f:selectItem itemLabel="NORMAL" itemValue="NORMAL" />
-	                            <f:selectItem itemLabel="COBERTURADO" itemValue="COBERTURADO" />
-	                        </p:selectOneMenu>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><p:outputLabel value="Importe:" for="txtImpAper"/></td>
-                        <td colspan="4">
-	                        <p:inputText id="txtImpAper" style="width: 315px;" maxlength="30" required="true"
-                                         value="#{portafolioController.importeAper}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td><p:message for="txtImpAper" display="icon" /></td>
-                    </tr>
-                    <tr>
-                    	<td><p:outputLabel value="Tasa:" for="txtTasaAper"/></td>
-                        <td>
-	                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="12" required="true"
-                                         value="#{portafolioController.tasaAper}">
-                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
-						    </p:inputText>
-                        </td>
-                        <td style="width: 40px;"><p:message for="txtTasaAper" display="icon" /></td>
-                        <td><p:outputLabel value="Plazo:" for="txtPlazoAper"/></td>
-                        <td>
-	                        <p:inputText id="txtPlazoAper" style="width: 105px;" maxlength="10" required="true" 
-                                         value="#{portafolioController.plazoAper}" >
-                            	<pe:keyFilter regEx="/[\d\.\s,]/" />
-                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVcto}" update="@this, :frmAperturaDeposito:fecVcto, msgAperturar, growl" />
-						    </p:inputText>
-                        </td>
-                        <td style="width: 40px;"><p:message for="txtPlazoAper" display="icon" /></td>
-                    </tr>
-                    <tr>
-                        <td><h:outputLabel value="Fecha Vcto:"/></td>
-                        <td colspan="5">
-                            <p:calendar maxlength="10" id="fecVcto" size="13" effect="fadeIn" 
-                        				locale="es" navigator="true" pattern="EEE, dd/MM/yyyy" disabled="true"
-                                        value="#{portafolioController.fechaVctoAper}"
-                                        styleClass="disabled">
-                            </p:calendar>
-                        </td>
-                    </tr>
-                    <tr>
-                    	<td colspan="6"><BR/></td>
-                    </tr>
-                </tbody>
-            </table>
+        <p:panel id="panelAperturaDeposito" header="Detalle Apertura">
+        	<div style="float:left;width: 350px;">
+	            <table style="width: 100%;">
+	                <tbody>
+	                	<tr>
+	                		<td style="width: 70px;"><p:outputLabel value="Efectividad:" for="txtEfectividad"/></td>
+	                        <td colspan="4">
+	                            <p:calendar maxlength="10" id="txtEfectividad" placeholder="dd/MM/yyyy" size="9" 
+	                                        effect="fadeIn" locale="es" navigator="true" pattern="dd/MM/yyyy"
+	                                        showOn="button" readonlyInput="true"
+	                                        value="#{portafolioController.fechaEfectividad}" required="true"
+	                                        mindate="#{portafolioController.fechaInicial}"
+	                                        maxdate="#{portafolioController.fechaFinal}">
+	                            </p:calendar>
+	                        </td>
+	                        <td><p:message for="txtEfectividad" display="icon" /></td>
+	                    </tr>
+	                	<tr>
+	                        <td style="width: 70px;"><h:outputLabel value="Fondo:"/></td>
+	                        <td colspan="5">
+	                            <p:selectOneMenu id="lstFondoAper" required="true" style="width: 325px;" 
+	                                         	value="#{portafolioController.selectedFondoAper}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaFondo}" var="fondo" 
+											   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Contraparte:"/></td>
+	                        <td colspan="5">
+	                            <p:selectOneMenu id="lstContraAper" required="true" style="width: 325px;" 
+	                                         	value="#{portafolioController.selectedContraAper}" filter="true" filterMatchMode="startsWith">
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaContraparte}" var="contraparte" 
+											   	   itemValue="#{contraparte.nbValorGeneral}" itemLabel="#{contraparte.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Moneda:"/></td>
+	                        <td colspan="2">
+		                        <p:selectOneMenu id="lstMonedaAper" required="true" style="width: 110px;" 
+	                                         	value="#{portafolioController.selectedMonedaAper}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItems value="#{portafolioController.listaMoneda}" var="moneda" 
+											   	   itemValue="#{moneda.nbValorGeneral}" itemLabel="#{moneda.nbDescGeneral}" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                        <td style="width: 50px;"><h:outputLabel value="Tipo:"/></td>
+	                        <td colspan="2">
+		                        <p:selectOneMenu id="lstTipoAper" required="true" style="width: 112px;" 
+	                                         	value="#{portafolioController.selectedTipoAper}" >
+		                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+		                            <f:selectItem itemLabel="NORMAL" itemValue="NORMAL" />
+		                            <f:selectItem itemLabel="COBERTURADO" itemValue="COBERTURADO" />
+		                        </p:selectOneMenu>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                        <td><p:outputLabel value="Importe:" for="txtImpAper"/></td>
+	                        <td colspan="4">
+		                        <p:inputText id="txtImpAper" style="width: 315px;" maxlength="30" required="true"
+	                                         value="#{portafolioController.importeAper}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td><p:message for="txtImpAper" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                    	<td><p:outputLabel value="Tasa:" for="txtTasaAper"/></td>
+	                        <td>
+		                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="12" required="true"
+	                                         value="#{portafolioController.tasaAper}">
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 40px;"><p:message for="txtTasaAper" display="icon" /></td>
+	                        <td><p:outputLabel value="Plazo:" for="txtPlazoAper"/></td>
+	                        <td>
+		                        <p:inputText id="txtPlazoAper" style="width: 105px;" maxlength="10" required="true" 
+	                                         value="#{portafolioController.plazoAper}" >
+	                            	<pe:keyFilter regEx="/[\d\.\s,]/" />
+	                            	<p:ajax event="blur" listener="#{portafolioController.calcularFechaVcto}" update="@this, :frmAperturaDeposito:fecVcto, msgAperturar, growl" />
+							    </p:inputText>
+	                        </td>
+	                        <td style="width: 40px;"><p:message for="txtPlazoAper" display="icon" /></td>
+	                    </tr>
+	                    <tr>
+	                        <td><h:outputLabel value="Fecha Vcto:"/></td>
+	                        <td colspan="5">
+	                            <p:calendar maxlength="10" id="fecVcto" size="13" effect="fadeIn" 
+	                        				locale="es" navigator="true" pattern="EEE, dd/MM/yyyy" disabled="true"
+	                                        value="#{portafolioController.fechaVctoAper}"
+	                                        styleClass="disabled">
+	                            </p:calendar>
+	                        </td>
+	                    </tr>
+	                    <tr>
+	                    	<td colspan="6"><BR/></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+        	</div>
+        	<div style="float:right;width: 250px;">
+        		<p:panel id="panelDatosAdicionalesAper" header="Datos Adicionales" styleClass="adicional"
+		                 rendered="#{(portafolioController.ordenAnterior)!=null}" style="float:right;">
+		        	<table style="width: 100%;">
+		        		<tbody>
+		            		<tr>
+		            			<td><h:outputLabel value="País:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstPaisAper" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedPais}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaPais}" var="pais" 
+												   	   itemValue="#{pais.cdIdgeneral}" itemLabel="#{pais.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Mecanismo:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstMecanismoAper" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedLugar}">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaLugar}" var="lugar" 
+												   	   itemValue="#{lugar.cdIdgeneral}" itemLabel="#{lugar.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td><h:outputLabel value="Intermediario:"/></td>
+		                        <td>
+		                            <p:selectOneMenu id="lstIntermediarioAper" required="true" style="width: 150px;" 
+		                                         	value="#{portafolioController.selectedIntermediario}" filter="true" filterMatchMode="startsWith">
+			                            <f:selectItem itemLabel="Seleccione" itemValue="-1" />
+			                            <f:selectItems value="#{portafolioController.listaIntermediario}" var="inter" 
+												   	   itemValue="#{inter.cdIdgeneral}" itemLabel="#{inter.nbDescGeneral}" />
+			                        </p:selectOneMenu>
+		                        </td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2"><br></br><h:outputLabel value="Observación:"/></td>
+		            		</tr>
+		            		<tr>
+		            			<td colspan="2">
+		            				<p:inputTextarea id="obsAper" counter="counterAper" maxlength="120" cols="32" 
+		                            				 value="#{portafolioController.observacion}" 
+		                            				 style="font-size: 11px;width:210px; height:60px; min-height: 60px; max-height: 60px;overflow-y: auto;" counterTemplate="{0} caracteres faltantes."/>
+		                            <br/>
+		                            <h:outputText id="counterAper" />
+		            			</td>
+		            		</tr>
+						</tbody>
+		        	</table> 
+		        </p:panel>
+        	</div>
+        	<div style="clear: both;"></div>
         </p:panel>
         <p:toolbar>
             <p:toolbarGroup align="right">
