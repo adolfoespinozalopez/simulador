@@ -24,6 +24,7 @@ import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.ProcesoCarga;
 import com.pss.simulador.bs.domain.ProcesoLog;
 import com.pss.simulador.bs.domain.Saldo;
+import com.pss.simulador.bs.service.ExpoFondoManager;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.ProcesoCargaManager;
 import com.pss.simulador.helper.CargaArchivoHelper;
@@ -44,14 +45,16 @@ public class ProcesoCargaRunnable implements Runnable {
 	GeneralManager generalManager;
 	@Autowired
 	ProcesoCargaManager procesoCargaManager;
+	@Autowired
+	ExpoFondoManager expoFondoManager;
 	private ProcesoCarga procesoCarga;
-	private List<ProcesoLog> lstProcesoLog = new ArrayList<ProcesoLog>();
+	private List<ProcesoLog> lstProcesoLog;
 	public void run() {
-
+		lstProcesoLog = new ArrayList<ProcesoLog>();
 		List<General> lstGeneral = generalManager.findByDomain(
 				Constante.Dominio.RUTAPROCESOCARGA, Constante.ESTADO_TODOS);
 		String rutaArchivo = lstGeneral.get(0).getNbValorGeneral();
-
+		List<String> lstNbFondos = new ArrayList<String>();
 		FileInputStream is = null;
 		XSSFWorkbook workbook = null;
 		try {
@@ -73,6 +76,7 @@ public class ProcesoCargaRunnable implements Runnable {
 			List<Saldo> lstSaldos = this.parseToSaldo(lstObjSheetSaldos);
 			List<CobranzaPago> lstCobPag = this.parseToCobranzaPago(lstObjSheetCobPag);
 			
+			lstNbFondos = obtenerFondosExcel(lstInfoportLoad);
 			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstInfoportLoad.size()+" registros de la pestaña INFOPORT." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
 			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstSaldos.size()+" registros de la pestaña SALDOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
 			this.getLstProcesoLog().addAll(Utilitarios.addLog(Constante.Log.TipoMensaje.INFO, "Se registraron "+lstCobPag.size()+" registros de la pestaña COBRANZAPAGOS." , this.getLstProcesoLog(), this.getProcesoCarga().getCdIdproceso()));
@@ -106,8 +110,35 @@ public class ProcesoCargaRunnable implements Runnable {
 		procesoCarga.setStEstadoProceso(this.obtenerEstadoProcesoByLog(this.getLstProcesoLog()));	
 		procesoCarga = procesoCargaManager.saveProcesoCarga(procesoCarga);
 		
+		if (this.obtenerEstadoProcesoByLog(this.getLstProcesoLog()).equals(Constante.EstadoProceso.TERMINADO)){
+			for (String strNbFondo : lstNbFondos) {
+				expoFondoManager.executeExposicionDelFondo(strNbFondo, Constante.ESTADO_ACTIVO);	
+			}
+			
+		}
 	}
 	
+	/**
+	 * @param lstInfoportLoad
+	 * @return
+	 */
+	private List<String> obtenerFondosExcel(List<Infoport> lstInfoportLoad) {
+		List<String> lstResult = new ArrayList<String>();
+		for (Infoport infoport : lstInfoportLoad) {
+			Boolean esRepetido = false;
+			for (String strFondosAniadidosIter : lstResult) {
+				if (infoport.getNbNomFondo().equals(strFondosAniadidosIter)){
+					esRepetido = true;
+					break;
+				}
+			}
+			if(!esRepetido){
+				lstResult.add(infoport.getNbNomFondo());	
+			}
+		}
+		return lstResult;
+	}
+
 	/**
 	 * @param lstProcesoLog2
 	 * @return
