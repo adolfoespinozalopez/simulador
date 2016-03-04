@@ -148,9 +148,35 @@ public class Utilitarios {
     	return null;
     }
     
+    public static boolean copiaPropiedadesDeInfoport(Infoport destino, Infoport origen){
+    	try {
+			BeanUtils.copyProperties(destino, origen);
+			return true;
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			return false;
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			return false;
+		}
+    }
+    
     public static boolean copiaPropiedades(DetalleOrden destino, Infoport origen){
     	try {
 			BeanUtils.copyProperties(destino, origen);
+			return true;
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			return false;
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			return false;
+		}
+    }
+    
+    public static boolean copiaPropiedades(Infoport origen, DetalleOrden destino){
+    	try {
+			BeanUtils.copyProperties(origen, destino);
 			return true;
 		} catch (IllegalAccessException e) {
 			logger.error(e);

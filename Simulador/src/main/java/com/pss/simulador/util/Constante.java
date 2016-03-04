@@ -113,11 +113,18 @@ public class Constante {
     /**
      * Observaciones de Operaciones de Orden
      */
-    public static final String CANCELAR_OBS = "Cancelar"; 
+    public static final String CANCELAR_OBS = "Cancelar";
+    public static final String PRE_CANCELAR_OBS = "Precancelar";
     
     public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
     
     public static final String WSLDAP_ENDPOINT = "http://118.180.14.23:8080/ws-ldap3/wService?wsdl";
+    
+    public static class Moneda{
+    	public static final String PEN = "PEN";
+    	public static final String USD = "USD";
+    }
+    
     /**
      * Perfil
      */

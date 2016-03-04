@@ -17,7 +17,7 @@ import com.pss.simulador.bs.domain.Orden;
 */
 public interface OrdenRepository extends CrudRepository<Orden, Integer>{
 
-	@Query(value="SELECT o FROM Orden o WHERE o.fhFecEfectividad >= :fecEfectividad "
+	@Query(value="SELECT o FROM Orden o WHERE o.stEstado != '5' AND o.fhFecEfectividad >= :fecEfectividad "
 			+ "AND (:tipoOperacion  IS NULL OR o.tpTipoOperacion = :tipoOperacion) "
 			+ "AND (:estado 	 IS NULL OR o.stEstado = :estado) "
 			+ "AND (:userName 	 IS NULL OR o.cdUsuCreacion LIKE :userName) "

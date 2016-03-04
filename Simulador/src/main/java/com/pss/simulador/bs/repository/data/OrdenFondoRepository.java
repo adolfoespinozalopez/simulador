@@ -16,7 +16,7 @@ import com.pss.simulador.bs.domain.OrdenFondo;
 */
 public interface OrdenFondoRepository extends CrudRepository<OrdenFondo, Integer> {
 
-	@Query(value = "SELECT o FROM OrdenFondo o WHERE o.orden.cdIdorden = :idOrden ")
+	@Query(value = "SELECT o FROM OrdenFondo o WHERE o.stEstado = '1' AND o.orden.cdIdorden = :idOrden ")
 	public abstract List<OrdenFondo> findFondoByOrden(@Param("idOrden") Integer idOrden);
 	
 }

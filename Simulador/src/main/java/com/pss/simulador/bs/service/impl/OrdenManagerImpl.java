@@ -82,5 +82,18 @@ public class OrdenManagerImpl implements OrdenManager{
 		return ordenFondoRepository.save(ordenFondo);
 	}
 
+	public List<OrdenFondo> findFondoByOrden(Integer idOrden) {
+		return ordenFondoRepository.findFondoByOrden(idOrden);
+	}
+	
+	public Orden deshabilitaOrden(Orden orden) {
+		for (OrdenFondo ordenFondo : findFondoByOrden(orden.getCdIdorden())) {
+			ordenFondo.setStEstado(Constante.ESTADO_INACTIVO);
+			ordenFondo.setFhFecElimina(orden.getFhFecElimina());
+			ordenFondo.setCdUsuElimina(orden.getCdUsuElimina());
+			ordenFondoRepository.save(ordenFondo);
+		}
+		return ordenRepository.save(orden);
+	}
 	
 }

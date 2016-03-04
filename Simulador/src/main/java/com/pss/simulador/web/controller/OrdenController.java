@@ -1,11 +1,10 @@
 package com.pss.simulador.web.controller;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.pss.simulador.bs.domain.DetalleOrden;
 import com.pss.simulador.bs.domain.Fondo;
 import com.pss.simulador.bs.domain.General;
 import com.pss.simulador.bs.domain.Infoport;
 import com.pss.simulador.bs.domain.Orden;
 import com.pss.simulador.bs.domain.OrdenEstado;
+import com.pss.simulador.bs.domain.OrdenFondo;
 import com.pss.simulador.bs.service.GeneralManager;
 import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
@@ -71,6 +72,7 @@ public class OrdenController extends GenericController{
 	private DecimalFormat formato = new DecimalFormat("###,###,###.00");
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
 	private SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
 	
 	public OrdenController(){
 		
@@ -78,6 +80,11 @@ public class OrdenController extends GenericController{
 	
 	@PostConstruct
 	public void init() {
+		otherSymbols.setGroupingSeparator((char) 44);
+		otherSymbols.setDecimalSeparator((char) 46);
+		formatoTasa=new DecimalFormat("0.00", otherSymbols);
+		formato = new DecimalFormat("###,###,###.00", otherSymbols);
+		
 		selectedTipoOperacion = Constante.NO_OPTION_SELECTED;
 		listaTipoOperacion = generalManager.findByDomainAndState(Constante.Dominio.TIPO_OPERACION, Constante.ESTADO_ACTIVO);
 		
@@ -114,15 +121,19 @@ public class OrdenController extends GenericController{
 	public void ejecutarbusqueda(){
 		//listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
 		listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
+		selectedOrdenes = new ArrayList<Orden>();
 	}
 	
-	public void editarOrden(Orden orden){
+	public void editarOrden(Orden orden, boolean bActualiza){
 		if(orden != null){
 			RequestContext context = RequestContext.getCurrentInstance();
 			Infoport selectedInfo = new Infoport();
 			portafolioController.setFechaEfectividad(orden.getFhFecEfectividad());
+			//Detalle
+			for (DetalleOrden detalle : ordenManager.findDetalleByOrden(orden.getCdIdorden())) {
+				Utilitarios.copiaPropiedades(selectedInfo, detalle);
+			}
 			selectedInfo.setFhFecEfectividad(orden.getFhFecEfectividad());
-			//selectedInfo.setNbNomFondo(orden.getFondo().getNbNomFondo());
 			if(orden.getContraparte()!=null){
 				selectedInfo.setNbNomEmisor(orden.getContraparte().getNbDescGeneral());
 			}
@@ -134,7 +145,9 @@ public class OrdenController extends GenericController{
 			selectedInfo.setPlazo(orden.getNuPlazoDia());
 			selectedInfo.setFhFecEmision(orden.getFhFecInicio());
 			selectedInfo.setFhFecVencimiento(orden.getFhFecVencimiento());
-			portafolioController.setListaFondoSelected(new ArrayList<Fondo>());
+			selectedInfo.setIdOperacion(orden.getOperacion().getCdIdgeneral());
+			
+			setearDatosDeFondo(selectedInfo, orden);
 			switch (orden.getOperacion().getCdIdgeneral()) {
 			case Constante.ID_OPERA_CANCELACION:
 				selectedInfo.setMontoCapital(formato.format(orden.getImCapital()));
@@ -152,25 +165,11 @@ public class OrdenController extends GenericController{
 				context.execute("PF('mantePreCancelarDeposito').show()");
 				break;
 			case Constante.ID_OPERA_APERTURA_DPF:
-				portafolioController.setSelectedFondoAper(selectedInfo.getNbNomFondo());
-				portafolioController.setSelectedContraAper(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setSelectedMonedaAper(orden.getTipoMoneda().getNbDescGeneral());
-				portafolioController.setSelectedTipoAper(orden.getTpApertura());
-				portafolioController.setImporteAper(formato.format(orden.getImMontoFinal()));
-				portafolioController.setTasaAper(formatoTasa.format(orden.getImTasa()));
-				portafolioController.setPlazoAper(selectedInfo.getPlazo().toString());
-				portafolioController.setFechaVctoAper(orden.getFhFecVencimiento());
+				setearDatosDeOrdenTipoApertura(selectedInfo, orden);
 				context.execute("PF('manteAperturaDeposito').show()");
 				break;
 			case Constante.ID_OPERA_APERTURA_DPF_COB:
-				portafolioController.setSelectedFondoAper(selectedInfo.getNbNomFondo());
-				portafolioController.setSelectedContraAper(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setSelectedMonedaAper(orden.getTipoMoneda().getNbDescGeneral());
-				portafolioController.setSelectedTipoAper(orden.getTpApertura());
-				portafolioController.setImporteAper(formato.format(orden.getImMontoFinal()));
-				portafolioController.setTasaAper(formatoTasa.format(orden.getImTasa()));
-				portafolioController.setPlazoAper(selectedInfo.getPlazo().toString());
-				portafolioController.setFechaVctoAper(orden.getFhFecVencimiento());
+				setearDatosDeOrdenTipoApertura(selectedInfo, orden);
 				context.execute("PF('manteAperturaDeposito').show()");
 				break;
 			case Constante.ID_OPERA_RENOVACION:
@@ -181,140 +180,167 @@ public class OrdenController extends GenericController{
 				context.execute("PF('manteRenuevaDeposito').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_SPOT:
-				portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoSpot(orden);
 				context.execute("PF('manteSpot').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_SPOT:
-				portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoSpot(orden);
 				context.execute("PF('manteSpot').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_FWD:
-				portafolioController.setSelectedTipoFwd(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedContraFwd(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setSelectedSettleFwd(orden.getTpForward());
-				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				portafolioController.setPuntosFwd(orden.getNuPuntofwd().toString());
-				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
-				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
-				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoForward(orden);
 				context.execute("PF('manteFwd').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_FWD:
-				portafolioController.setSelectedTipoFwd(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedContraFwd(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setSelectedSettleFwd(orden.getTpForward());
-				portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-				portafolioController.setPuntosFwd(orden.getNuPuntofwd().toString());
-				portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
-				portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
-				portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoForward(orden);
 				context.execute("PF('manteFwd').show()");
 				break;
 			case Constante.ID_OPERA_ABONO_CTA_AHORRO:
-				portafolioController.setSelectedFondoAbono(selectedInfo.getNbNomFondo());
-				portafolioController.setSelectedTipoAbono(orden.getTpOperaCuenta());
-				portafolioController.setSelectedContraAbono(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setMontoAbono(formato.format(orden.getImMontoFinal()));
+				setearDatosDeOrdenTipoAbonoRetiro(selectedInfo, orden);
 				context.execute("PF('manteAbonoCargo').show()");
 				break;
 			case Constante.ID_OPERA_RETIRO_CTA_AHORRO:
-				portafolioController.setSelectedFondoAbono(selectedInfo.getNbNomFondo());
-				portafolioController.setSelectedTipoAbono(orden.getTpOperaCuenta());
-				portafolioController.setSelectedContraAbono(orden.getContraparte().getNbDescGeneral());
-				portafolioController.setMontoAbono(formato.format(orden.getImMontoFinal()));
+				setearDatosDeOrdenTipoAbonoRetiro(selectedInfo, orden);
 				context.execute("PF('manteAbonoCargo').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_FIJA:
-				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
-				portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
-				portafolioController.setMonto(orden.getImMontoFinal().toString());
-				portafolioController.setMnemonico(orden.getNbMnemonico());
-				if(orden.getImPrecioLimpio() != null){
-					portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
-				}
-				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoFija(orden);
 				context.execute("PF('manteRentaFija').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_FIJA:
-				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
-				if(orden.getEmisor() !=null){
-					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
-				}
-				portafolioController.setMonto(orden.getImMontoFinal().toString());
-				portafolioController.setMnemonico(orden.getNbMnemonico());
-				portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
-				portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
-				portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+				setearDatosDeOrdenTipoFija(orden);
 				context.execute("PF('manteRentaFija').show()");
 				break;
 			case Constante.ID_OPERA_COMPRA_VARIABLE:
-				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
-				if(orden.getEmisor() !=null){
-					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
-				}
-				portafolioController.setMonto(orden.getImMontoFinal().toString());
-				portafolioController.setMnemonico(orden.getNbMnemonico());
-				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
+				setearDatosDeOrdenTipoVariable(orden);
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			case Constante.ID_OPERA_VENTA_VARIABLE:
-				portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
-				portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
-				if(orden.getEmisor() !=null){
-					portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
-				}
-				portafolioController.setMonto(orden.getImMontoFinal().toString());
-				portafolioController.setMnemonico(orden.getNbMnemonico());
-				portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
-				
-				//orden.getFondo().setMonto(orden.getImMontoFinal().toString());
-				//portafolioController.getListaFondoSelected().add(orden.getFondo());
-				
+				setearDatosDeOrdenTipoVariable(orden);
 				context.execute("PF('manteRentaVariable').show()");
 				break;
 			default:
 				break;
 			}
+			portafolioController.setSelectedLugar(Constante.NO_OPTION_SELECTED);
+			portafolioController.setSelectedPais(Constante.NO_OPTION_SELECTED);
+			portafolioController.setSelectedIntermediario(Constante.NO_OPTION_SELECTED);
+			portafolioController.setObservacion("");
+			//Datos Adicionales
+			if(orden.getLugar() != null){
+				portafolioController.setSelectedLugar(orden.getLugar().getCdIdgeneral().toString());
+			}
+			if(orden.getPais() != null){
+				portafolioController.setSelectedPais(orden.getPais().getCdIdgeneral().toString());
+			}
+			if(orden.getIntermediario() != null){
+				portafolioController.setSelectedIntermediario(orden.getIntermediario().getCdIdgeneral().toString());
+			}
+			portafolioController.setObservacion("");
+			
 			portafolioController.setOrdenAnterior(orden);
 			portafolioController.setSelectedInfo(selectedInfo);
+			if(bActualiza){
+				portafolioController.getOrdenAnterior().setStEstado(Constante.OrdenEstado.APROBADO);
+			}
+		}
+	}
+	
+	public void setearDatosDeOrdenTipoApertura(Infoport selectedInfo, Orden orden){
+		portafolioController.setSelectedFondoAper(selectedInfo.getNbNomFondo());
+		portafolioController.setSelectedContraAper(orden.getContraparte().getNbDescGeneral());
+		portafolioController.setSelectedMonedaAper(orden.getTipoMoneda().getNbDescGeneral());
+		portafolioController.setSelectedTipoAper(orden.getTpApertura());
+		portafolioController.setImporteAper(formato.format(orden.getImMontoFinal()));
+		portafolioController.setTasaAper(formatoTasa.format(orden.getImTasa()));
+		portafolioController.setPlazoAper(selectedInfo.getPlazo().toString());
+		portafolioController.setFechaVctoAper(orden.getFhFecVencimiento());
+	}
+	
+	public void setearDatosDeOrdenTipoSpot(Orden orden){
+		portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
+		portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
+		portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
+		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+	}
+	
+	public void setearDatosDeOrdenTipoForward(Orden orden){
+		portafolioController.setSelectedTipoFwd(orden.getTpMonedaOperacion());
+		portafolioController.setSelectedContraFwd(orden.getContraparte().getNbDescGeneral());
+		portafolioController.setSelectedSettleFwd(orden.getTpForward());
+		portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
+		portafolioController.setPuntosFwd(orden.getNuPuntofwd().toString());
+		portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
+		portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
+		portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
+		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+	}
+	
+	public void setearDatosDeOrdenTipoAbonoRetiro(Infoport selectedInfo, Orden orden){
+		portafolioController.setSelectedFondoAbono(selectedInfo.getNbNomFondo());
+		portafolioController.setSelectedTipoAbono(orden.getTpOperaCuenta());
+		portafolioController.setSelectedContraAbono(orden.getContraparte().getNbDescGeneral());
+		portafolioController.setMontoAbono(formato.format(orden.getImMontoFinal()));
+	}
+	
+	public void setearDatosDeOrdenTipoFija(Orden orden){
+		portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+		portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+		if(orden.getEmisor() !=null){
+			portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+		}
+		portafolioController.setMonto(orden.getImMontoFinal().toString());
+		portafolioController.setMnemonico(orden.getNbMnemonico());
+		if(orden.getImPrecioLimpio() != null){
+			portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
+		}
+		portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
+		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+	}
+	
+	public void setearDatosDeOrdenTipoVariable(Orden orden){
+		portafolioController.setSelectedTipo(orden.getTpMonedaOperacion());
+		portafolioController.setSelectedEspecie(orden.getEspecie().getNbValorGeneral());
+		if(orden.getEmisor() !=null){
+			portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
+		}
+		portafolioController.setMonto(orden.getImMontoFinal().toString());
+		portafolioController.setMnemonico(orden.getNbMnemonico());
+		portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
+	}
+
+	public void setearDatosDeFondo(Infoport selectedInfo, Orden orden){
+		orden.getOrdenFondoList().isEmpty();
+		if(orden.getOrdenFondoList().size()==1){
+			selectedInfo.setNbNomFondo(orden.getOrdenFondoList().get(0).getFondo().getNbNomFondo());
+		}else{
+			Double montoTo = Constante.VALOR_CERO;
+			Double porcentaje = Constante.VALOR_CERO;
+			List<Fondo> listaFondoSelected = new ArrayList<Fondo>();
+			Fondo fondoAnterior = null;
+			for (OrdenFondo ordenFondo : orden.getOrdenFondoList()) {
+				fondoAnterior = new Fondo();
+				if(ordenFondo.getImMontoFinal() != null){
+					montoTo += ordenFondo.getImMontoFinal();
+					fondoAnterior.setMonto(ordenFondo.getImMontoFinal().toString());
+					fondoAnterior.setMontoNuevo(fondoAnterior.getMonto());
+				}
+				if(ordenFondo.getPcParticipa() != null){
+					porcentaje += ordenFondo.getPcParticipa();
+					fondoAnterior.setPorcentaje(ordenFondo.getPcParticipa().toString()+"%");
+					fondoAnterior.setPorcentajeNuevo(fondoAnterior.getPorcentaje());
+				}
+				fondoAnterior.setNbNomFondo(ordenFondo.getFondo().getNbNomFondo());
+				listaFondoSelected.add(fondoAnterior);
+			}
+			portafolioController.setListaFondoSelected(listaFondoSelected);
+			portafolioController.setMontoTotal(montoTo.toString());
+			portafolioController.setPorcentajeTotal(porcentaje.toString());
+			portafolioController.setMontoTotalNuevo(portafolioController.getMontoTotal());
+			portafolioController.setPorcentajeTotalNuevo(portafolioController.getPorcentajeTotal());
+			for (int i = listaFondoSelected.size(); i < 10; i++) {
+				listaFondoSelected.add(new Fondo());
+			}
 		}
 	}
 	
@@ -333,7 +359,11 @@ public class OrdenController extends GenericController{
 	
 	public void aprobarOrden(){
 		if(selectedOrden != null){
-			actualizarEstado(Constante.OrdenEstado.APROBADO);
+			if(selectedOrden.getOperacion().getCdIdgeneral().equals(Constante.ID_OPERA_CANCELACION)){
+				actualizarEstado(Constante.OrdenEstado.APROBADO);
+			}else{
+				editarOrden(selectedOrden, true);
+			}
 		}
 	}
 

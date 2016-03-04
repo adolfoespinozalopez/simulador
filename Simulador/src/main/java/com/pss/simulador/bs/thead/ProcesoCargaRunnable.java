@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -112,7 +113,7 @@ public class ProcesoCargaRunnable implements Runnable {
 		
 		if (this.obtenerEstadoProcesoByLog(this.getLstProcesoLog()).equals(Constante.EstadoProceso.TERMINADO)){
 			for (String strNbFondo : lstNbFondos) {
-				expoFondoManager.executeExposicionDelFondo(strNbFondo, Constante.ESTADO_ACTIVO);	
+				expoFondoManager.executeExposicionDelFondo(strNbFondo, Constante.ESTADO_INACTIVO);	
 			}
 			
 		}
@@ -123,19 +124,14 @@ public class ProcesoCargaRunnable implements Runnable {
 	 * @return
 	 */
 	private List<String> obtenerFondosExcel(List<Infoport> lstInfoportLoad) {
-		List<String> lstResult = new ArrayList<String>();
+		Map<String, String> mapaFondo = new HashMap<String, String>();
 		for (Infoport infoport : lstInfoportLoad) {
-			Boolean esRepetido = false;
-			for (String strFondosAniadidosIter : lstResult) {
-				if (infoport.getNbNomFondo().equals(strFondosAniadidosIter)){
-					esRepetido = true;
-					break;
-				}
-			}
-			if(!esRepetido){
-				lstResult.add(infoport.getNbNomFondo());	
+			if(infoport.getNbNomFondo()!=null){
+				mapaFondo.put(infoport.getNbNomFondo().trim(), infoport.getNbNomFondo().trim());
 			}
 		}
+		List<String> lstResult = new ArrayList<String>();
+		lstResult.addAll(mapaFondo.keySet());
 		return lstResult;
 	}
 

@@ -45,6 +45,11 @@ public class Fondo implements java.io.Serializable {
 	@Transient
 	private String porcentaje;
 	
+	@Transient
+	private String montoNuevo;
+	@Transient
+	private String porcentajeNuevo;
+	
 	public Fondo() {
 	}
 
@@ -130,6 +135,22 @@ public class Fondo implements java.io.Serializable {
 
 	public void setPorcentaje(String porcentaje) {
 		this.porcentaje = porcentaje;
+	}
+
+	public String getMontoNuevo() {
+		return montoNuevo;
+	}
+
+	public void setMontoNuevo(String montoNuevo) {
+		this.montoNuevo = montoNuevo;
+	}
+
+	public String getPorcentajeNuevo() {
+		return porcentajeNuevo;
+	}
+
+	public void setPorcentajeNuevo(String porcentajeNuevo) {
+		this.porcentajeNuevo = porcentajeNuevo;
 	}
 	
 }

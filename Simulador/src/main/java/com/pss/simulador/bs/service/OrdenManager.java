@@ -22,5 +22,7 @@ public interface OrdenManager {
 	public OrdenEstado saveEstado(OrdenEstado ordenEstado);
 	public DetalleOrden saveDetalle(DetalleOrden detalleOrden);
 	public OrdenFondo saveOrdenFondo(OrdenFondo ordenFondo);
+	public List<OrdenFondo> findFondoByOrden(Integer idOrden);
 	
+	public Orden deshabilitaOrden(Orden orden);
 }
