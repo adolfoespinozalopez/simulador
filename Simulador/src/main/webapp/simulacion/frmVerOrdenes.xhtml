@@ -52,7 +52,7 @@
 					<h:outputText value="#{index+1}" />
 				</p:column>
 				<p:column headerText="Fondo" style="width: 10%;text-align: left;">
-					<h:outputText value="#{item.fondo.nbNomFondo}" />
+					<h:outputText value="#{ordenController.visualizaFondo(item)}" />
 				</p:column>
 				<p:column headerText="Operación" style="width: 10%;text-align: left;">
 					<h:outputText value="#{item.operacion.nbDescGeneral}" />

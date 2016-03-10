@@ -69,7 +69,7 @@
 	                        <td><p:outputLabel value="Importe:" for="txtImpAper"/></td>
 	                        <td colspan="4">
 		                        <p:inputText id="txtImpAper" style="width: 315px;" maxlength="30" required="true"
-	                                         value="#{portafolioController.importeAper}">
+	                                         value="#{portafolioController.importeAper}" styleClass="monto">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>
@@ -79,7 +79,7 @@
 	                    	<td><p:outputLabel value="Tasa:" for="txtTasaAper"/></td>
 	                        <td>
 		                        <p:inputText id="txtTasaAper" style="width: 100px;" maxlength="12" required="true"
-	                                         value="#{portafolioController.tasaAper}">
+	                                         value="#{portafolioController.tasaAper}" styleClass="tasa">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>

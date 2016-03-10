@@ -31,6 +31,8 @@ public class DetalleOrden implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secDetalleOrden")
 	@Column(name="CD_IDDETALLE")
 	private Integer cdIddetalle;
+	@Column(name="CD_IDINFOPORT")
+	private Integer cdIdinfoport;
 	@Column(name = "NB_NOM_FONDO", length = 40)
 	private String nbNomFondo;
 	@Column(name = "TP_TIPFONDO")
@@ -136,6 +138,14 @@ public class DetalleOrden implements Serializable {
 
 	public void setCdIddetalle(Integer cdIddetalle) {
 		this.cdIddetalle = cdIddetalle;
+	}
+
+	public Integer getCdIdinfoport() {
+		return cdIdinfoport;
+	}
+
+	public void setCdIdinfoport(Integer cdIdinfoport) {
+		this.cdIdinfoport = cdIdinfoport;
 	}
 
 	public String getNbNomFondo() {

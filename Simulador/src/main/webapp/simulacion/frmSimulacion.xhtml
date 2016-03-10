@@ -31,15 +31,13 @@
                         <h:outputText value="Fondo :" style="padding-right: 5px;"/>
                         <p:selectOneMenu id="lstFondo" style="width: 180px;" disabled="#{portafolioController.isRiesgo()}"
                                          value="#{simulacionController.selectedNombreFondo}" 
-                                         valueChangeListener="#{simulacionController.realizarFiltroDeFondo}">
+                                         valueChangeListener="#{simulacionController.realizarFiltroDeFondo}"
+                                         filter="true" filterMatchMode="startsWith">
                             <f:selectItem itemLabel="Todos" itemValue="-1" />
                             <f:selectItems value="#{simulacionController.listaFondo}" var="fondo" 
 										   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
                             <p:ajax event="change" update=":frmSimulacion:btnActualizar, :frmSimulacion:grdFondo, :frmSimulacion:grdLiquidez, :frmSimulacion:grdCaja, :frmSimulacion:grdEmisor"/>
                        	</p:selectOneMenu>
-                       	 	
-                       		                     
-  
                         <p:commandButton id="btnActualizar" process="@this" icon="fa fa-refresh" actionListener="#{simulacionController.ejecutaBusqueda}"
                         				 styleClass="actualizar ui-state-active" value="Actualizar" title="Actualizar"
                         				 onclick="PF('blkPanel').show();PF('blkPanelCaja').show();" oncomplete="PF('blkPanel').hide();PF('blkPanelCaja').hide();"

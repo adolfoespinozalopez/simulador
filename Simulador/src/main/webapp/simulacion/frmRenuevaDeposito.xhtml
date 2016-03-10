@@ -54,7 +54,7 @@
 	                        <td><p:outputLabel value="Importe:" for="txtImpRen"/></td>
 	                        <td colspan="4">
 		                        <p:inputText id="txtImpRen" style="width: 315px;" maxlength="30" required="true"
-	                                         value="#{portafolioController.importeRenova}">
+	                                         value="#{portafolioController.importeRenova}" styleClass="monto">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>
@@ -64,7 +64,7 @@
 	                    	<td><p:outputLabel value="Tasa:" for="txtTasaRen"/></td>
 	                        <td>
 		                        <p:inputText id="txtTasaRen" style="width: 100px;" maxlength="12" required="true"
-	                                         value="#{portafolioController.tasaRenova}" >
+	                                         value="#{portafolioController.tasaRenova}" styleClass="tasa">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>

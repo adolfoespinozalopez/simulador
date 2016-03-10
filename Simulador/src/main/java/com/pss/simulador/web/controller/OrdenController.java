@@ -25,6 +25,7 @@ import com.pss.simulador.bs.domain.Orden;
 import com.pss.simulador.bs.domain.OrdenEstado;
 import com.pss.simulador.bs.domain.OrdenFondo;
 import com.pss.simulador.bs.service.GeneralManager;
+import com.pss.simulador.bs.service.InfoportManager;
 import com.pss.simulador.bs.service.OrdenManager;
 import com.pss.simulador.util.Constante;
 import com.pss.simulador.util.Utilitarios;
@@ -63,6 +64,9 @@ public class OrdenController extends GenericController{
 	
 	@Autowired
 	private OrdenManager ordenManager;
+	
+	@Autowired
+	private InfoportManager infoPortManager;
 
 	@Autowired
 	private PortafolioController portafolioController;
@@ -369,6 +373,21 @@ public class OrdenController extends GenericController{
 
 	public void rechazarOrden(){
 		if(selectedOrden != null){
+			if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL))){
+				Infoport infoTmp = new Infoport();
+				//Detalle de Orden
+				for (DetalleOrden detalle : ordenManager.findDetalleByOrden(selectedOrden.getCdIdorden())) {
+					Utilitarios.copiaPropiedades(infoTmp, detalle);
+				}
+				Infoport selectedInfo = new Infoport();
+				selectedInfo = infoPortManager.findByID(infoTmp.getCdIdinfoport());
+				selectedInfo.setImValorMonLocal(infoTmp.getImValorMonLocal());
+				selectedInfo.setImValorMonRef(infoTmp.getImValorMonRef());
+				selectedInfo.setImValorSinInter(infoTmp.getImValorSinInter());
+				selectedInfo.setNbObservacion(null);
+				selectedInfo.setStEstado(Constante.ESTADO_ACTIVO);
+				infoPortManager.save(selectedInfo);
+			}
 			actualizarEstado(Constante.OrdenEstado.RECHAZADO);
 		}
 	}
@@ -521,4 +540,19 @@ public class OrdenController extends GenericController{
 		this.mensajeValida = mensajeValida;
 	}
 	
+	public String visualizaFondo(Orden orden){
+		String nombreFondo = "";
+		orden.getOrdenFondoList().isEmpty();
+		if(orden.getOrdenFondoList().size()==1){
+			nombreFondo = orden.getOrdenFondoList().get(0).getFondo().getNbNomFondo();
+		}else{
+			for (OrdenFondo ordenFondo : orden.getOrdenFondoList()) {
+				nombreFondo += ordenFondo.getFondo().getNbNomFondo() + ", ";
+			}
+			if(nombreFondo.length() != 0){
+				nombreFondo = nombreFondo.substring(0, nombreFondo.length()-2);
+			}
+		}
+		return nombreFondo;
+	}
 }

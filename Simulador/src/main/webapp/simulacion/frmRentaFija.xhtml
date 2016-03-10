@@ -65,9 +65,8 @@
 	                    <tr>
 	                        <td><p:outputLabel value="Monto:" for="txtMontoFija"/></td>
 	                        <td>
-		                        <p:inputText id="txtMontoFija" style="width: 100px;" maxlength="30" required="true"
-	                                         value="#{portafolioController.monto}">
-	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
+		                        <p:inputText id="txtMontoFija" style="width: 100px;" maxlength="30" required="true" 
+	                                         value="#{portafolioController.monto}" styleClass="monto">
 							    </p:inputText>
 	                        </td>
 	                        <td><p:message for="txtMontoFija" display="icon" /></td>
@@ -82,14 +81,14 @@
 	                        <td><h:outputLabel value="Precio Limpio:"/></td>
 	                        <td colspan="2">
 		                        <p:inputText id="txtPreLimpioFija" style="width: 100px;" maxlength="15" 
-	                                         value="#{portafolioController.precioLimpio}">
+	                                         value="#{portafolioController.precioLimpio}" styleClass="monto">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>
 	                        <td><p:outputLabel value="Precio Sucio:" for="txtPreSucioFija"/></td>
 	                        <td>
 		                        <p:inputText id="txtPreSucioFija" style="width: 120px;" maxlength="15" required="true"
-	                                         value="#{portafolioController.precioSucio}">
+	                                         value="#{portafolioController.precioSucio}" styleClass="monto">
 	                            	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 							    </p:inputText>
 	                        </td>
@@ -178,7 +177,7 @@
 											   	   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
 			                        </p:selectOneMenu>
 	                            </td>
-	                            <td><p:inputText id="txtMontoFija${idx.count}" style="width: 80px;" maxlength="10"  
+	                            <td><p:inputText id="txtMontoFija${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto" 
 	                             				 value="#{var.monto}" disabled="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
@@ -186,7 +185,7 @@
 	                            <td style="text-align: center;"><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	                            
 	                            <td style="text-align: center;">
-	                            	<p:inputText id="txtMontoFija2${idx.count}" style="width: 80px;" maxlength="10"  
+	                            	<p:inputText id="txtMontoFija2${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto" 
 	                             				 value="#{var.montoNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
@@ -199,14 +198,14 @@
             			    <td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total :</td>
             			    <td style="width: 80px;text-align: center;">
-            			    	<p:inputText id="txtTotalFija" style="width: 80px;" maxlength="10"  
-                             				 value="#{portafolioController.montoTotal}" />
+            			    	<p:inputText id="txtTotalFija" style="width: 80px;" readonly="true"
+                             				 value="#{portafolioController.montoTotal}" styleClass="monto"/>
             			    </td>
             			    <td style="width: 40px;">
             			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
             			    </td>
             			    <td style="text-align: center;">
-            			    	<p:inputText id="txtTotalFijaNuevo" style="width: 80px;" readonly="true"   
+            			    	<p:inputText id="txtTotalFijaNuevo" style="width: 80px;" readonly="true" styleClass="monto"  
                              				 value="#{portafolioController.montoTotalNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
             			    </td>
             			    <td>

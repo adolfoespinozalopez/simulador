@@ -165,14 +165,14 @@
 											   	   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
 			                        </p:selectOneMenu>
 	                            </td>
-	                            <td><p:inputText id="txtMontoVar${idx.count}" style="width: 80px;" maxlength="10"  
-	                             				 value="#{var.monto}">
+	                            <td><p:inputText id="txtMontoVar${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto" 
+	                             				 value="#{var.monto}" readonly="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
 	                            </td>
 	                            <td style="text-align: center;"><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	                            <td style="text-align: center;">
-	                            	<p:inputText id="txtMontoVar2${idx.count}" style="width: 80px;" maxlength="10"  
+	                            	<p:inputText id="txtMontoVar2${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto"  
 	                             				 value="#{var.montoNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
@@ -186,14 +186,14 @@
             			    <td style="width: 90px;"></td>
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total :</td>
             			    <td style="width: 80px;text-align: center;">
-            			    	<p:inputText id="txtTotalVar" style="width: 80px;" maxlength="10"  
-                             				 value="#{portafolioController.montoTotal}" />
+            			    	<p:inputText id="txtTotalVar" style="width: 80px;" readonly="true" 
+                             				 value="#{portafolioController.montoTotal}" styleClass="monto"/>
             			    </td>
             			    <td style="width: 40px;">
             			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
             			    </td>
             			    <td style="text-align: center;">
-            			    	<p:inputText id="txtTotalVarNuevo" style="width: 80px;" readonly="true"   
+            			    	<p:inputText id="txtTotalVarNuevo" style="width: 80px;" readonly="true" styleClass="monto" 
                              				 value="#{portafolioController.montoTotalNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
             			    </td>
             			    <td>

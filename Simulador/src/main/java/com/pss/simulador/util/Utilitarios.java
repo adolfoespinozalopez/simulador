@@ -3,6 +3,7 @@ package com.pss.simulador.util;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -225,6 +226,13 @@ public class Utilitarios {
 		procesoLog.setProcesoCarga(new ProcesoCarga(cdIdproceso));
 		lstProcesoLog.add(procesoLog);
 		return lstProcesoLog;
-
 	}
+    
+    public static String formatoDouble(DecimalFormat formato, String monto){
+    	try {
+    		return String.valueOf(formato.parse(monto).doubleValue());
+    	} catch (Exception e) {
+    		return null;
+    	}
+    }
 }

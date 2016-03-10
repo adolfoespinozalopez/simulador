@@ -47,5 +47,9 @@ public class InfoportManagerImpl implements InfoportManager {
 	public Infoport save(Infoport infoport) {
 		return infoportRepository.save(infoport);
 	}
+
+	public Infoport findByID(Integer cdIdinfoport) {
+		return infoportRepository.findOne(cdIdinfoport);
+	}
 	
 }

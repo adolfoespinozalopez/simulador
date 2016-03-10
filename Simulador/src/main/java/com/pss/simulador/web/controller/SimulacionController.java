@@ -114,15 +114,15 @@ public class SimulacionController extends GenericController{
 	}
 	
 	public void ejecutaBusqueda(){
-
 		setEstadoInicial((isValorEstado())?"0":"1");
-		System.out.println(getEstadoInicial());
 		obtieneExposicionFondo();
 	}
 	
 
 	public void obtieneExposicionFondo(){
-		expoFondoManager.executeExposicionDelFondo(selectedNombreFondo, Constante.ESTADO_ACTIVO); /*Constante.ESTADO_ACTIVO*/
+		if(getEstadoInicial().equals(Constante.ESTADO_ACTIVO)){
+			expoFondoManager.executeExposicionDelFondo(selectedNombreFondo, Constante.ESTADO_ACTIVO);
+		}		
 		if(selectedFondo != null){
 			limpiarListas();
 			List<ExpoFondo> listaTemporal = fondoManager.obtenerExposicionDelFondo(selectedFondo.getCdIdfondo(), getEstadoInicial());

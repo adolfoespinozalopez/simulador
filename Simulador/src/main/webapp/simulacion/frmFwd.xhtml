@@ -61,7 +61,7 @@
                         <td><p:outputLabel value="Tipo de Cambio Spot:" for="txtCambioSpotFwd"/></td>
                         <td>
 	                        <p:inputText id="txtCambioSpotFwd" style="width: 100px;" maxlength="15" required="true"
-                                         value="#{portafolioController.tipoCambioSpot}">
+                                         value="#{portafolioController.tipoCambioSpot}" styleClass="monto">
                             	<pe:keyFilter regEx="/[\d\.\s,]/"/>
                             	<p:ajax event="blur" listener="#{portafolioController.calcularTipoCambioFwd}" update="@this, :frmFwd:txtCambioFwd, msgFwd, growl" />
 						    </p:inputText>
@@ -81,7 +81,7 @@
                         <td><p:outputLabel value="Tipo de Cambio Fwd:" for="txtCambioFwd"/></td>
                         <td>
 	                        <p:inputText id="txtCambioFwd" style="width: 100px;" maxlength="15" required="true"
-                                         value="#{portafolioController.tipoCambioFwd}">
+                                         value="#{portafolioController.tipoCambioFwd}" styleClass="monto">
                             	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 						    </p:inputText>
                         </td>
@@ -187,14 +187,14 @@
 											   	   	   itemValue="#{fondo.nbNomFondo}" itemLabel="#{fondo.nbNomFondo}" />
 			                        </p:selectOneMenu>
 	                            </td>
-	                            <td><p:inputText id="txtMontoFwd${idx.count}" style="width: 80px;" maxlength="10"  
+	                            <td><p:inputText id="txtMontoFwd${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto"
 	                             				 value="#{var.monto}" disabled="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
 	                            </td>
 	                            <td style="text-align: center;"><h:outputLabel value="${var.porcentaje}" style="font-weight: bold;color: #499900;"/></td>
 	                            
-	                            <td><p:inputText id="txtMontoFwd2${idx.count}" style="width: 80px;" maxlength="10"  
+	                            <td><p:inputText id="txtMontoFwd2${idx.count}" style="width: 80px;" maxlength="20" styleClass="monto" 
 	                             				 value="#{var.montoNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}">
 	                             		<pe:keyFilter regEx="/[\d\.\s,]/"/>
 	                             	</p:inputText>
@@ -208,13 +208,13 @@
             			    <td style="width: 200px;text-align: right;font-weight: bold;">Total Operar USD :</td>
             			    <td style="width: 80px;">
             			    	<p:inputText id="txtTotalFwd" style="width: 80px;" readonly="true" 
-                             				 value="#{portafolioController.montoTotal}" />
+                             				 value="#{portafolioController.montoTotal}" styleClass="monto"/>
             			    </td>
             			    <td style="width: 40px;">
             			    	<h:outputLabel id="lblPorcTotal" value="${portafolioController.porcentajeTotal}" style="font-weight: bold;color: #499900;"/>
             			    </td>
             			    <td>
-            			    	<p:inputText id="txtTotalFwdNuevo" style="width: 80px;" readonly="true"   
+            			    	<p:inputText id="txtTotalFwdNuevo" style="width: 80px;" readonly="true" styleClass="monto"  
                              				 value="#{portafolioController.montoTotalNuevo}" rendered="#{(portafolioController.ordenAnterior)!=null}"/>
             			    </td>
             			    <td style="text-align: center;">

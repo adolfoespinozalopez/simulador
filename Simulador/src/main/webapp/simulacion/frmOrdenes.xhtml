@@ -108,8 +108,8 @@
                             <p:column headerText="N°" style="width: 4%;text-align: center;">
                                 <h:outputText value="#{index+1}"/>
                             </p:column>
-                            <p:column headerText="Fondo" style="width: 14%;text-align: left;" sortBy="#{item.fondo.nbNomFondo}" >
-                                <h:outputText value=""/>
+                            <p:column headerText="Fondo" style="width: 14%;text-align: left;">
+                                <h:outputText value="#{ordenController.visualizaFondo(item)}"/>
                             </p:column>
                             <p:column headerText="Operación" style="width: 10%;text-align: left;" sortBy="#{item.operacion.nbDescGeneral}">
                                 <h:outputText value="#{item.operacion.nbDescGeneral}"/>
