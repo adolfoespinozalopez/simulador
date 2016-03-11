@@ -7,7 +7,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.event.ValueChangeEvent;
 
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.impl.xb.xsdschema.Public;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

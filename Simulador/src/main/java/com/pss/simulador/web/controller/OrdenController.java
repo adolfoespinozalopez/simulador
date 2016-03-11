@@ -123,8 +123,11 @@ public class OrdenController extends GenericController{
     }
 	
 	public void ejecutarbusqueda(){
-		//listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
-		listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
+		if(this.isAdmin()){
+			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, null);
+		}else{
+			listaOrdenes = ordenManager.findByFilter(selectedTipoOperacion, selectedEstado, this.getUsuarioSession().getUsuario().getUID().toString());
+		}
 		selectedOrdenes = new ArrayList<Orden>();
 	}
 	
@@ -264,20 +267,20 @@ public class OrdenController extends GenericController{
 	public void setearDatosDeOrdenTipoSpot(Orden orden){
 		portafolioController.setSelectedTipoSpot(orden.getTpMonedaOperacion());
 		portafolioController.setSelectedContraSpot(orden.getContraparte().getNbDescGeneral());
-		portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
-		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+		portafolioController.setTipoCambioSpot(formato.format(orden.getImTipocambiospot()));
+		portafolioController.setMontoTotal(formato.format(orden.getImMontoFinal()));
 	}
 	
 	public void setearDatosDeOrdenTipoForward(Orden orden){
 		portafolioController.setSelectedTipoFwd(orden.getTpMonedaOperacion());
 		portafolioController.setSelectedContraFwd(orden.getContraparte().getNbDescGeneral());
 		portafolioController.setSelectedSettleFwd(orden.getTpForward());
-		portafolioController.setTipoCambioSpot(orden.getImTipocambiospot().toString());
+		portafolioController.setTipoCambioSpot(formato.format(orden.getImTipocambiospot()));
 		portafolioController.setPuntosFwd(orden.getNuPuntofwd().toString());
-		portafolioController.setTipoCambioFwd(orden.getImTipocambiofwd().toString());
+		portafolioController.setTipoCambioFwd(formato.format(orden.getImTipocambiofwd()));
 		portafolioController.setPlazoFwd(orden.getNuPlazoDia().toString());
 		portafolioController.setFechaVctoFwd(orden.getFhFecVencimiento());
-		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+		portafolioController.setMontoTotal(formato.format(orden.getImMontoFinal()));
 	}
 	
 	public void setearDatosDeOrdenTipoAbonoRetiro(Infoport selectedInfo, Orden orden){
@@ -293,13 +296,13 @@ public class OrdenController extends GenericController{
 		if(orden.getEmisor() !=null){
 			portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
 		}
-		portafolioController.setMonto(orden.getImMontoFinal().toString());
+		portafolioController.setMonto(formato.format(orden.getImMontoFinal()));
 		portafolioController.setMnemonico(orden.getNbMnemonico());
 		if(orden.getImPrecioLimpio() != null){
-			portafolioController.setPrecioLimpio(orden.getImPrecioLimpio().toString());
+			portafolioController.setPrecioLimpio(formato.format(orden.getImPrecioLimpio()));
 		}
-		portafolioController.setPrecioSucio(orden.getImPrecioSucio().toString());
-		portafolioController.setMontoTotal(orden.getImMontoFinal().toString());
+		portafolioController.setPrecioSucio(formato.format(orden.getImPrecioSucio()));
+		portafolioController.setMontoTotal(formato.format(orden.getImMontoFinal()));
 	}
 	
 	public void setearDatosDeOrdenTipoVariable(Orden orden){
@@ -308,9 +311,9 @@ public class OrdenController extends GenericController{
 		if(orden.getEmisor() !=null){
 			portafolioController.setSelectedEmisorModal(orden.getEmisor().getNbNomEmisor());
 		}
-		portafolioController.setMonto(orden.getImMontoFinal().toString());
+		portafolioController.setMonto(formato.format(orden.getImMontoFinal()));
 		portafolioController.setMnemonico(orden.getNbMnemonico());
-		portafolioController.setPrecioReferencial(orden.getImPrecioReferencia().toString());
+		portafolioController.setPrecioReferencial(formato.format(orden.getImPrecioReferencia()));
 	}
 
 	public void setearDatosDeFondo(Infoport selectedInfo, Orden orden){
@@ -326,7 +329,7 @@ public class OrdenController extends GenericController{
 				fondoAnterior = new Fondo();
 				if(ordenFondo.getImMontoFinal() != null){
 					montoTo += ordenFondo.getImMontoFinal();
-					fondoAnterior.setMonto(ordenFondo.getImMontoFinal().toString());
+					fondoAnterior.setMonto(formato.format(ordenFondo.getImMontoFinal()));
 					fondoAnterior.setMontoNuevo(fondoAnterior.getMonto());
 				}
 				if(ordenFondo.getPcParticipa() != null){
@@ -338,7 +341,7 @@ public class OrdenController extends GenericController{
 				listaFondoSelected.add(fondoAnterior);
 			}
 			portafolioController.setListaFondoSelected(listaFondoSelected);
-			portafolioController.setMontoTotal(montoTo.toString());
+			portafolioController.setMontoTotal(formato.format(montoTo));
 			portafolioController.setPorcentajeTotal(porcentaje.toString());
 			portafolioController.setMontoTotalNuevo(portafolioController.getMontoTotal());
 			portafolioController.setPorcentajeTotalNuevo(portafolioController.getPorcentajeTotal());

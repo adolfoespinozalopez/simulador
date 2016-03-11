@@ -9,12 +9,10 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
-import org.apache.poi.util.SystemOutLogger;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.util.SocketUtils;
 
 import com.pss.simulador.bs.domain.Emisor;
 import com.pss.simulador.bs.domain.Fondo;
