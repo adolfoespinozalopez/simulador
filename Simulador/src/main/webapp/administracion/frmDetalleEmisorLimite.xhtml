@@ -70,8 +70,8 @@
 						                    <tr>
 						                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
 						                        <td>
-							                       	<p:inputText id="valInicio" value="#{emisorController.selectedlimiteEmisor.nuMontoIni}" 
-							                        			 required="true" maxlength="30" style="width: 130px;">
+							                       	<p:inputText id="valInicio" value="#{emisorController.selectedlimiteEmisor.snuMontoIni}" 
+							                        			 required="true" maxlength="30" style="width: 130px;" styleClass="monto">
 							                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 						                			</p:inputText>
 						                        </td>
@@ -80,8 +80,8 @@
 						                    <tr> 
 						                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
 						                        <td>
-						                        	<p:inputText id="valFin" value="#{emisorController.selectedlimiteEmisor.nuMontoFin}" 
-							                        			 required="true" maxlength="30" style="width: 130px;">
+						                        	<p:inputText id="valFin" value="#{emisorController.selectedlimiteEmisor.snuMontoFin}" 
+							                        			 required="true" maxlength="30" style="width: 130px;" styleClass="monto">
 							                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 						                			</p:inputText>
 						                        </td>

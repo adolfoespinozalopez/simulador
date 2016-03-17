@@ -91,16 +91,16 @@
 		                    <tr>
 		                        <td><p:outputLabel value="Monto Inicial:" for="valInicio" /></td>
 		                        <td>
-			                       	<p:inputText id="valInicio" value="#{fondoController.selectedLimFondoEspecie.nuMontoIni}" 
-			                        			 required="true" maxlength="30" style="width: 130px;">
+			                       	<p:inputText id="valInicio" value="#{fondoController.selectedLimFondoEspecie.snuMontoIni}" 
+			                        			 required="true" maxlength="30" style="width: 130px;" styleClass="monto">
 			                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 		                			</p:inputText>
 		                        </td>
 		                        <td><p:message for="valInicio" display="icon" /></td>
 		                        <td><p:outputLabel value="Monto Final:" for="valFin" /></td>
 		                        <td>
-		                        	<p:inputText id="valFin" value="#{fondoController.selectedLimFondoEspecie.nuMontoFin}" 
-			                        			 required="true" maxlength="30" style="width: 130px;">
+		                        	<p:inputText id="valFin" value="#{fondoController.selectedLimFondoEspecie.snuMontoFin}" 
+			                        			 required="true" maxlength="30" style="width: 130px;" styleClass="monto">
 			                        	<pe:keyFilter regEx="/[\d\.\s,]/"/>
 		                			</p:inputText>
 		                        </td>
