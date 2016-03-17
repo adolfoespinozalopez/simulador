@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 /**
  *
  * @author Adolfo Espinoza
@@ -60,6 +61,11 @@ public class LimitesEmisor implements java.io.Serializable {
 	@JoinColumn(name = "CD_IDEMISOR", referencedColumnName = "CD_IDEMISOR", nullable = false)
 	@ManyToOne(optional = false)
 	private Emisor emisor;
+	
+	@Transient
+	private String snuMontoFin;
+	@Transient
+	private String snuMontoIni;
 	
 	public LimitesEmisor() {
 	}
@@ -178,6 +184,22 @@ public class LimitesEmisor implements java.io.Serializable {
 
 	public void setEmisor(Emisor emisor) {
 		this.emisor = emisor;
+	}
+
+	public String getSnuMontoFin() {
+		return snuMontoFin;
+	}
+
+	public void setSnuMontoFin(String snuMontoFin) {
+		this.snuMontoFin = snuMontoFin;
+	}
+
+	public String getSnuMontoIni() {
+		return snuMontoIni;
+	}
+
+	public void setSnuMontoIni(String snuMontoIni) {
+		this.snuMontoIni = snuMontoIni;
 	}
 
 }

@@ -61,7 +61,6 @@ public class FilterSession implements Filter {
 //			logger.debug("authorization succeeded");
 			chain.doFilter(req, res);
 		}
-
 	}
 
 	public void destroy() {

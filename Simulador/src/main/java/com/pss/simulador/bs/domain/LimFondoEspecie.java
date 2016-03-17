@@ -13,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 /**
 *
 * @author Adolfo Espinoza
@@ -64,6 +65,11 @@ public class LimFondoEspecie implements java.io.Serializable {
 	@ManyToOne(optional = false)
 	private General general;
 
+	@Transient
+	private String snuMontoFin;
+	@Transient
+	private String snuMontoIni;
+	
 	public LimFondoEspecie() {
 	}
 
@@ -189,6 +195,22 @@ public class LimFondoEspecie implements java.io.Serializable {
 
 	public void setGeneral(General general) {
 		this.general = general;
+	}
+
+	public String getSnuMontoFin() {
+		return snuMontoFin;
+	}
+
+	public void setSnuMontoFin(String snuMontoFin) {
+		this.snuMontoFin = snuMontoFin;
+	}
+
+	public String getSnuMontoIni() {
+		return snuMontoIni;
+	}
+
+	public void setSnuMontoIni(String snuMontoIni) {
+		this.snuMontoIni = snuMontoIni;
 	}
 
 }

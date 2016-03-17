@@ -1,5 +1,7 @@
 package com.pss.simulador.web.controller;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +50,9 @@ public class FondoController extends GenericController {
 	
 	private LimFondoEspecie selectedLimFondoEspecie;
 	
+	private DecimalFormat formato = new DecimalFormat("###,###,###,###,###.00");
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(); 
+	
 	@Autowired
     private GeneralManager generalManager;
 	
@@ -63,6 +68,9 @@ public class FondoController extends GenericController {
 	
 	@PostConstruct
 	public void init() {
+		otherSymbols.setGroupingSeparator((char) 44);
+		otherSymbols.setDecimalSeparator((char) 46);
+		formato = new DecimalFormat("###,###,###.00", otherSymbols);
 		selectedSaldo = null;
 		this.listarSaldos();
 	}
@@ -106,6 +114,8 @@ public class FondoController extends GenericController {
         limFondoEspecieConsulta.setFondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
         selectedLimFondoEspecie = fondoManager.findLimFondoEspecieByFondoAndEmisorAndEspecie(limFondoEspecieConsulta);
         selectedLimFondoEspecie = (selectedLimFondoEspecie ==null)?new LimFondoEspecie():selectedLimFondoEspecie;
+        selectedLimFondoEspecie.setSnuMontoIni((selectedLimFondoEspecie.getNuMontoIni() ==null)?"":formato.format(selectedLimFondoEspecie.getNuMontoIni()));
+        selectedLimFondoEspecie.setSnuMontoFin((selectedLimFondoEspecie.getNuMontoFin() ==null)?"":formato.format(selectedLimFondoEspecie.getNuMontoFin()));
     }
 	
 	public void cancelar() {
@@ -119,6 +129,8 @@ public class FondoController extends GenericController {
 				selectedLimFondoEspecie.setEmisor(selectedEmisor);
 				selectedLimFondoEspecie.setGeneral(selectedEspecie);
 				selectedLimFondoEspecie.setFondo(fondoManager.findFondoByName(selectedSaldo.getNbNomFondo()));
+				selectedLimFondoEspecie.setNuMontoIni(formato.parse(selectedLimFondoEspecie.getSnuMontoIni()).doubleValue());
+				selectedLimFondoEspecie.setNuMontoFin(formato.parse(selectedLimFondoEspecie.getSnuMontoFin()).doubleValue());
 				
 				if (selectedLimFondoEspecie.getCdIdconfiguracion()!=null){//Actualizacion
 					selectedLimFondoEspecie.setFhFecModifica(new Date());

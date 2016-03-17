@@ -1,5 +1,7 @@
 package com.pss.simulador.web.controller;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,6 +45,9 @@ public class EmisorController extends GenericController {
 	private List<Fondo> listaFondo = new ArrayList<Fondo>();
 	private Fondo selectedFondo;
 
+	private DecimalFormat formato = new DecimalFormat("###,###,###,###,###.00");
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(); 
+	
 	@Autowired
 	private GeneralManager generalManager;
 
@@ -79,6 +84,9 @@ public class EmisorController extends GenericController {
 
 	@PostConstruct
 	public void init() {
+		otherSymbols.setGroupingSeparator((char) 44);
+		otherSymbols.setDecimalSeparator((char) 46);
+		formato = new DecimalFormat("###,###,###.00", otherSymbols);
 		listaEmisor = new ArrayList<Emisor>();
 		selectedEmisor = new Emisor();
 		selectedEmisor.setTpTipemisor(Constante.NO_OPTION_SELECTED_INT);
@@ -109,6 +117,7 @@ public class EmisorController extends GenericController {
 			if (selectedEmisor != null) {	
 				selectedEmisor.setTpMicroFina((value1)?"1":"0");
 				selectedEmisor.setTpGrupoBbva((value2)?"1":"0");
+				selectedEmisor.setImPasivo(formato.parse(selectedEmisor.getSimPasivo()).doubleValue());
 				
 				if (selectedEmisor.getCdIdemisor() != null) {// Actualizacion
 					selectedEmisor.setFhFecModifica(new Date());
@@ -137,12 +146,17 @@ public class EmisorController extends GenericController {
 		limiteEmisorConsulta.setFondo(selectedFondo);
 		selectedlimiteEmisor = emisorManager.findByFondoAndEmisor(limiteEmisorConsulta);
 		selectedlimiteEmisor = (selectedlimiteEmisor == null)?new LimitesEmisor():selectedlimiteEmisor;
+		selectedlimiteEmisor.setSnuMontoIni((selectedlimiteEmisor.getNuMontoIni() ==null)?"":formato.format(selectedlimiteEmisor.getNuMontoIni()));
+		selectedlimiteEmisor.setSnuMontoFin((selectedlimiteEmisor.getNuMontoFin() ==null)?"":formato.format(selectedlimiteEmisor.getNuMontoFin()));
 	}
 
 	public void guardarEmisorLimite() {
 		try {
 			if (selectedlimiteEmisor != null) {
 				selectedlimiteEmisor.setStEstado(Constante.ESTADO_ACTIVO);
+				selectedlimiteEmisor.setNuMontoIni(formato.parse(selectedlimiteEmisor.getSnuMontoIni()).doubleValue());
+				selectedlimiteEmisor.setNuMontoFin(formato.parse(selectedlimiteEmisor.getSnuMontoFin()).doubleValue());
+				
 				if (selectedlimiteEmisor.getCdIdlimite() != null) {// Actualizacion
 					selectedlimiteEmisor.setFhFecModifica(new Date());
 					selectedlimiteEmisor.setCdUsuModifica(this.getUsuarioSession().getUsuario().getUID());
@@ -173,11 +187,9 @@ public class EmisorController extends GenericController {
 
 	public void verDetalles(Emisor emisor) {
 		selectedEmisor = emisor;
-		setValue1((selectedEmisor.getTpMicroFina().equals("1"))?true:false);
-		setValue2((selectedEmisor.getTpGrupoBbva().equals("1"))?true:false);
-		System.out.println(value1);
-
-		
+		setValue1((selectedEmisor.getTpMicroFina()==null)?false:selectedEmisor.getTpMicroFina().equals("1"));
+		setValue2((selectedEmisor.getTpGrupoBbva()==null)?false:selectedEmisor.getTpGrupoBbva().equals("1"));
+		selectedEmisor.setSimPasivo((selectedEmisor.getImPasivo() ==null)?"":formato.format(selectedEmisor.getImPasivo()));
 	}
 
 	public void eliminar() {

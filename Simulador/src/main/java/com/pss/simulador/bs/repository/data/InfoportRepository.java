@@ -34,4 +34,10 @@ public interface InfoportRepository extends CrudRepository<Infoport, Integer> {
 	@Query(value = "delete from BBVATESOR.TSI002_INFOPORT i where TO_CHAR(i.FH_FEC_IMPORTA,'yyyyMMddhhmiss') != ?1", nativeQuery=true)
 	public abstract int deleteAllByDistintoFechaImportacion(String fechaImporta);
 	
+	@Query(value = "SELECT f FROM Infoport f WHERE f.nbNomFondo LIKE :nomFondo "
+			+ "AND f.nbEspecie LIKE 'Depositos de ahorr' "
+			+ "AND f.nbNomEmisor LIKE 'BANCO CONTINENTAL' "
+			+ "AND f.tpAbrevMoneda LIKE :moneda "
+			+ "ORDER BY f.cdIdinfoport")
+	public List<Infoport> findCaja(@Param("nomFondo") String nomFondo, @Param("moneda") String moneda);
 }

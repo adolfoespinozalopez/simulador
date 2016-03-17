@@ -53,6 +53,7 @@ public class OrdenController extends GenericController{
 	private Orden selectedOrden;
 	private List<Orden> selectedOrdenes = new ArrayList<Orden>();
 	
+	List<General> listaMoneda = new ArrayList<General>();
 	private Map<Integer, String> mapaMoneda = new HashMap<Integer, String>();
 	private Map<String, String> mapaEstado = new HashMap<String, String>();
 	
@@ -98,7 +99,7 @@ public class OrdenController extends GenericController{
 			mapaEstado.put(estadoOrden.getNbValorGeneral(), estadoOrden.getNbDescGeneral());
 		}
 		
-		List<General> listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
+		listaMoneda = generalManager.findByDomainAndState(Constante.Dominio.MONEDA, Constante.ESTADO_ACTIVO);
 		for (General moneda : listaMoneda) {
 			mapaMoneda.put(moneda.getCdIdgeneral(), moneda.getNbDescGeneral());
 		}
@@ -355,7 +356,7 @@ public class OrdenController extends GenericController{
 		RequestContext context = RequestContext.getCurrentInstance();
 		selectedOrden = orden;
 		if(selectedOrden != null){
-			if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL))){
+			if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL)) || !selectedOrden.getTpTipoOperacion().equals(Constante.InfoPortTipoOperacion.CODIGO_M)){
 				context.execute("PF('msjConfirmacionAprueba').show()");
 			}else{
 				mensajeValida = "No se puede aprobar la orden. Verifique la fecha de efectividad.";
@@ -376,25 +377,71 @@ public class OrdenController extends GenericController{
 
 	public void rechazarOrden(){
 		if(selectedOrden != null){
-			if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL))){
-				Infoport infoTmp = new Infoport();
-				//Detalle de Orden
-				for (DetalleOrden detalle : ordenManager.findDetalleByOrden(selectedOrden.getCdIdorden())) {
-					Utilitarios.copiaPropiedades(infoTmp, detalle);
-				}
-				Infoport selectedInfo = new Infoport();
-				selectedInfo = infoPortManager.findByID(infoTmp.getCdIdinfoport());
-				selectedInfo.setImValorMonLocal(infoTmp.getImValorMonLocal());
-				selectedInfo.setImValorMonRef(infoTmp.getImValorMonRef());
-				selectedInfo.setImValorSinInter(infoTmp.getImValorSinInter());
-				selectedInfo.setNbObservacion(null);
-				selectedInfo.setStEstado(Constante.ESTADO_ACTIVO);
-				infoPortManager.save(selectedInfo);
-			}
+			rechazarDetalleOrden();
 			actualizarEstado(Constante.OrdenEstado.RECHAZADO);
 		}
 	}
 
+	public void rechazarDetalleOrden(){
+		if(formatoFecha.format(selectedOrden.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL))){
+			Infoport infoTmp = new Infoport();
+			//Detalle de Orden seleccionada
+			for (DetalleOrden detalle : ordenManager.findDetalleByOrden(selectedOrden.getCdIdorden())) {
+				Utilitarios.copiaPropiedades(infoTmp, detalle);
+			}
+			Infoport selectedInfo = new Infoport();
+			selectedInfo = infoPortManager.findByID(infoTmp.getCdIdinfoport());
+			if(selectedInfo != null){
+				selectedInfo.setStEstado(Constante.ESTADO_ACTIVO);
+				selectedInfo.setNbObservacion(null);
+				switch (selectedOrden.getOperacion().getCdIdgeneral()){
+					case Constante.ID_OPERA_CANCELACION:
+						selectedInfo.setImValorMonLocal(infoTmp.getImValorMonLocal());
+						selectedInfo.setImValorMonRef(infoTmp.getImValorMonRef());
+						rechazarCaja(false);
+						break;
+					case Constante.ID_OPERA_PRE_CANCELACION:
+						selectedInfo.setImValorMonLocal(infoTmp.getImValorMonLocal());
+						selectedInfo.setImValorMonRef(infoTmp.getImValorMonRef());
+						selectedInfo.setImValorSinInter(infoTmp.getImValorSinInter());
+						rechazarCaja(false);
+						break;
+					case Constante.ID_OPERA_APERTURA_DPF:
+						
+						break;
+					default:
+						break;
+				}
+				infoPortManager.save(selectedInfo);
+			}
+		}
+	}
+	
+	public void rechazarCaja(boolean abono){
+		List<OrdenFondo> listaFondos = ordenManager.findFondoByOrden(selectedOrden.getCdIdorden());
+		Double valorDepositoMR = Constante.VALOR_CERO;
+		if(!listaFondos.isEmpty()){
+			if(listaFondos.size() == 1){
+				OrdenFondo ordenFondo = listaFondos.get(0);
+				General moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, ordenFondo.getFondo().getTpTipmoneda());
+				if(selectedOrden.getTipoMoneda().getNbValorGeneral().equals(moneda.getNbValorGeneral())){
+					valorDepositoMR = selectedOrden.getImMontoFinal();
+				}else{
+					if(selectedOrden.getTipoMoneda().getNbValorGeneral().equals(Constante.Moneda.PEN)){
+						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() * portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}else{
+						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() / portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}
+				}
+				portafolioController.actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), selectedOrden.getTipoMoneda().getNbValorGeneral(), selectedOrden.getImMontoFinal(), valorDepositoMR, abono);
+			}else{
+				
+				//FOR
+				
+			}
+		}
+	}
+	
 	public void actualizarEstado(String stEstado){
 		try {
 			OrdenEstado ordenEstado = new OrdenEstado();
@@ -493,6 +540,14 @@ public class OrdenController extends GenericController{
 
 	public void setSelectedOrdenes(List<Orden> selectedOrdenes) {
 		this.selectedOrdenes = selectedOrdenes;
+	}
+
+	public List<General> getListaMoneda() {
+		return listaMoneda;
+	}
+
+	public void setListaMoneda(List<General> listaMoneda) {
+		this.listaMoneda = listaMoneda;
 	}
 
 	public Map<Integer, String> getMapaMoneda() {

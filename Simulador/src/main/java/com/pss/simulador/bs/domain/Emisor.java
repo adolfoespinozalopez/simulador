@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -66,6 +67,9 @@ public class Emisor implements java.io.Serializable {
 	private List<LimFondoEspecie> limFondoEspecieList;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "emisor")
 	private List<LimitesEmisor> limitesEmisorList;
+	
+	@Transient
+	private String simPasivo;
 	
 	public Emisor() {
 	}
@@ -210,4 +214,12 @@ public class Emisor implements java.io.Serializable {
 		this.ordenList = ordenList;
 	}
 
+	public String getSimPasivo() {
+		return simPasivo;
+	}
+
+	public void setSimPasivo(String simPasivo) {
+		this.simPasivo = simPasivo;
+	}
+	
 }

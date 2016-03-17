@@ -115,6 +115,7 @@ public class Constante {
      */
     public static final String CANCELAR_OBS = "Cancelar";
     public static final String PRE_CANCELAR_OBS = "Precancelar";
+    public static final String RENOVAR_OBS = "Renovar";
     
     public static final String __USUARIO_SESSION__ = "__USUARIO_SESSION__";
     

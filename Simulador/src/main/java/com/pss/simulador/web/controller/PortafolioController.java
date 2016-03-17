@@ -1102,6 +1102,20 @@ public class PortafolioController extends GenericController{
 				selectedInfo.setNbObservacion(Constante.CANCELAR_OBS);
 				selectedInfo.setStEstado(Constante.ESTADO_INACTIVO);
 				infoportManager.save(selectedInfo);
+				
+				Double valorDepositoMR = Constante.VALOR_CERO;
+				Fondo fondo = Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo());
+				General moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, fondo.getTpTipmoneda());
+				if(selectedInfo.getTpAbrevMoneda().equals(moneda.getNbValorGeneral())){
+					valorDepositoMR = orden.getImMontoFinal();
+				}else{
+					if(selectedInfo.getTpAbrevMoneda().equals(Constante.Moneda.PEN)){
+						valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}else{
+						valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}
+				}
+				actualizarCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda(), orden.getImMontoFinal(), valorDepositoMR, true);
 			}
 			
 			context.execute("PF('manteCancelarDeposito').hide()");
@@ -1131,6 +1145,20 @@ public class PortafolioController extends GenericController{
 				selectedInfo.setNbObservacion(Constante.PRE_CANCELAR_OBS);
 				selectedInfo.setStEstado(Constante.ESTADO_INACTIVO);
 				infoportManager.save(selectedInfo);
+				
+				Double valorDepositoMR = Constante.VALOR_CERO;
+				Fondo fondo = Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo());
+				General moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, fondo.getTpTipmoneda());
+				if(selectedInfo.getTpAbrevMoneda().equals(moneda.getNbValorGeneral())){
+					valorDepositoMR = orden.getImMontoFinal();
+				}else{
+					if(selectedInfo.getTpAbrevMoneda().equals(Constante.Moneda.PEN)){
+						valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}else{
+						valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
+					}
+				}
+				actualizarCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda(), orden.getImMontoFinal(), valorDepositoMR, true);
 			}
 			
 			context.execute("PF('mantePreCancelarDeposito').hide()");
@@ -1181,17 +1209,21 @@ public class PortafolioController extends GenericController{
 					infoportAper.setTpAbrevMoneda(selectedMonedaAper.trim());
 					infoportAper.setStEstado(Constante.ESTADO_ACTIVO);
 					infoportAper.setFhFecImporta(Constante.FECHA_ACTUAL);
+					Double valorDepositoMR = Constante.VALOR_CERO;
 					General moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, fondo.getTpTipmoneda());
 					if(selectedMonedaAper.equals(moneda.getNbValorGeneral())){
-						infoportAper.setImValorMonLocal(orden.getImMontoFinal());
+						valorDepositoMR = orden.getImMontoFinal();
 					}else{
 						if(selectedMonedaAper.equals(Constante.Moneda.PEN)){
-							infoportAper.setImValorMonLocal(Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0));
+							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
 						}else{
-							infoportAper.setImValorMonLocal(Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0));
+							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
 						}
 					}
+					infoportAper.setImValorMonLocal(valorDepositoMR);
 					infoportManager.save(infoportAper);
+					actualizarCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda(), orden.getImMontoFinal(), valorDepositoMR, false);
+					
 				}
 				guardaOrden(orden, false);
 				context.execute("PF('manteAperturaDeposito').hide()");
@@ -1261,6 +1293,51 @@ public class PortafolioController extends GenericController{
 				orden.getOrdenFondoList().get(0).setImMontoFinal(orden.getImMontoFinal());
 				guardaOrden(orden, true);
 				
+				if(formatoFecha.format(selectedInfo.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL)) && ordenAnterior == null){
+					selectedInfo.setImValorMonLocal(Constante.VALOR_CERO);
+					selectedInfo.setImValorMonRef(Constante.VALOR_CERO);
+					selectedInfo.setNbObservacion(Constante.RENOVAR_OBS);
+					selectedInfo.setStEstado(Constante.ESTADO_INACTIVO);
+					infoportManager.save(selectedInfo);
+					
+					Double valorDepositoMR = Constante.VALOR_CERO;
+					Fondo fondo = Utilitarios.buscaFondoEnLista(listaFondo, selectedInfo.getNbNomFondo());
+					General moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, fondo.getTpTipmoneda());
+					if(selectedInfo.getTpAbrevMoneda().equals(moneda.getNbValorGeneral())){
+						valorDepositoMR = orden.getImMontoFinal();
+					}else{
+						if(selectedInfo.getTpAbrevMoneda().equals(Constante.Moneda.PEN)){
+							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
+						}else{
+							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
+						}
+					}
+					
+					Infoport infoportReno = new Infoport();
+					infoportReno.setCdIdinfoport(null);
+					if(orden.getContraparte() != null){
+						infoportReno.setNbNomEmisor(orden.getContraparte().getNbValorGeneral());
+					}
+					if(orden.getOrdenFondoList().get(0).getFondo() != null){
+						infoportReno.setNbNomFondo(fondo.getNbNomFondo());
+						infoportReno.setTpTipfondo(fondo.getTpTipfondo());
+					}
+					infoportReno.setTpOperacion(Constante.InfoPortTipoOperacion.CODIGO_M);
+					infoportReno.setNbEspecie(Especie.DESC_DEPOSITOS_PLAZO);
+					infoportReno.setFhFecEmision(Constante.FECHA_ACTUAL);
+					infoportReno.setFhFecVencimiento(fechaVctoAper);
+					infoportReno.setImNominalEnMil(Utilitarios.parseToDouble(orden.getNuPlazoDia()));
+					infoportReno.setImCupon(orden.getImTasa());
+					infoportReno.setImValorSinInter(orden.getImMontoFinal());
+					infoportReno.setImValorMonRef(orden.getImMontoFinal());
+					infoportReno.setTpAbrevMoneda(selectedMonedaAper.trim());
+					infoportReno.setStEstado(Constante.ESTADO_ACTIVO);
+					infoportReno.setFhFecImporta(Constante.FECHA_ACTUAL);
+					infoportReno.setImValorMonLocal(valorDepositoMR);
+					infoportManager.save(infoportReno);
+					//actualizarCaja(orden.getImMontoFinal(), valorDepositoMR, true);
+				}
+				
 				context.execute("PF('manteRenuevaDeposito').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1314,6 +1391,47 @@ public class PortafolioController extends GenericController{
 				orden.setContraparte(Utilitarios.buscaGeneralEnLista(listaContraparte, selectedContraSpot));
 				orden.setTpMonedaOperacion(selectedTipoSpot);
 				orden.setImTipocambiospot(formato.parse(tipoCambioSpot).doubleValue());
+				
+				if(formatoFecha.format(selectedInfo.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL)) && ordenAnterior == null){
+					General moneda = null;
+					Double valorMontoUSD = Constante.VALOR_CERO;
+					Double valorMontoPEN = Constante.VALOR_CERO;
+					Double valorMonto = Constante.VALOR_CERO;
+					for (OrdenFondo ordenFondo : orden.getOrdenFondoList()) {
+						if(selectedTipoSpot.equals(Constante.MONEDAOPERACION_COMPRA)){
+							moneda = Utilitarios.buscaGeneralPorIDEnLista(listaMoneda, ordenFondo.getFondo().getTpTipmoneda());
+							valorMontoUSD = ordenFondo.getImMontoFinal();
+							valorMontoPEN = Utilitarios.round(ordenFondo.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(), 0);
+							if(moneda.getNbValorGeneral().equals(Constante.Moneda.PEN)){
+								//soles
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoPEN, valorMontoPEN, false);
+								//dolares
+								valorMonto = Utilitarios.round(valorMontoUSD * getNotificacionController().getTipoCambioActual().getNuValor(), 0);
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoUSD, valorMonto, true);
+							}else{
+								//soles
+								valorMonto = Utilitarios.round(valorMontoPEN / getNotificacionController().getTipoCambioActual().getNuValor(), 0);
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoPEN, valorMonto, false);
+								//dolares
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoUSD, valorMontoUSD, true);
+							}
+						}else{
+							if(moneda.getNbValorGeneral().equals(Constante.Moneda.PEN)){
+								//soles
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoPEN, valorMontoPEN, true);
+								//dolares
+								valorMonto = Utilitarios.round(valorMontoUSD * getNotificacionController().getTipoCambioActual().getNuValor(), 0);
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoUSD, valorMonto, false);
+							}else{
+								//soles
+								valorMonto = Utilitarios.round(valorMontoPEN / getNotificacionController().getTipoCambioActual().getNuValor(), 0);
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoPEN, valorMonto, true);
+								//dolares
+								actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), moneda.getNbValorGeneral(), valorMontoUSD, valorMontoUSD, false);
+							}
+						}
+					}
+				}
 				guardaOrden(orden, false);
 				
 				context.execute("PF('manteSpot').hide()");
@@ -1414,6 +1532,19 @@ public class PortafolioController extends GenericController{
 				orden.setNuPlazoDia(Utilitarios.parseToInteger(plazoFwd));
 				orden.setFhFecVencimiento(fechaVctoFwd);
 				
+				if(formatoFecha.format(selectedInfo.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL)) && ordenAnterior == null){
+					Infoport infoportForward = null;
+					for (OrdenFondo ordenFondo : orden.getOrdenFondoList()) {
+						infoportForward = new Infoport();
+						infoportForward.setNbNomFondo(ordenFondo.getFondo().getNbNomFondo());
+						infoportForward.setNbNomEmisor(selectedContraFwd);
+						infoportForward.setNbEspecie(Constante.Especie.DESC_INSTRUMENTO_COBERTURA);
+						infoportForward.setFhFecEmision(Constante.FECHA_ACTUAL);
+						infoportForward.setImNominalEnMil(orden.getNuPlazoDia().doubleValue());
+						infoportForward.setImValorSinInter(ordenFondo.getImMontoFinal());
+						infoportManager.save(infoportForward);
+					}
+				}
 				guardaOrden(orden, false);
 				
 				context.execute("PF('manteFwd').hide()");
@@ -1496,7 +1627,16 @@ public class PortafolioController extends GenericController{
 					orden.setOperacion(Utilitarios.buscaGeneralPorIDEnLista(listaOperacion, Constante.ID_OPERA_RETIRO_CTA_AHORRO));
 				}
 				orden.setImMontoFinal(formato.parse(montoAbono).doubleValue());
+				
+				if(formatoFecha.format(selectedInfo.getFhFecEfectividad()).equals(formatoFecha.format(Constante.FECHA_ACTUAL)) && ordenAnterior == null){
+					if(selectedTipoAbono.equals(Constante.TIPOOPERACIONCUENTA_ABONO)){
+						
+					}else{
+						
+					}
+				}
 				guardaOrden(orden, false);
+				
 				context.execute("PF('manteAbonoCargo').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1839,7 +1979,6 @@ public class PortafolioController extends GenericController{
 			return false;
 		}
 	}
-	
 
 	public Orden getOrdenAnterior() {
 		return ordenAnterior;
@@ -1847,6 +1986,28 @@ public class PortafolioController extends GenericController{
 
 	public void setOrdenAnterior(Orden ordenAnterior) {
 		this.ordenAnterior = ordenAnterior;
+	}
+	
+	public boolean actualizarCaja(String fondo, String moneda, Double valorDepositoMo, Double valorDepositoMr, boolean abono){
+		try {
+			//Obtener Caja
+			Infoport infoCaja = infoportManager.findCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda());
+			if(infoCaja != null){
+				if(abono){
+					//Aumentar
+					infoCaja.setImValorMonRef(infoCaja.getImValorMonRef() + valorDepositoMo);
+					infoCaja.setImValorMonLocal(infoCaja.getImValorMonLocal() + valorDepositoMr);
+				}else{
+					//Reducir
+					infoCaja.setImValorMonRef(infoCaja.getImValorMonRef() - valorDepositoMo);
+					infoCaja.setImValorMonLocal(infoCaja.getImValorMonLocal() - valorDepositoMr);
+				}
+				infoportManager.save(infoCaja);
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 	
 }

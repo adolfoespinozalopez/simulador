@@ -18,7 +18,7 @@ public interface EmisorRepository extends CrudRepository<Emisor, Integer> {
 
 	@Query(value = "SELECT g FROM Emisor g "
 			+ " left join fetch g.limitesEmisorList le "
-			+ " WHERE ( :nombEmisor IS NULL OR g.nbNomEmisor LIKE (CONCAT('%', :nombEmisor , '%'))) AND ( -1 = :tipoEmisor OR g.tpTipemisor = :tipoEmisor ) AND g.stEstado = :estado")	
+			+ " WHERE ( :nombEmisor IS NULL OR UPPER(g.nbNomEmisor) LIKE (CONCAT('%', UPPER(:nombEmisor) , '%'))) AND ( -1 = :tipoEmisor OR g.tpTipemisor = :tipoEmisor ) AND g.stEstado = :estado")	
 	public abstract List<Emisor> findByNameAndType(@Param("nombEmisor") String strNombEmisor, @Param("tipoEmisor") Integer tipoEmisor, @Param("estado") String strStEstado);
 
 	@Query(value = "SELECT DISTINCT e FROM Emisor e, Infoport f "

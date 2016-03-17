@@ -51,5 +51,14 @@ public class InfoportManagerImpl implements InfoportManager {
 	public Infoport findByID(Integer cdIdinfoport) {
 		return infoportRepository.findOne(cdIdinfoport);
 	}
+
+	public Infoport findCaja(String nomFondo, String moneda) {
+		List<Infoport> lista = infoportRepository.findCaja(nomFondo, moneda);
+		if(lista.isEmpty()){
+			return null;
+		}else{
+			return lista.get(0);
+		}
+	}
 	
 }
