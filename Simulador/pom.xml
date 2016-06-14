@@ -217,21 +217,5 @@
 
 	</dependencies>
 	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sonar-maven-plugin</artifactId>
-				<version>2.0</version>
-				<executions>
-	          		<execution>
-						<phase>install</phase>
-						<goals>
-							<goal>sonar</goal>	
-						</goals>	          			
-	          		</execution>
-	          	</executions>
-          	</plugin>
-		</plugins>
-	</build>
+	
 </project>
