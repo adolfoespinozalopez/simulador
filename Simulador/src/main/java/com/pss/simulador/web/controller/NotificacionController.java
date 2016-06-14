@@ -64,9 +64,9 @@ public class NotificacionController extends GenericController implements Seriali
 	public void listarTipoCambio(){
 		listaTipoCambio = tipoCambioManager.findAllActivo();
 		if(!listaTipoCambio.isEmpty()){
-			tipoCambioActual = listaTipoCambio.get(0);
+			setTipoCambioActual(listaTipoCambio.get(0));
 		}else{
-			tipoCambioActual = new TipoCambio(Constante.VALOR_CERO);
+			setTipoCambioActual(new TipoCambio(Constante.VALOR_CERO));
 		}
 	}
 	

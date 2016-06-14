@@ -22,6 +22,8 @@ public class Constante {
      */
     public final static Date FECHA_ACTUAL = new Date();
     
+    
+    public static final Integer DIAS_ANIO = 360;
     /**
      * Dominio
      */
@@ -57,6 +59,7 @@ public class Constante {
     public static final String MONEDAOPERACION_VENTA = "VENTA";
     
     public static final String VENCE_HOY = "VENCE HOY";
+    public static final String ACTIVO = "ACTIVO";
     
     public static final Double VALOR_CERO = 0.0;
     

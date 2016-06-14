@@ -15,6 +15,7 @@ public interface InfoportManager {
 	public List<Infoport> findByFilter(String nomFondo, String nomEmisor, String vencehoy, String operacion);
 	public Infoport save(Infoport infoport);
 	public Infoport findByID(Integer cdIdinfoport);
+	public Boolean delete(Integer cdIdinfoport);
 	public Infoport findCaja(String nomFondo, String moneda);
 	
 }

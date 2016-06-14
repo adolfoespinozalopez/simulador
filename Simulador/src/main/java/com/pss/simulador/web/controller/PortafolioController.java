@@ -76,7 +76,8 @@ public class PortafolioController extends GenericController{
 	private DecimalFormat formatoTasa = new DecimalFormat("0.00");
 	private DecimalFormat formatoPorcentaje = new DecimalFormat("##0.0");
 	
-	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(); 
+	DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
+	
 	@Autowired
 	private NotificacionController notificacionController;
 	
@@ -866,6 +867,13 @@ public class PortafolioController extends GenericController{
 		selectedLugar = Constante.NO_OPTION_SELECTED;
 		selectedPais = Constante.NO_OPTION_SELECTED;
 		observacion = "";
+		validarTipoDeCambio();
+	}
+	
+	public void validarTipoDeCambio(){
+		if(getNotificacionController().getTipoCambioActual() == null){
+			getNotificacionController().listarTipoCambio();
+		}
 	}
 	
 	public void validarCancelarDeposito(){
@@ -953,6 +961,7 @@ public class PortafolioController extends GenericController{
 	
 	public void inicializaDatosDeApertura(){
 		fechaEfectividad = null;
+		selectedInfo = null;
 		selectedFondoAper = Constante.NO_OPTION_SELECTED;
     	selectedContraAper = Constante.NO_OPTION_SELECTED;
     	selectedMonedaAper = Constante.NO_OPTION_SELECTED;
@@ -1207,6 +1216,7 @@ public class PortafolioController extends GenericController{
 					infoportAper.setImValorSinInter(orden.getImMontoFinal());
 					infoportAper.setImValorMonRef(orden.getImMontoFinal());
 					infoportAper.setTpAbrevMoneda(selectedMonedaAper.trim());
+					infoportAper.setImDuracNorm(infoportAper.getImNominalEnMil() / Constante.DIAS_ANIO);
 					infoportAper.setStEstado(Constante.ESTADO_ACTIVO);
 					infoportAper.setFhFecImporta(Constante.FECHA_ACTUAL);
 					Double valorDepositoMR = Constante.VALOR_CERO;
@@ -1214,18 +1224,28 @@ public class PortafolioController extends GenericController{
 					if(selectedMonedaAper.equals(moneda.getNbValorGeneral())){
 						valorDepositoMR = orden.getImMontoFinal();
 					}else{
-						if(selectedMonedaAper.equals(Constante.Moneda.PEN)){
+						if(moneda.getNbValorGeneral().equals(Constante.Moneda.PEN)){
 							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
 						}else{
 							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
 						}
 					}
 					infoportAper.setImValorMonLocal(valorDepositoMR);
+					infoportAper.setImValorPorDurac(infoportAper.getImValorMonLocal() * infoportAper.getImDuracNorm());
+					infoportAper.setNuDiaParaVenc(orden.getNuPlazoDia().doubleValue() - 1);
+					if(infoportAper.getNuDiaParaVenc().equals(Constante.VALOR_CERO)){
+						infoportAper.setStEstadoPort(Constante.VENCE_HOY);
+						infoportAper.setStCondicion(Constante.ESTADO_ACTIVO);
+					}else{
+						infoportAper.setStEstadoPort(Constante.ACTIVO);
+						infoportAper.setStCondicion(Constante.ESTADO_INACTIVO);
+					}
 					infoportManager.save(infoportAper);
-					actualizarCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda(), orden.getImMontoFinal(), valorDepositoMR, false);
+					setSelectedInfo(infoportAper);
 					
+					actualizarCaja(selectedFondoAper, selectedMonedaAper, orden.getImMontoFinal(), valorDepositoMR, false);
 				}
-				guardaOrden(orden, false);
+				guardaOrden(orden, true);
 				context.execute("PF('manteAperturaDeposito').hide()");
 				Utilitarios.mostrarMensajeInfo("growl", Constante.Mensajes.MSJ_REGISTRO_OK, null);
 			}
@@ -1306,7 +1326,7 @@ public class PortafolioController extends GenericController{
 					if(selectedInfo.getTpAbrevMoneda().equals(moneda.getNbValorGeneral())){
 						valorDepositoMR = orden.getImMontoFinal();
 					}else{
-						if(selectedInfo.getTpAbrevMoneda().equals(Constante.Moneda.PEN)){
+						if(moneda.getNbValorGeneral().equals(Constante.Moneda.PEN)){
 							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() * getNotificacionController().getTipoCambioActual().getNuValor(),0);
 						}else{
 							valorDepositoMR = Utilitarios.round(orden.getImMontoFinal() / getNotificacionController().getTipoCambioActual().getNuValor(),0);
@@ -1961,11 +1981,13 @@ public class PortafolioController extends GenericController{
 			ordenManager.saveEstado(ordenEstado);
 			
 			if(isDetalle){
-				DetalleOrden detalle = new DetalleOrden();
-				Utilitarios.copiaPropiedades(detalle, selectedInfo);
-				detalle.setCdIddetalle(null);
-				detalle.setOrden(orden);
-				ordenManager.saveDetalle(detalle);
+				if(selectedInfo != null){
+					DetalleOrden detalle = new DetalleOrden();
+					Utilitarios.copiaPropiedades(detalle, selectedInfo);
+					detalle.setCdIddetalle(null);
+					detalle.setOrden(orden);
+					ordenManager.saveDetalle(detalle);
+				}
 			}
 			for (OrdenFondo ordenFondo : listaOrdenFondo) {
 				ordenFondo.setOrden(orden);
@@ -1991,7 +2013,7 @@ public class PortafolioController extends GenericController{
 	public boolean actualizarCaja(String fondo, String moneda, Double valorDepositoMo, Double valorDepositoMr, boolean abono){
 		try {
 			//Obtener Caja
-			Infoport infoCaja = infoportManager.findCaja(selectedInfo.getNbNomFondo(), selectedInfo.getTpAbrevMoneda());
+			Infoport infoCaja = infoportManager.findCaja(fondo, moneda);
 			if(infoCaja != null){
 				if(abono){
 					//Aumentar

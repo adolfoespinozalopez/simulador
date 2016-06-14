@@ -46,7 +46,7 @@ public class LoginController extends GenericController implements Serializable  
 			logger.error(e, e);
 		}
     	if (codigoUsuario == null || codigoUsuario.isEmpty() || codigoUsuario.toUpperCase().equals("NO AUTENTICADO")){
-			codigoUsuario = this.getRequest().getParameter("frmLoginCuadro:codUsuarioLocal");	
+			codigoUsuario = this.getRequest().getParameter("frmLoginCuadro:codUsuarioLocal");
 		}
 		IILDPeUsuario usuarioLdap = null;
 //		pe.com.bbva.ws.ldap.cliente.wsmodel.Usuario usuarioWsLdap;

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pss.simulador.bs.domain.Infoport;
@@ -52,6 +53,12 @@ public class InfoportManagerImpl implements InfoportManager {
 		return infoportRepository.findOne(cdIdinfoport);
 	}
 
+	@Transactional
+	public Boolean delete(Integer cdIdinfoport){
+		infoportRepository.delete(cdIdinfoport);
+		return true;
+	}
+	
 	public Infoport findCaja(String nomFondo, String moneda) {
 		List<Infoport> lista = infoportRepository.findCaja(nomFondo, moneda);
 		if(lista.isEmpty()){

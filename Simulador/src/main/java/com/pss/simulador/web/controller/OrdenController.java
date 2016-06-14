@@ -407,7 +407,8 @@ public class OrdenController extends GenericController{
 						rechazarCaja(false);
 						break;
 					case Constante.ID_OPERA_APERTURA_DPF:
-						
+						infoPortManager.delete(infoTmp.getCdIdinfoport());
+						rechazarCaja(true);
 						break;
 					default:
 						break;
@@ -428,14 +429,13 @@ public class OrdenController extends GenericController{
 					valorDepositoMR = selectedOrden.getImMontoFinal();
 				}else{
 					if(selectedOrden.getTipoMoneda().getNbValorGeneral().equals(Constante.Moneda.PEN)){
-						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() * portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(),0);
+						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() / portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(), 0);
 					}else{
-						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() / portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(),0);
+						valorDepositoMR = Utilitarios.round(selectedOrden.getImMontoFinal() * portafolioController.getNotificacionController().getTipoCambioActual().getNuValor(), 0);
 					}
 				}
 				portafolioController.actualizarCaja(ordenFondo.getFondo().getNbNomFondo(), selectedOrden.getTipoMoneda().getNbValorGeneral(), selectedOrden.getImMontoFinal(), valorDepositoMR, abono);
 			}else{
-				
 				//FOR
 				
 			}
